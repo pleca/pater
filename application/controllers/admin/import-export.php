@@ -37,10 +37,23 @@ function showList($params = [])
 function prepareCsv(array $products)
 {
     $csvFile = fopen(EXP_DIR . '/products.csv', 'w');
+    if (!($csvFile)){
+        throw new \Exception('Can\'t open file '. EXP_DIR . '/products.csv');
+    }
     chmod(EXP_DIR . '/products.csv', 0777);
 
     $pr = [];
-    $i=0;
+    $pr[0]['1'] = 'jedyn';
+    $pr[0]['2'] = 'dwa';
+    $pr[0]['3'] = 'czy';
+    $pr[0]['4'] = 'tery';
+    $pr[0]['5'] = 'ęć';
+    $pr[0]['6'] = 'szejść';
+    $i=1;
+
+
+
+
 
     foreach ($products as $product) {
         foreach ($product as $key => $val) {
@@ -57,8 +70,13 @@ function prepareCsv(array $products)
         fputcsv($csvFile, $fields, ";");//NOTICE: [8] Array to string conversion (jeśli repozytorium zwraca wariacje z Product, bo robi się 3 wymiarowa tablica)
     }
 
+
+
     if (!fclose($csvFile)){
         throw new \Exception('CSV file not written properly.');
     }
+
+
+
     return $csvFile;
 }
