@@ -3,3 +3,4 @@
 /application/compilation_cache
 vendor
 application/logs
+application/config/config.php
