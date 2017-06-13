@@ -1,0 +1,27 @@
+{% set slugs = selected|replace({'.html':''})|split('/') %}
+
+{% if static('Cms','modules')['help'] != 1 %}
+    <h2 class="title">
+        {{ lang.shop_categories }}
+        <i class="mdi mdi-chevron-down collapsed" data-toggle="collapse" data-parent="#category-nav" href="#categoryList" aria-expanded="false"></i>
+    </h2>
+        
+    <ul id="categoryList" class="collapse">
+        {% for entity in categories %}
+            <li class="{% if entity.slug in slugs or entity.show_expanded %}active{% endif %}">
+                {% if entity.subcategories %}
+                    <i class="mdi mdi-chevron-down{% if entity.slug in slugs or entity.show_expanded %}{% else %} collapsed{% endif %}" data-toggle="collapse" data-parent="#category-nav" href="#category{{ entity.id }}" aria-expanded="false"></i>
+                {% endif %}                
+                <a href="{{ entity.url }}">{{ entity.name }}</a>
+            {% if entity.subcategories %}
+                <ul id="category{{ entity.id }}" class="collapse{% if entity.slug in slugs and subcategory.slug in slugs or entity.show_expanded %} in{% endif %}">
+                    {% for subcategory in entity.subcategories %}
+                        <li {% if entity.slug in slugs and subcategory.slug in slugs %}class="active"{% endif %}><a href="{{ subcategory.url }}">{{ subcategory.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}    
+            </li>        
+        {% endfor %}
+    </ul>
+
+{% endif %}

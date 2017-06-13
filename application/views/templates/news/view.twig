@@ -1,0 +1,30 @@
+{% extends "templates/base.twig" %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block content %}
+<div id="pageTitle">
+   <h1>{{ title }}</h1>
+</div>
+
+<div id="pageContent" class="articleTop">   
+   {% if entity.active !=1 %}<div class="error">Artykuł archiwalny.</div><br />{% endif %}
+   {% if entity.photo %}
+      <a href="{{ entity.photo.normal }}" title="{{ entity.title }}" class="fancybox"><img class="articleImg" src="{{ entity.photo.small }}" alt="{{ entity.title }}" /></a>
+   {% endif %}
+   <div class="articleDate">{{ entity.date_add }}</div>
+   <div class="articleTitle">{{ entity.desc.name }}</div>         
+   <div class="articleDesc">{{ entity.desc.desc|raw }}</div>
+
+{#   {if $entity.desc.tag1 OR $entity.desc.tag2 OR $entity.desc.tag3}
+      <div class="tags">
+         {if $entity.desc.tag1}<a href="{$URL}/search/{{ entity.desc.tag1_url}.html" title="{{ entity.desc.tag1}">{{ entity.desc.tag1}</a>{/if}
+         {if $entity.desc.tag2}<a href="{$URL}/search/{{ entity.desc.tag2_url}.html" title="{{ entity.desc.tag2}">{{ entity.desc.tag2}</a>{/if}
+         {if $entity.desc.tag3}<a href="{$URL}/search/{{ entity.desc.tag3_url}.html" title="{{ entity.desc.tag3}">{{ entity.desc.tag3}</a>{/if}
+      </div>
+   {/if}#}
+   
+</div>
+{% endblock %}

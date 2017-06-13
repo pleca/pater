@@ -1,0 +1,111 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ constant('CMS_URL') }}/public/js/jquery.MultiFile.js"></script>
+    <script type="text/javascript">
+// <![CDATA[        
+        $(document).ready(function () {
+            $('#photos').MultiFile({
+               list: '#photos-list',
+               STRING: {remove: 'Usuń'},
+               max: 5
+            });
+        });      
+// ]]>        
+    </script>
+    
+    <style>
+    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+        border-top: none;
+    }    
+    </style>    
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        
+        <div class="btn-group">
+            <a class="btn btn-default" href="?"><i class="fa fa-arrow-left"></i> {{ lang.back }}</a>
+            <a class="btn btn-default" href="?action=edit&amp;id={{ product.id }}"><i class="fa fa-home"></i> Dane podstawowe</a>
+            <a class="btn btn-default" href="?action=expanded&amp;id={{ product.id }}"><i class="fa fa-globe"></i> Dane rozszerzone</a>
+            <a class="btn btn-default active" href="?action=variation&amp;id={{ product.id }}"><i class="fa fa-sitemap"></i> Wariacje</a>
+            <a class="btn btn-default" href="?action=image&amp;id={{ product.id }}"><i class="fa fa-photo"></i> Zdjęcia</a>
+        </div>
+       
+        <div class="text-center"><br />
+            <a href="?action=variation_edit&amp;product_id={{ product.id }}&amp;variation_id={{ entity.id2 }}" title="{{ lang.btn_general }}">{{ lang.btn_general }}</a> |
+            <a class="bold" href="?action=variation_photo&amp;product_id={{ product.id }}&amp;variation_id={{ entity.id2 }}" title="{{ lang.btn_photo }}">{{ lang.btn_photo }}</a> |
+            <a class="" href="?action=variation_related&amp;product_id={{ product.id }}&amp;variation_id={{ entity.id2 }}" title="{{ lang.related_variations }}">{{ lang.related_variations }}</a>
+        </div>
+                             
+        <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}" enctype="multipart/form-data">
+            <div class="form-body">  
+                <div class="form-group">
+{#                      <label class="col-md-3 control-label"></label>#}
+                      <div class="col-md-12">
+                        {% for image in images %}
+                                 {% if loop.first %}
+                                          <table class="table"><tr>
+                                 {% endif %}
+                                 {% if loop.index > 0 and loop.index % 6 == 0 %}</tr><tr>{% endif %}
+                                 <td class="text-center">
+                                    {% if image.photo %}
+                                        <a href="{{ image.photo.normal }}" title="{{ image.file }}" class="fancybox" rel="fancybox">
+                                        <img src="{{ image.photo.small }}" alt="{{ image.file }}" /></a>
+                                    {% else %}
+                                        <strong>Brak zdjęcia!</strong>
+                                    {% endif %}
+                                          <br />
+                                          
+                                    {% if not loop.first %}
+                                        <a href="?action=variation_photo_up&amp;product_id={{ product.id }}&amp;variation_id={{ entity.id2 }}&amp;photo_id={{ image.id }}" title="{{ lang.btn_up }}"><i class="fa fa-arrow-up"></i></a>
+                                    {% endif %}
+                                    
+                                    {% if not loop.last %}
+                                        <a href="?action=variation_photo_down&amp;product_id={{ product.id }}&amp;variation_id={{ entity.id2 }}&amp;photo_id={{ image.id }}" title="{{ lang.btn_down }}"><i class="fa fa-arrow-down"></i></a>
+                                    {% endif %}
+                                    
+                                    <a href="?action=variation_photo_delete&amp;product_id={{ product.id }}&amp;variation_id={{ entity.id2 }}&amp;photo_id={{ image.id }}" title="{{ lang.btn_delete }}" onclick="return show_confirm('{{ lang.btn_delete_info }}');">
+                                        <i class="fa fa-remove"></i>
+                                    </a>
+                                    <br /><br />
+                                 </td>
+                                 {% if loop.last %}</tr></table>{% endif %}
+                        {% endfor %}
+                      </div>                     
+                </div>
+                <div class="form-group">
+                      <label class="col-md-3 control-label">Zdjęcia wariacji:<br /><small>[Zalecany rozmiar: 1024x768 px]</small></label>
+                      <div class="col-md-9">
+                            <input type="file" multiple="multiple" class="with-preview" id="photos" name="photos[]" size="100" />
+                            <div id="photos-list" style="margin: 20px;"></div>
+                      </div>                     
+                </div>
+            </div>                     
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" name="action" value="variation_photo" />
+                        <input type="hidden" name="id" value="{{ product.id }}" />
+                        <input type="hidden" name="variation_id" value="{{ entity.id2 }}" />                        
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                        <a href="?action=variation&id={{ product.id }}" class="btn default">{{ lang.btn_cancel }}</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

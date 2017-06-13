@@ -1,0 +1,99 @@
+body{ 
+color: #2e2d2e;}
+
+.dropdown-menu{ 
+color: #2e2d2e;}
+
+a:hover, a:focus{ 
+color: #f54900;}
+
+.btn-default:hover, .btn-default:focus, .btn-default:active{ 
+background-color: #f54900 !important;}
+
+.btn-primary{ 
+background-color: #f54900;}
+
+.checkbox a{ 
+color: #f54900 !important;}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{ 
+background-color: #f54900;}
+
+header nav ul{ 
+border-bottom-color: #f54900;}
+
+header nav #top-menu li.active a, header nav #top-menu li:hover ul + a, header nav #top-menu li:hover ul a{ 
+background-color: #f54900 !important;}
+
+header nav #top-menu li:hover a{ 
+color: #f54900;}
+
+header nav button:not(.collapsed){ 
+background-color: #f54900 !important;}
+
+aside.side-bar ul li a{ 
+background-color: #f54900 !important;}
+
+@media (max-width: 767px){ 
+aside.side-bar h2.title{ 
+background-color: #f54900 !important;}
+
+}
+
+footer .second-footer-row .social-icons a i:hover{ 
+color: #f54900;}
+
+section.content article a{ 
+color: #f54900 !important;}
+
+section.content article a{ 
+color: #f54900 !important;}
+
+input:focus, textarea:focus, .select2-container--bootstrap.select2-container--open .select2-selection, .select2-container--bootstrap .select2-dropdown, .form-control:focus{ 
+border-color: #f54900;}
+
+.select2-container--bootstrap .select2-results__option--highlighted{ 
+background-color: #f54900;}
+
+.select2-container--bootstrap .select2-results__option[aria-selected="true"]:after{ 
+color: #f54900;}
+
+.select2-container--bootstrap .select2-results__option--highlighted[aria-selected="true"]:after{ 
+color: #f54900;}
+
+aside.side-bar ul li a{ 
+color: #304269;}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active{ 
+background-color: #304269 !important;}
+
+header nav ul{ 
+background-color: #304269;}
+
+header nav ul li a{ 
+background-color: #304269 !important;}
+
+header nav #top-menu li ul a:hover{ 
+color: #304269 !important;}
+
+.btn-default{ 
+background-color: #304269;}
+
+.text-primary{ 
+color: #304269;}
+
+.label-primary{ 
+background-color: #304269;}
+
+section.content h2.title{ 
+background: #304269;}
+
+footer .second-footer-row .social-icons a i{ 
+color: #304269;}
+
+footer .first-footer-row .container{ 
+background-color: #f5f5f5;}
+
+footer .second-footer-row .container{ 
+background-color: #e8e8e8;}
+

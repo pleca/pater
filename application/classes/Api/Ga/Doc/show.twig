@@ -1,0 +1,26 @@
+<link href="{{ constant("TPL_URL") }}/css/bootstrap.min.css" rel="stylesheet">
+<div class="container">
+    <h2 class="text-center">API GA Documentation</h2>
+    <h4>Methods</h4>
+    <table class="table table-bordered">
+        <tr><th>Method name</th><th>Available parameters</th></tr>
+        {% for method in methods %}
+            <tr><td>{{ method.name }}</td>
+            {% if method.params %}
+                <td>
+                {% for param in method.params %}
+                    {{ param }}{% if not loop.last %},{% endif %}
+                {% endfor %}
+                </td>
+            {% endif %}
+        {% endfor %}
+    </table>
+    
+    <h4>Errors</h4>
+    <table class="table table-bordered">
+        <tr><th>Error code</th><th>Message</th></tr>
+        {% for key, error in errors %}
+            <tr><td>{{ key }}</td><td>{{ error }}</td></tr>
+        {% endfor %}
+    </table>    
+</div>    

@@ -1,0 +1,7 @@
+User-Agent: *
+Allow: /
+Disallow: /application
+Disallow: /logs
+Disallow: /upload
+User-Agent: Googlebot-Image
+Allow: /files

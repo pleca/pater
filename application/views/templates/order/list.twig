@@ -1,0 +1,264 @@
+{% extends "templates/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <style>
+    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th { padding-right: 15px; }
+    #accept { margin-left:5px; }
+    .mrg-15 { margin-right: 15px; }
+    .pd-18 { padding-right:18px; }
+    .checkbox.accept-terms label { display: inline; }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class='basket-index box'>    
+    <div class="title">
+       <h2>{{ lang.order_confirmation }}</h2>
+       <p>{{ lang.order_verify_information }}</p>     
+    </div>
+
+    <div id="pageContent">     
+        {% include 'templates/other/notify.twig' %}
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>{{ lang.info }}</h4>
+                        <div class="form-group">
+                            {{ lang.delivery }}: <strong>{{ delivery.service_name }} ({{ delivery.delivery_time }}) - {{ conf.currency_left }}{{ delivery.price_gross }}{{ conf.currency_right }}</strong>
+                        </div>
+                        <div class="form-group">
+                            {{ lang.order_payment }}: <strong>{{ payment.name }}</strong> 
+                        </div>
+                    </div>
+                </div>                 
+            </div>
+                        
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-body payer-data">
+                    <h4>{{ lang.basket_shipping_address }}</h4>                   
+                        <a class='button-continue-shopping' href="{{ constant("URL") }}/{{ lang.url_basket }}.html">{{ lang.change }}</a>
+                        
+                        {% if addressBilling.shipping_type == 2 %}
+                        <div>
+                            <div class="form-group">
+                                {% if addressBilling.shipping_company_name %}
+                                    {{ addressBilling.shipping_company_name }}
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                {% if addressBilling.shipping_nip %}
+                                    {{ addressBilling.shipping_nip }}
+                                {% endif %}
+                            </div>
+                        </div>                        
+                        {% endif %}
+                        <div class="form-group">
+                            <strong>{{ addressBilling.shipping_first_name }} {{ addressBilling.shipping_last_name }}</strong>
+                        </div>
+                        <div class="form-group">
+                            {{ addressBilling.email }}
+                        </div>                        
+                        <div class="form-group">
+                            {{ addressBilling.shipping_phone }}
+                        </div>
+                        <div class="form-group">
+                            {{ addressBilling.shipping_address1 }}
+                        </div>
+                        <div class="form-group">
+                            {{ addressBilling.shipping_address2 }}
+                        </div>
+                        <div class="form-group">
+                            {{ addressBilling.shipping_address3 }}
+                        </div>
+                        <div class="form-group">
+                            {{ addressBilling.shipping_post_code }} {{ addressBilling.shipping_city }}
+                        </div>
+                        <div class="form-group">
+                            {{ shippingCountry.name }}
+                        </div>
+                    </div>
+                </div>                
+            </div>
+                 
+            {% if addressBilling.other_shipping == 1 %}            
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-body payer-data">
+                        <h4>{{ lang.basket_billing_address }}</h4>                   
+                        <a class='button-continue-shopping' href="{{ constant("URL") }}/{{ lang.url_basket }}.html">{{ lang.change }}</a>
+                        
+                        {% if addressBilling.type == 2 %}
+                        <div>
+                            <div class="form-group">
+                                {% if addressBilling.company_name %}
+                                    {{ addressBilling.company_name }}
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                {% if addressBilling.nip %}
+                                    {{ addressBilling.nip }}
+                                {% endif %}
+                            </div>
+                        </div>                        
+                        {% endif %}
+                        <div class="form-group">
+                            <strong>{{ addressBilling.first_name }} {{ addressBilling.last_name }}</strong>
+                        </div>
+                        <div class="form-group">
+                            {{ addressBilling.phone }}
+                        </div>
+                        <div class="form-group">
+                            {{ addressBilling.address1 }}
+                        </div>
+                        <div class="form-group">
+                            {{ addressBilling.address2 }}
+                        </div>
+                        <div class="form-group">
+                            {{ addressBilling.address3 }}
+                        </div>
+                        <div class="form-group">
+                            {{ addressBilling.post_code }} {{ addressBilling.city }}
+                        </div>
+                        <div class="form-group">
+                            {{ country.name }}
+                        </div>                            
+                    </div>
+                </div>                
+            </div>  
+            {% endif %}
+        </div>
+
+                    
+        <table class="table table-bordered table-basket">
+            <thead>
+                <tr>
+                    <th>{{ lang.photo }}</th>
+                    <th>{{ lang.name }}</th>
+                    {% if constant("LOGGED") and customer.only_netto_prices == 1 %}
+                        <th>{{ lang.netto }}</th>
+                    {% endif %}                    
+                    <th>{{ lang.gross }}</th>
+                    <th class="text-center">{{ lang.quantity }}</th>
+                    <th>{{ lang.total }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set first_mega_offer = 1 %}
+                {% for entity in basket %}
+                    {% if entity.mega_offer and first_mega_offer %}
+                        <tr class="mega-offer-header">
+                            <td colspan="2"><span class="mega-offer-label">{{ lang.mega_offer }}</span></td>
+                            <td><span class="mega-price">{{ lang.mega_price }}</span></td>
+                            <td colspan="5"></td>
+                        </tr>
+                        {% set first_mega_offer = 0 %}
+                    {% endif %}                
+                <tr data-basket-id='{{ entity.id }}' class="product">
+                    <td>
+                        <a href="{{ entity.url }}">
+                        {% if entity.image %}
+                            <img class="image" src="{{ entity.image }}" alt="{{ entity.name }}" />
+                        {% else %}
+                            <img class="image" src="{{ constant("CMS_URL") }}/files/no-picture.png" alt="{{ entity.name }}" />
+                        {% endif %}
+                    </a></td>
+                    <td class="product-name" style="width:70%;"><a href="{{ entity.url }}" title="{{ entity.name }}">{{ entity.name }}</a><br />
+                    <small>{{ entity.desc }}</small>
+                    </td>
+                    {% if constant("LOGGED") and customer.only_netto_prices == 1 %}
+                        <td>{{ conf.currency_left }}{{ entity.price|number_format(2) }}{{ conf.currency_right }}</td>
+                    {% endif %}                    
+                    <td>{{ conf.currency_left }}{{ entity.price_gross }}{{ conf.currency_right }}</td>
+                    <td class="text-center">{{ entity.qty }}</td>
+                    <td class='product-total'>{{ conf.currency_left }}{{ entity.sum }}{{ conf.currency_right }}</td>
+                </tr>                
+                {% endfor %}
+                
+                {% if constant("LOGGED") and customer.only_netto_prices == 1 %}
+                <tr style="text-align: right;border-collapse:collapse ">
+                    <td colspan="2" style="border:none;"></td>
+                    <td colspan="4" style="border:none;">{{ lang.basket_value_netto }}: {{ conf.currency_left }}{{ summary.sum_netto }}{{ conf.currency_right }}</td>
+                </tr>                
+                {% endif %}
+                
+                <tr style="text-align: right;border-collapse:collapse ">
+                    <td colspan="2" style="border:none;"></td>
+                    <td colspan="4" style="border:none;">{{ lang.basket_value }}: {{ conf.currency_left }}{{ summary.sum }}{{ conf.currency_right }}</td>
+                </tr>
+                
+                {% if session[constant("CUSTOMER_CODE")]['discount'] and session[constant("CUSTOMER_CODE")]['discount'] > 0 %}                
+                    <tr style="text-align: right;">
+                        <td colspan="2" style="border:none;"></td>
+                        <td colspan="3" style="border:none;">{{ lang.order_discount }} {{ session[constant("CUSTOMER_CODE")]['discount'] }}%</td>
+                    </tr>                   
+                    <tr class="basket-discount-row" style="text-align: right;">
+                        <td colspan="2" style="border:none;"></td>
+                        <td colspan="3" style="border:none;">{{ lang.order_discount4 }} {{ conf.currency_left }}{{- session[constant("CUSTOMER_CODE")]['discount_total'] -}}{{ conf.currency_right }}</td>
+                    </tr>                     
+                {% endif %}                
+                
+                <tr style="text-align: right;border: 1px solid #ddd;">
+                    <td colspan="2" style="border:none;"></td>
+                    <td colspan="4" style="border:none;">{{ lang.delivery_cost }}: {{ conf.currency_left }}{{ summary.delivery }}{{ conf.currency_right }}</td>
+                </tr>
+                <tr class="basket-total-row" style="text-align: right;">
+                    <td colspan="2" style="border-top:none;border-right:none;"></td>
+                    <td colspan="4" style="border-top:none;border-left:none;">
+                        <strong>
+                        {{ lang.basket_total_order }}:
+                        
+                        {% if session[constant("CUSTOMER_CODE")]['discount'] and session[constant("CUSTOMER_CODE")]['discount'] > 0 %}
+                            {{ conf.currency_left }}{{ summaryTotal }}{{ conf.currency_right }}
+                        {% else %}
+                            {{ conf.currency_left }}{{ summary.total }}{{ conf.currency_right }}
+                        {% endif %}                         
+                        </strong>
+                    </td>
+                </tr>
+                
+                {% if session[constant("CUSTOMER_CODE")]['discount'] and session[constant("CUSTOMER_CODE")]['discount'] > 0 %}
+                <tr class="basket-discount-row" style="text-align: right;">
+                    <td colspan="2" style="border:none;"></td>
+                    <td colspan="4" style="border:none;">{{ lang.order_discount2 }} {{ conf.currency_left }}{{ session[constant("CUSTOMER_CODE")]['discount_saving'] }}{{ conf.currency_right }}</td>
+                </tr>   
+                {% endif %}
+                
+                {% if session[constant("CUSTOMER_CODE")]['discount'] and session[constant("CUSTOMER_CODE")]['discount'] > 0 %}                
+{#                    <tr style="text-align: right;">
+                        <td colspan="2" style="border:none;"></td>
+                        <td colspan="3" style="border:none;">{{ lang.order_discount }} {{ session[constant("CUSTOMER_CODE")]['discount'] }}%</td>
+                    </tr>
+                    <tr class="basket-discount-row" style="text-align: right;">
+                        <td colspan="2" style="border:none;"></td>
+                        <td colspan="4" style="border:none;">{{ lang.order_discount2 }} {{ conf.currency_left }}{{ session[constant("CUSTOMER_CODE")]['discount_saving'] }}{{ conf.currency_right }}</td>
+                    </tr>                    
+                    <tr class="basket-discount-row" style="text-align: right;">
+                        <td colspan="2" style="border:none;"></td>
+                        <td colspan="3" style="border:none;">{{ lang.order_discount3 }} {{ conf.currency_left }}{{ session[constant("CUSTOMER_CODE")]['discount_total'] }}{{ conf.currency_right }}</td>
+                    </tr> #}                    
+                {% endif %}
+            </tbody>                  
+        </table>      
+                        
+        <form  method="post" action="{{ server('PHP_SELF') }}">
+            <div class="form-group pull-right mrg-15">
+                <div class="col-sm-12 pd-18">
+                    <div class="checkbox accept-terms">
+                        <label>
+                            <strong>{{ lang.c_accept2|raw }}</strong> <input type="checkbox" name="accept" id="accept" value="1" />
+                        </label>
+                    </div> 
+                    <button type="submit" class="btn btn-default pull-right">{{ lang.order_with_payment_submit }}</button>
+                </div>                        
+            </div>                                                            
+            <input type="hidden" name="action" value="save" />
+        </form>
+                     
+       <div class="clear"></div>
+    </div>
+</div>
+{% endblock %}

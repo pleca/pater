@@ -1,0 +1,92 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+    <small>{{ pageTitle }}</small>
+</h3>
+             
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="table-toolbar">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="btn-group">
+                        {% if user.level != 3 %}
+                        <a href="?action=addForm">
+                        <button id="sample_editable_1_new" class="btn sbold green"> {{ lang.add_new }}
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <div class="table-scrollable">
+            {% for entity in entities %}            
+                {% if loop.first %}
+                    <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+                    <thead>
+                        <tr>
+                            <th>{{ lang.lp }}</th>
+                            <th>{{ lang.login }}</th>
+                            <th>{{ lang.first_name }}</th>
+                            <th>{{ lang.last_name }}</th>
+                            <th>{{ lang.email }}</th>
+                            <th>{{ lang.date_add }}</th>
+                            <th>{{ lang.password_change_date }}</th>
+                            <th>{{ lang.level }}</th>
+                            <th class="text-center">{{ lang.active }}</th>
+                            <th class="text-center">{{ lang.edit }}</th>
+                            <th class="text-center">{{ lang.delete }}</th>
+                        </tr>
+                    </thead>              
+                    <tbody>
+                {% endif %}                         
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ entity.login }}</td>
+                        <td>{{ entity.name }} </td>
+                        <td>{{ entity.surname }}</td>
+                        <td>{{ entity.email }}</td>
+                        <td>{{ entity.date_add }}</td>
+                        <td>{{ entity.date_pass }}</td>
+                        <td>{% if entity.level == 1 %}{{ lang.super_admin }}{% elseif entity.level==2 %}{{ lang.admin }}{% else %}{{ lang.user }}{% endif %}</td>
+                        <td class="text-center">
+                           {% if entity.active == 1 %}<i class="fa fa-check" alt="{{ lang.yes }}" title="{{ lang.yes }}"></i>{% else %}<i class="fa fa-ban" alt="{{ lang.no }}" title="{{ lang.no }}"></i>{% endif %}
+                           </td>
+                           <td class="text-center">
+                               {% if user.level == 1 and entity.level != 1 
+                                or user.level == 2 and entity.level not in ['1','2'] 
+                                or user.level in ['1','2'] and entity.level not in ['1','2']
+                                or user.id == entity.id 
+                               %}
+                                   <a href="?action=edit&amp;sid={{ entity.shid }}" title="{{ lang.edit }}">
+                                       <i class="fa fa-edit"></i>
+                                   </a>
+                              {% endif %}
+                           </td>
+                           <td class="text-center">
+                               {% if user.level == 1 and entity.level != 1 
+                                or user.level == 2 and entity.level not in ['1','2'] 
+                                or user.level in ['1','2'] and entity.level not in ['1','2']
+                               %}
+                                  <a href="#" data-href="?action=delete&amp;sid={{ entity.shid }}" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-remove"></i></a>
+                              {% endif %}
+                           </td>            
+                    </tr>                
+                {% if loop.last %}</tbody></table>{% endif %}
+        {% endfor %}             
+        </div>
+    </div>
+</div>
+        
+{% include 'admin/other/confirm.twig' %}
+
+{% endblock %}

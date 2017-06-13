@@ -1,0 +1,129 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function setAction(action) {
+           $('input[type=hidden]#action').val(action);
+        }
+
+        $(document).ready(function () {
+           {% for row in static('Cms','langs') %}
+                   toggleEditor("edytor{{ row.code }}");
+           {% endfor %}
+        });          
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <ul class="nav nav-tabs">  
+            {% for row in static('Cms','langs') %}
+            <li {% if row.code == constant('LOCALE') %}class="active"{% endif %}>
+                <a href="#tab_{{ row.code }}" data-toggle="tab" aria-expanded="true"> {{ attribute(lang, row.code) }} 
+                <img src="{{ constant('TPL_URL') }}/assets/global/img/flags/{{ row.code }}.png" alt="{{ row.name }}" title="{{ row.name }}" />
+                </a>                
+            </li>
+            {% endfor %}
+        </ul>        
+                
+        <form id="form" method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}" enctype="multipart/form-data">
+        <div class="tab-content">            
+            {% for row in static('Cms','langs') %}                                          
+                <div class="tab-pane fade {% if row.code == constant('LOCALE') %}active in{% endif %}" id="tab_{{ row.code }}">                
+                        <div class="form-body">  
+                        {% for tran in attribute(entities, row.code) if tran.name == parameter('name') %}
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ lang.file }}:<br />
+                                    <small>[{{ lang.pic_size }}: {{ constant('PRODUCER_IMG_X1') }}x{{ constant('PRODUCER_IMG_Y1') }} px]</small>
+                                </label>
+                                <div class="col-md-4">
+                                    <input type="file" id="file" name="{{ row.code }}" size="100"/>
+                                    <div id="file-list" style="margin: 20px;"></div>
+                                </div>                     
+                            </div>                            
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ lang.title }}</label>
+                                <div class="col-md-4">
+                                    <input name="{{ row.code }}[title]" type="text" class="form-control" value="{{ tran.title }}">
+                                </div>
+                            </div>                                       
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Url</label>
+                                <div class="col-md-4">
+                                    <input name="{{ row.code }}[url]" type="text" class="form-control" value="{{ tran.url }}">
+                                </div>
+                            </div>                                
+                        {% else %}
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ lang.file }}:
+{#                                    <br /><small>[{{ lang.pic_size }}: 1140x440]</small>#}
+                                </label>
+                                <div class="col-md-4">
+                                    <input type="file" id="file" name="{{ row.code }}" size="100"/>
+                                    <div id="file-list" style="margin: 20px;"></div>
+                                </div>                     
+                            </div>                            
+                            <div class="form-group">
+                                   <label class="col-md-3 control-label">{{ lang.title }}</label>
+                                   <div class="col-md-4">
+                                       <input name="{{ row.code }}[title]" type="text" class="form-control" value="">
+                                   </div>
+                            </div>                                                   
+                            <div class="form-group">
+                                   <label class="col-md-3 control-label">Url</label>
+                                   <div class="col-md-4">
+                                       <input name="{{ row.code }}[url]" type="url" class="form-control" value="">
+                                   </div>
+                            </div>                                   
+                        {% endfor %}                                                                        
+                    </div>
+             
+                </div>                                                                  
+            {% endfor%}            
+        </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label">Target</label>
+                <div class="col-md-4">
+                    <select name="target" class="form-control">
+                       <option value="_top" selected="selected">_top</option>
+                       <option value="_parent">_parent</option>
+                       <option value="_blank">_blank</option>                                     
+                    </select>                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label">Status</label>
+                <div class="col-md-4">
+                    <select name="active" class="form-control">
+                        <option value="0" {% if entity.active == 0 %}selected="true"{% endif %}>{{ lang.status2 }}</option>
+                        <option value="1" {% if entity.active == 1 or entity.active == '' %}selected="true"{% endif %}>{{ lang.status }}</option>
+                    </select>
+                </div>                     
+            </div>   
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" id="action" name="action" value="add" />
+{#                        <button class="btn green" onclick="setAction('addPublish');">{{ lang.btn_publish }}</button>#}
+{#                        <button class="btn green" onclick="setAction('addContinue');">{{ lang.btn_save_continue }}</button>#}
+                        <button class="btn green" type="submit">{{ lang.btn_add }}</button>
+                        <a href="?" class="btn default" onclick="setAction('');">{{ lang.btn_cancel }}</a>
+                    </div>
+                </div>
+            </div>            
+    </form>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">{{ entity.name }}</span>
+            <span class="caption-helper">{{ entity.description }}</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+            <div class="form-body">  
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.name }}</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="name" value="{{ entity.name }}" />
+                    </div>                     
+                </div>                       
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.code }}</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="name_url" value="{{ entity.name_url }}" readonly />
+                    </div>                     
+                </div> 
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.order }}</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="order" value="{{ entity.order }}" />
+                    </div>                     
+                </div> 
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.active }}</label>
+                    <div class="col-md-4">
+                        <select name="active" class="form-control">
+                            <option value="0" {% if entity.active != 1 %}selected="true"{% endif %}>nieaktywne</option>
+                            <option value="1" {% if entity.active == 1 %}selected="true"{% endif %}>aktywne</option>
+                        </select>
+                    </div>                     
+                </div>                    
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                        <a href="{{ url_back }}" class="btn default">{{ lang.btn_cancel }}</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

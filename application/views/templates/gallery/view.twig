@@ -1,0 +1,13 @@
+<div id="galleryTitle">
+   <h2>{{ lang.gallery_title2 }}</h2>
+</div>
+
+<div id="galleryContent">
+   {% for key, row in photos %}
+      <div class="galleryPhoto {% if key % 4 == 3 %}galleryPhotoR{% endif %}">
+      {% if row.photo %}<a href="{{ row.photo.normal }}" title="{% if row.desc %}{{ row.desc }}{% else %}{{ entity.title }}{% endif %}" class="fancybox" rel="fancybox">
+            <img src="{{ row.photo.small }}" alt="{% if row.alt %}{{ row.alt }}{% else %}{{ row.title }}{% endif %}" /></a>
+      {% else %}<strong>Brak zdjęcia!</strong>{% endif %}
+   </div>
+    {% endfor %}
+</div>

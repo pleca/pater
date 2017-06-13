@@ -1,0 +1,5 @@
+{% if constant("LOGGED") and customer.only_netto_prices == 1 %}
+    {{ conf.currency_left }}{{ summary.total_netto }}{{ conf.currency_right }}
+{% else %}
+    {{ conf.currency_left }}{{ summary.total }}{{ conf.currency_right }}
+{% endif %}

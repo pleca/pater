@@ -1,0 +1,39 @@
+<aside class="side-bar" id="category-nav">    
+    {% include 'templates/other/categories-list.twig' %}
+
+    {% if static('Cms','modules')['help'] %}
+
+        <h2 class="title">
+            {{ lang.menu_left_title }}
+            <i class="mdi mdi-chevron-down collapsed" data-toggle="collapse" data-parent="#category-nav" href="#menuLeftList" aria-expanded="false"></i>
+        </h2>
+
+        <ul id="menuLeftList" class="collapse">
+            {% for entity in menuLeft %}
+                <li class="{% if selected == entity.url %}active{% endif %}">
+                    {% if entity.submenu %}
+                        {% set parentSelected = false %}
+                        
+                        {% for submenu in entity.submenu %}
+                            {% if selected == submenu.url %}
+                                {% set parentSelected = true %}
+                            {% endif %}
+                        {% endfor %}
+                        <i class="mdi mdi-chevron-down{% if parentSelected == true %}{% else %} collapsed{% endif %}" data-toggle="collapse" data-parent="#category-nav" href="#submenu{{ entity.id }}" aria-expanded="false"></i>
+                    {% endif %}                
+                    <a href="{{ entity.url }}">{{ entity.name }}</a>
+                {% if entity.submenu %}
+                    <ul id="submenu{{ entity.id }}" class="submenu collapse{% if parentSelected %} in{% endif %}">
+                        {% for submenu in entity.submenu %}
+                            <li {% if selected == submenu.url %}class="active"{% endif %}><a href="{{ submenu.url }}">{{ submenu.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}    
+                </li>        
+            {% endfor %}
+        </ul>
+
+    {% endif %}
+
+    {% include 'templates/other/menu-filtr.twig' %}
+</aside>

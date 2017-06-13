@@ -1,0 +1,4 @@
+{% for unit in unitTransportGroupUnits %}
+    {% if loop.first %}<option value="">{{ lang.select }}</option>{% endif %}
+        <option value="{{ unit.unit_id }}" {% if unitId == unit.unit_id %}selected="true"{% endif %}>{{ unit.length }}x{{ unit.width }}x{{ unit.height }}</option>
+{% endfor %}

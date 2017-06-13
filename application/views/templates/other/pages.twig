@@ -1,0 +1,54 @@
+{#{% if pages > 1 %}
+    <div class="clear"></div>
+    <div class="pages text-center">
+        {% for i in 1..pages+1 %}
+            {% if parameter("page") == i %}
+               <a class="page-s" title="{{ i }}">{{ i }}</a>
+            {% else %}
+               <a class="page" href="?page={{ i }}{{ qs }}" title="{{ i }}">{{ i }}</a>
+            {% endif %}       
+        {% endfor %}
+    </div>
+{% endif %}#}
+{% if pages > 1 %}
+   <div class="clear"></div>
+   <div class="pages">
+    {% for i in 1..pages %}
+         {% if loop.first %}
+            <a {% if page > 1 %}href="?page={{ page-1 }}{{ qs }}"{% endif %} title="{{ lang.prev|raw }}">{{ lang.prev|raw }}</a>
+         {% endif %}
+         {% if page == i %}
+            <strong><a class="strong" title="{{ i }}">{{ i }}</a></strong>
+         {% else %}            
+            {% if (i < page + 5 and i > page - 5) or loop.first or loop.last %}
+               {% if loop.last and i >= page + 6 %}..{% endif %}
+               <a class="page" href="?page={{ i }}{{ qs }}" title="{{ i }}">{{ i }}</a>
+               {% if loop.first and i <= page - 6 %}..{% endif %}
+            {% endif %}
+         {% endif %}
+         {% if loop.last %}<a {% if page < pages %}href="?page={{ page + 1 }}{{ qs }}"{% endif %} title="{{ lang.next|raw }}">{{ lang.next|raw }}</a>{% endif %}
+    {% endfor %}
+   </div>
+{% endif %}
+
+{#{if $pages>1}
+   <div class="clear"></div>
+   <div class="pages">
+      {section start=1 loop=$pages+1 name=n}
+         {assign var=i value=$smarty.section.n.index}
+         {if $smarty.section.n.first}
+            <a {if $page>1}href="?page={$page-1}{$qs}"{/if} title="{$lang.prev}">{$lang.prev}</a>
+         {/if}
+         {if $page==$i}
+            <a class="pageS" title="{$i}">{$i}</a>
+         {else}            
+            {if ($i<$page+5 AND $i>$page-5) OR $smarty.section.n.first OR $smarty.section.n.last}
+               {if $smarty.section.n.last AND $i>=$page+6}..{/if}
+               <a class="page" href="?page={$i}{$qs}" title="{$i}">{$i}</a>
+               {if $smarty.section.n.first AND $i<=$page-6}..{/if}
+            {/if}
+         {/if}
+         {if $smarty.section.n.last}<a {if $page<$smarty.section.n.total}href="?page={$page+1}{$qs}"{/if} title="{$lang.next}">{$lang.next}</a>{/if}
+      {/section}
+   </div>
+{/if}#}

@@ -1,0 +1,23 @@
+{% extends "templates/base.twig" %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block content %}
+<div id="pageTitle">
+   <h1>{{ title }}</h1>
+</div>
+
+<div id="pageContent">
+   {% for entity in entities %}
+      <div class="articleList {% if loop.last %}no-border{% endif %}">
+         {% if entity.photo %}<a href="{{ entity.url }}" title="{{ entity.name }}"><img class="articleImg" src="{{ entity.photo.small }}" alt="{{ entity.name }}" /></a>{% endif %}
+         <div class="articleDate">{{ entity.date_add }}</div>
+         <a class="articleTitle" href="{{ entity.url }}" title="{{ entity.name }}">{{ entity.name }}</a>         
+         <div class="articleDesc">{{ entity.desc_short }}</div>
+      </div>
+   {% endfor %}
+</div>
+
+{% endblock %}

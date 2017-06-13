@@ -1,0 +1,39 @@
+{% if seoAccordion['accordion_header1'] %}
+    <style>
+        #accordion { clear: both; padding-left: 10px;}
+        #footer1 .panel {border: 0;}
+        #accordion a {text-decoration:none;}
+        #footer1 .panel, .panel-default > .panel-heading {background-color: inherit;border: 0;}
+        .panel {box-shadow:none;}
+        .panel-heading {border: 0;padding: 0 15px;}
+    </style>
+
+    <div id="accordion" class="panel-group">
+        <div class="panel panel-default">
+            <div id="headingOne" class="panel-heading">
+                <h5 class="panel-title"><a href="#collapseOne" data-toggle="collapse" data-parent="#accordion"> {{ seoAccordion['accordion_header1'] }} </a></h5>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse">
+                <div class="panel-body">{{ seoAccordion['accordion_content1']|raw }}</div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div id="headingTwo" class="panel-heading">
+                <h5 class="panel-title"><a class="collapsed" href="#collapseTwo" data-toggle="collapse" data-parent="#accordion"> {{ seoAccordion['accordion_header2'] }} </a></h5>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse">
+                <div class="panel-body">{{ seoAccordion['accordion_content2']|raw }}</div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div id="headingThree" class="panel-heading">
+                <h5 class="panel-title"><a class="collapsed" href="#collapseThree" data-toggle="collapse" data-parent="#accordion"> {{ seoAccordion['accordion_header3'] }} </a></h5>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+                <div class="panel-body">{{ seoAccordion['accordion_content3']|raw }}</div>
+            </div>
+        </div>
+    </div>
+{% endif %}

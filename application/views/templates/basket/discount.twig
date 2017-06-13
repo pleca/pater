@@ -1,0 +1,27 @@
+<div class="alert alert-success">
+{% if session[constant("CUSTOMER_CODE")]['discount'] and session[constant("CUSTOMER_CODE")]['discount'] > 0 %}               
+{#    <div class="basket-discount percent">
+        <span class="text">{{ lang.order_discount }}</span>
+        <span class="value">
+            {{ session[constant("CUSTOMER_CODE")]['discount'] }}%
+        </span>                                
+    </div>#}
+    <div class="basket-discount saving">
+        <span class="text">{{ lang.order_discount2 }}</span>
+        <span class="value">{{ conf.currency_left -}} {{- discountSaving -}} {{ conf.currency_right }}</span>
+    </div>
+{#    <div class="basket-discount pay">
+        <span class="text">{{ lang.order_discount3 }}</span>
+        <span class="value">{{ conf.currency_left }}{{ discountTotal }}{{ conf.currency_right }}</span>                                
+    </div>  #}
+{% endif %} 
+
+{% if static('Cms','modules')['shopping_thresholds'] and shoppingThresholdInfo['needToDiscount'] %}
+    <div class='need-to-discount'>
+        {{ lang.need_to_discount1 }} {{ conf.currency_left }}{{ shoppingThresholdInfo['needToDiscount'] }}{{conf.currency_right }}
+        {{ lang.need_to_discount2 }} {{ shoppingThresholdInfo['nerestThreshold']['discount'] }}% {{ lang.need_to_discount3 }}
+    </div>
+{% endif %}
+
+{#{{ dump(shoppingThresholdInfo) }}#}
+</div>

@@ -1,0 +1,197 @@
+{% extends "templates/base.twig" %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(function () {   
+            $('input[name="type"').click(function(event) {
+                var customer_type = $(this).attr('id');
+
+                switch(customer_type) {
+                    case 'individual':
+                        $('.company-data').hide();
+                        break;
+                    case 'company':
+                        $('.company-data').show();
+                        break;
+                }                        
+            });
+        });
+
+          $(function () {
+             $('select[name=country]').change(function () {
+                var country = $(this).val();
+                if (country != '1')
+                {
+                   $('#p1').hide();
+                   $('#p2').show();
+                   $('#p2').removeClass('hidden');
+                }
+                else
+                {
+                   $('#p2').hide();
+                   $('#p1').show();
+                   $('#p1').removeClass('hidden');
+                }
+             });
+          });
+    </script>
+   
+{% endblock %}
+
+{% block content %}
+    <div class="row profile-page">
+
+        <div class="col-xs-12">            
+            {% include 'templates/customer/top.twig' %}                        
+            {% include 'templates/other/notify.twig' %}
+            
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12">
+                    <form action="" method="" class="form-horizontal">
+                        <div class="form-group required-field">
+                            <label class="col-sm-4 col-xs-12 control-label">{{ lang.c_first_name }}</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="form-control" name="first_name" value="{{ entity.first_name }}">
+                            </div>
+                        </div>
+                        <div class="form-group required-field">
+                            <label class="col-sm-4 col-xs-12 control-label">{{ lang.c_last_name }}</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="form-control" name="last_name" value="{{ entity.last_name }}">
+                            </div>
+                        </div>
+                        <div class="form-group required-field">
+                            <label class="col-sm-4 col-xs-12 control-label">{{ lang.c_email }}</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="form-control" name="email" value="{{ entity.email }}" disabled="disabled">
+                            </div>
+                        </div>
+                        <div class="form-group required-field">
+                            <label class="col-sm-4 col-xs-12 control-label">{{ lang.c_login }}</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="form-control" name="login" value="{{ entity.login }}" disabled="disabled">
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="action" value="edit" />
+                        <input type="hidden" name="sid" value="{{ session[constant("CUSTOMER_CODE")]['sid'] }}" />
+                        <input type="hidden" name="code" value="" />
+            
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-8 col-xs-12">
+                                <div class="required-field">
+                                    <label></label><small>{{ lang.c_star }}</small>
+                                </div>
+                                <button type="submit" class="btn btn-default" onclick="setCode();">{{ lang.c_save }}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr />
+            
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12">
+                    <form class="form-horizontal" method="post" action="{{ server('PHP_SELF') }}">
+                        <div class="form-group">
+                            <label class="col-sm-4 col-xs-12 control-label">{{ lang.c_type }}</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <label class="radio-inline">
+                                  <input type="radio" name="type" id="individual" value="1" {% if entity.type != 2 %}checked{% endif %}> {{ lang.c_individual }}
+                                </label>
+                                <label class="radio-inline">
+                                  <input type="radio" name="type" id="company" value="2" {% if entity.type == 2 %}checked{% endif %}> {{ lang.c_company }}
+                                </label>
+                            </div>
+                        </div>                                
+                        <div class="company-data" style="display:none;">
+                            <div class="form-group required-field">
+                                <label class="col-sm-4 col-xs-12 control-label">{{ lang.c_company_name }}</label>
+                                <div class="col-sm-8 col-xs-12">
+                                    <input type="text" name="company_name" class="form-control" value="{{ entity.company_name }}">
+                                </div>                                        
+                            </div>
+                            <div class="form-group required-field">
+                                <label class="col-sm-4 col-xs-12 control-label">{{ lang.c_nip }}</label>
+                                <div class="col-sm-8 col-xs-12">
+                                    <input type="text" name="nip" class="form-control" value="{{ entity.nip }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 col-xs-12 control-label">{{ lang.c_country }}</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <select id="delivery_country" class="form-control" data-plugin="select2" name="country">
+                                {% for country in transportEnabledCountries %}
+                                    <option value="{{ country.id }}" {% if entity.country == country.id %}selected="selected"{% endif %}>{{ country.name }}</option>  
+                                {% endfor %}                                     
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group required-field">
+                            <label class="col-sm-4 col-xs-12 control-label">{{ lang.c_address1 }}</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="form-control" name="address1" value="{{ entity.address1 }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 col-xs-12 control-label">{{ lang.c_address2 }}</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="form-control" name="address2" value="{{ entity.address2 }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 col-xs-12 control-label">{{ lang.c_address3 }}</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="form-control" name="address3" value="{{ entity.address3 }}">
+                            </div>
+                        </div>
+                        <div class="form-group required-field">
+                            <label class="col-sm-4 col-xs-12 control-label">{{ lang.c_postcode }}</label>
+                            <div id="p1" class="col-sm-8 col-xs-12" {% if entity.country != '1' and entity.country != '' %}style="display:none;"{% endif %}>
+                                <input class="form-control" style="width:48%;display:inline-block;" name="post_code1" type="text" value="{{ entity.post_code1 }}" maxlength="4">
+                                <input class="form-control" style="width:48%;display:inline-block;float:right;" name="post_code2" type="text" value="{{ entity.post_code2 }}" maxlength="3">
+                            </div> 
+                            <div id="p2" class="col-sm-3" {% if entity.country == '1' or entity.country == '' %}style="display:none;"{% endif %}>
+                                <input type="text" class="form-control" name="post_code" value="{{ entity.post_code }}" maxlength="12">
+                            </div>                            
+                        </div>
+                        <div class="form-group required-field">
+                            <label class="col-sm-4 col-xs-12 control-label">{{ lang.c_city }}</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="form-control" name="city" value="{{ entity.city }}">
+                            </div>
+                        </div>
+                        <div class="form-group required-field">
+                            <label class="col-sm-4 col-xs-12 control-label">{{ lang.c_phone }}</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="form-control" name="phone" value="{{ entity.phone }}">
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="action" value="address" />
+                        <input type="hidden" name="sid" value="{{ session[constant("CUSTOMER_CODE")]['sid'] }}" />                            
+                            
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-8 col-xs-12">
+                                <div class="required-field">
+                                    <label></label><small>{{ lang.c_star }}</small>
+                                </div>
+                                <button type="submit" class="btn btn-default">{{ lang.c_save }}</button>
+                            </div>
+                        </div>
+                    </form>
+                            
+                    {% include 'templates/customer/bottom.twig' %} 
+                </div>
+            </div>            
+            
+        </div>
+    </div> 
+{% endblock %}

@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<language-pack>
+  <header>
+    <!-- Please fill in contact information (author & email), we might contact you when we are doing updates -->
+    <!-- You will also have the chance to participate in beta releases of new versions -->
+    <author>Tomasz Stempkowicz (tstempko@wp.pl)</author>
+    <version minor="5" major="1" releasedate="2009-12-16" />
+    <description>
+			This is the Polish language pack for the MCImageManager.
+		</description>
+  </header>
+  <language code="pl" title="Polish" dir="ltr">
+    <group target="common">
+      <item name="title">Menadżer obrazów Moxiecode</item>
+      <item name="filemanager">Menadżer plików</item>
+      <item name="createdir">Utwórz katalog</item>
+      <item name="refresh">Odśwież</item>
+      <item name="upload">Wgraj</item>
+      <item name="help">Pomoc</item>
+      <item name="edit">Edycja</item>
+      <item name="deleteit">Usuń</item>
+      <item name="view">Podgląd</item>
+      <item name="download">Pobierz</item>
+      <item name="insert">Wstaw</item>
+      <item name="directory">Wybrany katalog</item>
+      <item name="loading">Ładowanie...</item>
+      <item name="filter">Filtr</item>
+      <item name="alert_ok">Ok</item>
+      <item name="confirm_yes">Tak</item>
+      <item name="confirm_no">Nie</item>
+      <item name="prev">Poprzedni</item>
+      <item name="next">Następny</item>
+      <item name="image_data">Ładowanie grafiki, proszę czekać...</item>
+      <item name="page">Strona</item>
+      <item name="of">z</item>
+      <!-- Legacy items -->
+      <item name="add_favorite">Dodaj do ulubionych</item>
+      <item name="removefavorite">Usuń z ulubionych</item>
+    </group>
+    <group target="button">
+      <!-- think about the length of the text -->
+      <item name="create">Utwórz</item>
+      <item name="cancel">Anuluj</item>
+      <item name="apply">Zastosuj</item>
+      <item name="save">Zapisz</item>
+    </group>
+    <group target="error">
+      <!-- common -->
+      <item name="demo">Ta funkcja jest niedostępna w wersji demo.</item>
+      <item name="no_filesystem">Niewłaściwy katalog/ścieżka: {path}.</item>
+      <item name="no_access">Brak dostępu dla tego pliku/katalogu.</item>
+      <item name="no_write_access">Brak prawa do zapisu dla katalogu.</item>
+      <item name="file_not_exists">Nie znaleziono pliku/katalogu.</item>
+      <item name="invalid_filename">Plik jest nieprawidłowy.</item>
+      <!-- create dir -->
+      <item name="template_missing">Nie można odnaleźć wybranego szablonu.</item>
+      <item name="folder_exists">Katalog o podanej nazwie już istnieje.</item>
+      <item name="createdir_failed">Nie można utworzyć katalogu.</item>
+      <!-- upload -->
+      <item name="upload_failed">Nie udało się wgrać pliku na serwer. Sprawdź uprawnienia do katalogu.</item>
+      <item name="file_exists">Plik o podanej nazwie już istnieje.</item>
+      <item name="error_to_large">Plik, który próbujesz wgrać, jest zbyt duży.</item>
+      <!-- delete -->
+      <item name="delete_failed">Nie można usunąć pliku(-ów).</item>
+      <!-- image edit -->
+      <item name="crop_failed">Nie można przyciąć obrazka.</item>
+      <item name="resize_failed">Nie można zmienić rozmiaru obrazka.</item>
+      <item name="rotate_failed">Nie można obrócić obrazka.</item>
+      <item name="flip_failed">Nie można wykonać odbicia lustrzanego.</item>
+      <item name="save_failed">Nie można zapisać obrazka.</item>
+      <!-- Legacy items -->
+      <item name="remove_favorite_failed">Nie można usunąć pliku z listy ulubionych.</item>
+    </group>
+    <group target="message">
+      <!-- common -->
+      <item name="save_success">Plik został zapisany.</item>
+      <item name="keepalive">Żądanie keepalive.</item>
+      <!-- delete -->
+      <item name="delete_success">Plik(i) został usunięty.</item>
+      <!-- create dir -->
+      <item name="directory_ok">Katalog został utworzony.</item>
+      <!-- upload -->
+      <item name="upload_ok">Ładowanie zakończone poprawnie.</item>
+      <!-- image edit -->
+      <item name="crop_success">Obrazek został przycięty.</item>
+      <item name="resize_success">Rozmiar obrazka został zmieniony.</item>
+      <item name="rotate_success">Obrazek został obrócony.</item>
+      <item name="flip_success">Odbicie lustrzane zakończyło się sukcesem.</item>
+    </group>
+    <group target="panel">
+      <item name="categories">Kategorie</item>
+      <item name="folders">Katalogi</item>
+      <!-- Legacy items -->
+      <item name="favorites">Ulubione</item>
+      <item name="history">Historia</item>
+    </group>
+    <group target="view">
+      <item name="title">Widok</item>
+      <item name="mode">Widok:</item>
+      <item name="thumbnail">Miniaturki</item>
+      <item name="textlist">Lista</item>
+      <item name="images_per_page">obrazków na stronę</item>
+      <item name="confirm_delete">Czy na pewno chcesz usunąć ten plik?</item>
+      <item name="keyboard_next">Skrót klawiaturowy: Spacja, N, Strzałka w prawo, PAGE DOWN</item>
+      <item name="keyboard_prev">Skrót klawiaturowy: P, Strzałka w lewo, PAGE UP</item>
+      <item name="dimensions">Rozdzielczość</item>
+      <!-- Legacy items -->
+      <item name="confirm_remove_favorite">Czy na pewno chcesz usunąć ten plik ze swojej listy ulubionych?</item>
+    </group>
+    <group target="createdir">
+      <item name="title">Utwórz katalog</item>
+      <item name="description">Podaj nazwę katalogu, który chcesz utworzyć.</item>
+      <item name="template">Szablon:</item>
+      <item name="select_template">-- Wybierz szablon --</item>
+      <item name="directory_name">Nazwa katalogu:</item>
+      <item name="create_in">Utwórz w:</item>
+      <item name="progress">Tworzenie katalogu, proszę czekać...</item>
+    </group>
+    <group target="upload">
+      <item name="title">Wgraj</item>
+      <item name="description">Wybierz plik do wgrania na serwer.</item>
+      <item name="valid_extensions">Dopuszczalne rozszerzenia:</item>
+      <item name="max_upload_size">Maksymalna wielkość pliku:</item>
+      <item name="file_to_upload">Plik:</item>
+      <item name="as_file_name">Nazwa pliku:</item>
+      <item name="path">Ścieżka: </item>
+      <item name="button_upload">Wgraj</item>
+      <item name="browse">Dodaj plik(i)</item>
+      <item name="progress">Wgrywanie...</item>
+      <item name="upload_warn">Pliki są aktualnie wgrywane na serwer. Czy jesteś pewien, że chcesz anulować?</item>
+      <item name="statusrow">{files} plików (romiar {size}) oczekuje na wysłanie.</item>
+      <item name="progressinfo">{loaded} z {total} wysłanych z prędkością {speed}/s.</item>
+      <item name="abort">Anuluj wysyłanie</item>
+      <item name="add_more">Chcesz dodać więcej?</item>
+      <item name="upload_to_server">Wyślij na serwer</item>
+      <item name="cancelled">Wysyłanie zostało anulowane</item>
+      <item name="choose_files">Wybierz pliki</item>
+      <item name="basic_upload">Jeśli masz problemy z wysyłaniem spróbuj skorzystać z {a}basic uploader{/a}.</item>
+      <item name="remove">Usuń</item>
+      <item name="file">Plik</item>
+      <item name="size">Rozmiar</item>
+      <item name="status">Status</item>
+      <item name="no_valid_files">Nie ma plików. Wybierz właściwe pliki i spróbuj ponownie.</item>
+    </group>
+    <group target="edit_image">
+      <item name="title">Edytor obrazów Moxiecode ImageManager</item>
+      <item name="save">Zapisz</item>
+      <item name="revert">Przywróć</item>
+      <item name="crop">Przytnij</item>
+      <item name="resize">Zmień rozmiar</item>
+      <item name="please_wait">Przetwarzanie obrazka, proszę czekać...</item>
+      <item name="constrain">Zachowaj proporcje</item>
+      <item name="left">Od lewej</item>
+      <item name="top">Od góry</item>
+      <item name="width">Szerokość</item>
+      <item name="height">Wysokość</item>
+      <item name="save_as">Zapisz jako</item>
+      <item name="flip">Odbicie lustrzane</item>
+      <item name="rotate">Obróć</item>
+      <item name="reload">Odśwież</item>
+      <item name="horizontal">Poziomo</item>
+      <item name="vertical">Pionowo</item>
+      <item name="saving_wait">Zapisywanie obrazka, proszę czekać...</item>
+      <item name="confirm_revert">Czy na pewno chcesz przywrócić ostatnią zapisaną wersję obrazka?</item>
+      <item name="loading">Ładowanie obrazka, proszę czekać...</item>
+      <item name="confirm_no_save">Czy jesteś pewien, że nie chcesz zachować zmian?</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertimage_desc">Wstaw obrazek</item>
+      <item name="replaceimage_desc">Zamień obrazek</item>
+      <item name="editimage_desc">Edytuj obrazek</item>
+    </group>
+    <group target="favorites">
+      <item name="special_folder_title">Ulubione</item>
+      <item name="addfavorites">Dodaj do Ulubionych</item>
+      <item name="removefavorites">Usuń z Ulubionych</item>
+      <item name="confirm_remove_favorite">Czy na pewno chcesz usunąć z listy ulubionych?</item>
+      <item name="remove_favorite_failed">Nie udało się usunąć z listy ulubionych.</item>
+    </group>
+    <group target="history">
+      <item name="special_folder_title">Historia</item>
+    </group>
+  </language>
+</language-pack>

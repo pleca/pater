@@ -1,0 +1,125 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <form id="form" method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+            <div class="form-body">                
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Nazwa zadania</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="name" value="{{ entity.name }}" />
+{#                        <p class="help-block">Max 60 characters.</p>#}
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label"> {{ lang.description }}</label>                     
+                    <div class="col-md-4">
+                        <textarea class="form-control" type="text" name="description">{{ entity.description }} </textarea>
+                    </div>                     
+                </div>
+                <div class="form-group form-inline">
+                    <label class="col-md-3 control-label"> Run</label>
+                    <div class="col-md-4">
+                        <select name="minute" class="form-control">
+                            <option value="*" {% if entity.minute == '*' %}selected{% endif %}>*</option>
+                            {% for i in 0..59 %}
+                                {% if i > 0 and i < 10 %}
+                                    {% set i = '0' ~ i %}
+                                {% endif %}
+                                
+                                <option {% if entity.minute != '*' and entity.minute == i %}selected{% endif %} value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="hour" class="form-control">
+                            <option value="*" {% if entity.hour == '*' %}selected{% endif %}>*</option>
+                            {% for i in 0..23 %}
+                                {% if i > 0 and i < 10 %}
+                                    {% set i = '0' ~ i %}
+                                {% endif %}                                
+                                <option {% if entity.hour != '*' and entity.hour == i %}selected{% endif %} value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="dayOfMonth" class="form-control">
+                            <option value="*" {% if entity.dayOfMonth == '*' %}selected{% endif %}>*</option>
+                            {% for i in 1..31 %}
+                                {% if i > 0 and i < 10 %}
+                                    {% set i = '0' ~ i %}
+                                {% endif %}                                 
+                                <option {% if entity.dayOfMonth != '*' and entity.dayOfMonth == i %}selected{% endif %} value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="month" class="form-control">
+                            <option value="*" {% if entity.month == '*' %}selected{% endif %}>*</option>
+                            {% for i in 1..12 %}                             
+                                <option {% if entity.month == i %}selected{% endif %} value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="dayOfWeek" class="form-control">
+                            <option value="*" {% if entity.dayOfWeek == '*' %}selected{% endif %}>*</option>
+                            {% for i in 0..6 %}
+                                <option {% if entity.dayOfWeek != '*' and entity.dayOfWeek == i %}selected{% endif %} value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                        <p class="help-block"><br /> 
+                            * * * * * command to be executed<br />
+                            1 - Minute (0 - 59)<br />
+                            2 - Hour (0 - 23)<br />
+                            3 - Day of month (1 - 31)<br />
+                            4 - Month (1 - 12)<br />
+                            5 - Day of week (0 - 6 => Sunday - Saturday)<br /><br />
+                            Examples:<br />
+                            * * * * * - every minute<br />
+                            5 0 * * * - five minutes after midnight, every day,<br />
+                            0 22 * * 1 - 10 pm on monday
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Start Date</label>
+                    <div class="col-md-2">
+                        <input class="form-control datetimepicker" type="text" name="startDate" value="{{ entity.startDate is empty ? "" : entity.startDate|date('Y-m-d H:i') }}" />                                                                   
+                    </div>                     
+                </div> 
+                <div class="form-group">
+                    <label class="col-md-3 control-label">End Date</label>
+                    <div class="col-md-2">
+                        <input class="form-control datetimepicker" type="text" name="endDate" value="{{ entity.endDate is empty ? "" : entity.endDate|date('Y-m-d H:i') }}" />                                                                   
+                    </div>                     
+                </div>                 
+                <div class="form-group">
+                    <label class="col-md-3 control-label"></label>
+                    <div class="col-md-4">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="active" id ="active" value="1" {% if entity.active == 1 %}checked="true"{% endif %} />{{ lang.active }}
+                            </label>
+                        </div>
+                    </div>                     
+                </div>                                               
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" name="action" value="edit" />
+                        <input type="hidden" name="id" value="{{ entity.id }}" /> 
+                            <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                            <a href="?" class="btn default">{{ lang.btn_cancel }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

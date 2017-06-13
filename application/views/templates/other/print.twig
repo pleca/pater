@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl">
+   <head>
+      <title>{{ pageTitle }}</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <meta name="keywords" content="{{ pageKeywords }}" />
+      <meta name="description" content="{{ pageDescription }}" />
+         <style type="text/css">
+            /* <![CDATA[ */
+            body { margin: 0;	padding: 0;	width: 900px; height: 100%; text-align: left; font-family: "Tahoma", "Verdana", "Helvetica", "Arial", sans-serif; font-size: 8pt; }
+            img { border: none; }
+            h1 { font-size: 12pt; }
+            #container { margin: 0 auto; padding: 10px; width: 900px; height: auto; position: relative; text-align: left; }
+            #pageTitle { width: 880px; margin: 0 10px; padding: 10px 0; border-bottom: 1px solid #CFD0D1; float: left; }
+            #pageTitle h1 { margin: 0; padding: 0;	}
+            #pageContent { width: 880px; padding: 10px; text-align: justify; float: left; }
+            .imgArticle { float: left; margin: 0 5px 5px 0; }
+            .galleryPhoto { width: 155px; height: 145px; text-align: center; overflow: hidden; float: left; }
+            #footer { width: 880px; margin: 0 auto; padding: 10px; height: auto; position: relative; text-align: center; float: left; }
+            .left { text-align: left; }
+            .claer { clear: both; }
+            /* ]]> */
+         </style>
+   </head>
+   <body>
+      <div id="container">
+         <div id="pageTitle">
+            <h1>{{ aItem.title }}</h1>
+         </div>
+
+         <div id="pageContent">
+            {% if aItem.active != 1 %}<div class="error">Artykuł archiwalny.</div><br />{% endif %}
+            {% if aItem.photo %}<img class="imgArticle" src="{{ aItem.photo.small }}" alt="{{ aItem.title }}" />{% endif %}
+            {{ aItem.desc }}
+            <div class="clear"></div>
+
+            {% for row in aPhotos % }
+               <div class="galleryPhoto">
+               {% if row.photo %}<img src="{{ row.photo.small }}" alt="{% if row.alt %}{{ row.alt }}{% else %}{{ aItem.title }}{% endif %}" /><br />
+                  {{ row.desc }}
+               {% else %}<strong>Brak zdjęcia!</strong>{/if}
+            </div>
+            {% endfor %}
+         <div class="clear"></div>
+      </div>
+      <div id="footer">
+         <div>Design Copyright © <strong>Idea7</strong>  2010 | Vitaminshop All Rights Reserved for Chillimedia</div>
+         <div class="left"><a href="javascript:print();document.location.href='{{ server("REDIRECT_URL") }}';">drukuj</a></div>
+      </div>
+   </div>
+</body>
+</html>

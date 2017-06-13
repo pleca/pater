@@ -1,0 +1,41 @@
+<div id="pageTitle">
+   <h1>{{ entity.title }}</h1>
+</div>
+
+<div id="pageContent">
+   {% if entity.active != 1 %}<div class="error">Artykuł archiwalny.</div><br />{% endif %}
+   {{ entity.desc|raw }}
+   <br /><br />
+   <div class="clear"></div>
+
+    {% for row in photos %}
+        <div class="galleryPhoto">
+        {% if row.photo %}<a href="{{ row.photo.normal }}" title="{% if row.desc %}{{ row.desc }}{% else %}{{ entity.title }}{% endif %}" class="fancybox" rel="fancybox">
+            <img src="{{ row.photo.small }}" alt="{% if row.alt %}{{ row.alt }}{% else %}{{ entity.title }}{% endif %}" /></a><br />
+            {{ row.desc|raw }}
+         {% else %}<strong>Brak zdjęcia!</strong>{% endif %}
+        </div>
+        {% if loop.index %5 == 4 %}<div class="clear"></div>{% endif %}
+    {% endfor %}
+
+<div class="clear"></div>
+{% if show_tags == 1 %}
+   <div class="tags">
+      {% if entity.tag1 %}<a href="{{ constant("CMS_URL") }}/search/{{ entity.tag1_url }}.html" title="{{ entity.tag1 }}">{{ entity.tag1 }}</a>{% endif %}
+      {% if entity.tag2 %}<a href="{{ constant("CMS_URL") }}/search/{{ entity.tag2_url }}.html" title="{{ entity.tag2 }}">{{ entity.tag2 }}</a>{% endif %}
+      {% if entity.tag3 %}<a href="{{ constant("CMS_URL") }}/search/{{ entity.tag3_url }}.html" title="{{ entity.tag3 }}">{{ entity.tag3 }}</a>{% endif %}
+   </div>
+{% endif %}
+
+{% if show_opinion == 1 %}
+    {% include 'templates/other/opinion.twig' %}
+{% endif %}
+
+{% if show_comments == 1 %}
+    {% include 'templates/other/comments.twig' %}
+{% endif %}
+</div>
+
+{% if show_send == 1 %}
+    {% include 'templates/other/sendLink.twig' %}
+{% endif %}

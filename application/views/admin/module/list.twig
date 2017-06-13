@@ -1,0 +1,51 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+    <small>{{ pageTitle }}</small>
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body">   
+        <div class="table-scrollable">
+            <form class="form-horizontal" method="post" action="{{ server('PHP_SELF') }}">
+                <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+                <thead>
+                    <tr>
+                        <th>Nazwa modułu</th>
+                        <th>Opis</th>
+                    </tr>
+                </thead>              
+                <tbody>
+                    {% for entity in entities %}   
+                    <tr>
+                        <td style="max-width:150px;">
+                            <label>
+                            <input type="checkbox" name="modules[]" id="p{{ entity.id }}" value="{{ entity.id }}" {% if entity.active == 1 %}checked="true"{% endif %} />
+                            {{ entity.name }}</label>
+                        </td>
+                        <td>{{ entity.description }}</td>
+                    </tr>
+                    {% endfor %} 
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="hidden" name="action" value="saveModules" />
+                            <input type="hidden" name="sid" value="{{ entity.shid }}" />
+                            
+                            <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                        </td>
+                    </tr>                        
+                </tbody>
+                </table>                       
+            </form>          
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "templates/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            getMiniBasketList();
+            getSummary();
+        });
+    </script>
+
+    {% if redirect %}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                setTimeout("location.href='{{ URL }}/'", 3000);
+            });
+        </script>
+    {% endif %}    
+{% endblock %}
+
+{% block content %}
+    
+    <div class="profile box">
+        <div id="pageTitle">
+            <h1>{{ lang.c_logout }}</h1>
+        </div>
+
+        <div id="pageContent">
+            {% include 'templates/other/notify.twig' %} 
+        </div>
+    </div>
+
+{% endblock %}

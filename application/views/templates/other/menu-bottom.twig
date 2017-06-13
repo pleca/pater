@@ -1,0 +1,13 @@
+{% for entity in menuBottom %}                    
+    <div class="col-sm-4 col-md-3">
+        <h2>{{ entity.name }}
+            <i class="mdi mdi-chevron-down collapsed" data-toggle="collapse" data-parent="#footer-nav" href="#firstCollapse" aria-expanded="false"></i>
+        </h2>
+            
+        <ul id="firstCollapse" class="collapse">    
+        {% for submenu in entity.submenu %}
+            <li><a href="{{ submenu.url }}" title="{{ submenu.name }}"><span>{{ submenu.name }}</span></a></li>
+        {% endfor %}  
+        </ul>
+    </div>
+{% endfor %}

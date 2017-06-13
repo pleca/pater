@@ -1,0 +1,23 @@
+{% if static('Cms','modules')['help'] != 1 %}
+    {% include 'templates/other/menu-categories.twig' %}
+{% endif %}
+
+{% if static('Cms','modules')['help'] %}
+    <h3>{{ lang.menu_left_title }}</h3>
+    <ul class="nav nav-pills nav-stacked">        
+        {% for entity in menuLeft %}
+            <li role="presentation" {% if selected == entity.url %}class="active"{% endif %}>
+                <a href="{{ entity.url }}">{% if entity.submenu %}<span class="glyphicon glyphicon-menu-right" style="margin-right: 5px;"></span>{% endif %}{{ entity.name }}</a>
+            {% if entity.submenu %}
+                <ul class="submenu">
+                    {% for submenu in entity.submenu %}
+                        <li {% if selected == submenu.url %}class="active"{% endif %}><a href="{{ submenu.url }}">{{ submenu.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}    
+            </li>        
+        {% endfor %}    
+    </ul>
+{% endif %}
+
+{% include 'templates/other/menu-filtr.twig' %}

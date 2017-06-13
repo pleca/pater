@@ -1,0 +1,138 @@
+{% extends "templates/base.twig" %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+          $(function () {
+             $('#type1').click(function () {
+                $('#type_tr_1').fadeOut();
+                $('#type_tr_2').fadeOut();
+             });
+             $('#type2').click(function () {
+                $('#type_tr_1').fadeIn();
+                $('#type_tr_2').fadeIn();
+             });
+          });
+          $(function () {
+             $('select[name=country]').change(function () {
+                var country = $(this).val();
+                if (country != 'GB')
+                {
+                   $('#p1').hide();
+                   $('#p2').show();
+                }
+                else
+                {
+                   $('#p2').hide();
+                   $('#p1').show();
+                }
+             });
+          });
+    </script>   
+{% endblock %}
+
+{% block content %}
+<div id="customer">
+    {% include 'templates/other/notify.twig' %} 
+
+   <h1 class="customerH">{{ lang.c_address }}</h1>
+   <div class="customerL2">
+        {% include 'templates/customer/menu-left.twig' %}     
+   </div>
+   <div class="customerT2">
+       {% include 'templates/customer/menu-top.twig' %} 
+   </div>
+   <div class="customerR2">
+      <div class="customerR3">
+         <form id="form" method="post" action="{{ server("PHP_SELF") }}">
+            <table class="tableCustomer" cellpadding="0" cellspacing="0" border="0">
+               <tr>
+                  <td></td>
+                  <td>
+                     <div>{{ lang.c_type }}</div>
+                     <div style="margin: 10px 30px; text-align: center; float: left;">
+                        <input type="radio" name="type" id="type1" value="1" {% if aItem.type != 2 %}checked="checked"{% endif %} /><br />
+                        <label for="type1">{{ lang.c_individual }}</label>
+                     </div>
+                     <div style="margin: 10px 30px; text-align: center; float: left;">
+                        <input type="radio" name="type" id="type2" value="2" {% if aItem.type == 2 %}checked="checked"{% endif %} /><br />
+                        <label for="type2">{{ lang.c_company }}</label>
+                     </div>
+                  </td>
+               </tr>
+               <tr id="type_tr_1" {% if aItem.type != 2 %}style="display:none;"{% endif %}>
+                  <td class="">{{ lang.c_company_name }}  <span class="red">*</span></td>
+                  <td><input class="inpText w300" type="text" name="company_name" value="{{ aItem.company_name }}" /></td>
+               </tr>
+               <tr id="type_tr_2" {% if aItem.type != 2 %}style="display:none;"{% endif %}>
+                  <td class="">{{ lang.c_nip }}  <span class="red">*</span></td>
+                  <td><input class="inpText w300" type="text" name="nip" value="{{ aItem.nip }}" /></td>
+               </tr>
+               <tr>
+                  <td class="w150">{{ lang.c_country }}</td>
+                  <td>
+                     <select name="country" class="inpSelect w200">
+                        {% for country in countries %}
+                           <option value="{{ country.code }}" {% if aItem.country == country.code %}selected="true"{% endif %}>{{ country.name }}</option>
+                        {% endfor %}
+                     </select>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="">{{ lang.c_address1 }}  <span class="red">*</span></td>
+                  <td><input class="inpText w300" type="text" name="address1" value="{{ aItem.address1 }}" /></td>
+               </tr>
+               <tr>
+                  <td class="">{{ lang.c_address2 }}</td>
+                  <td><input class="inpText w300" type="text" name="address2" value="{{ aItem.address2 }}" /></td>
+               </tr>
+               <tr>
+                  <td class="">{{ lang.c_address3 }}</td>
+                  <td><input class="inpText w300" type="text" name="address3" value="{{ aItem.address3 }}" /></td>
+               </tr>
+               <tr>
+                  <td class="">{{ lang.c_postcode }}  <span class="red">*</span></td>
+                  <td>
+                     <span id="p1" {% if aItem.country != 'GB' and aItem.country != '' %}style="display:none;"{% endif %}>
+                        <input class="inpText w60" type="text" name="post_code1" value="{{ aItem.post_code1 }}" maxlength="4" />
+                        <input class="inpText w60" type="text" name="post_code2" value="{{ aItem.post_code2 }}" maxlength="3" />
+                        {{ lang.c_postcode3 }}
+                     </span>
+                     <span id="p2" {% if aItem.country == 'GB' or aItem.country == '' %}style="display:none;"{% endif %}>
+                        <input class="inpText w100" type="text" name="post_code" value="{{ aItem.post_code }}" maxlength="12" />                  
+                     </span>
+                  </td>
+               </tr>
+               <tr>
+                  <td class="">{{ lang.c_city }}  <span class="red">*</span></td>
+                  <td><input class="inpText w300" type="text" name="city" value="{{ aItem.city }}" /></td>
+               </tr>
+               <tr>
+                  <td class="">{{ lang.c_phone }}  <span class="red">*</span></td>
+                  <td><input class="inpText w300" type="text" name="phone" value="{{ aItem.phone }}" /></td>
+               </tr>
+               <tr>
+                  <td></td>
+                  <td><span class="red">*</span> {{ lang.c_star }}</td>
+               </tr>
+               <tr>
+                  <td></td>
+                  <td class="">
+                     <input type="hidden" name="action" value="address" />
+                     <input type="hidden" name="uid" value="{{ aItem.uid }}" />
+                     <input type="hidden" name="code" value="" />
+                     <input class="inpSubmit" type="submit" value="{{ lang.c_save }}" onclick="setCode();" />
+                  </td>
+               </tr>
+            </table>
+         </form>
+      </div>
+
+        {% include 'templates/customer/bottom.twig' %}
+   </div>
+</div>
+{% endblock %}

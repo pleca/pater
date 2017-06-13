@@ -1,0 +1,61 @@
+{% extends "templates/base.twig" %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block content %}
+    
+{#    {{ dump(session) }}#}
+<div class="row login-page">
+    <div class="col-sm-6">    
+        <div class="login-page box">
+            <div class="title">
+               <h2>{{ lang.password_change }}</h2>
+{#               <p>{{ lang.c_log2 }}</p> #}
+               {% include 'templates/other/notify.twig' %} 
+
+                <form id="form2" class="login-form form-horizontal" method="post" action="{{ server('PHP_SELF') }}">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ lang.c_login2 }}</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="login" value="{{ parameter("login", "post") }}" placeholder="{{ parameter("login", "post") }}" readonly />
+                        </div>
+                    </div>           
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ lang.c_password }}</label>
+                        <div class="col-sm-4">
+                            <input type="password" class="form-control" name="pass" value="{{ parameter("pass") }}" placeholder="{{ lang.c_password }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ lang.c_password2 }}</label>
+                        <div class="col-sm-4">
+                            <input type="password" class="form-control" name="pass2" value="{{ parameter("pass2") }}" placeholder="{{ lang.c_password2 }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-10">
+                            <button type="submit" class="btn btn-default">{{ lang.change }}</button>
+                        </div>
+                    </div>            
+                    <input type="hidden" name="action" value="change_password" />
+                </form>               
+            </div>
+        </div>
+    </div>
+                        
+    <div class="col-sm-6">
+        <div class="box">
+            <div class="title">
+                <h2>{{ lang.menu_register }}</h2>               
+                    <img class="center-block" alt="Icon_new_user" src="{{ constant("CMS_URL") }}/public/images/icon_new_user.gif"><br />
+                    <p class="center-block text-center">
+                        <a class="btn btn-default" href="{{ constant("URL") }}/customer/register">{{ lang.menu_register }}</a>
+                    </p>
+            </div>            
+        </div>
+    </div>        
+</div>
+               
+{% endblock %}               

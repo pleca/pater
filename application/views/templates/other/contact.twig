@@ -1,0 +1,101 @@
+{% extends "templates/base.twig" %}
+
+{% block content %}
+    
+<div class="row row-tiny">
+    <div class="col-sm-4 col-md-3">
+        {% include 'templates/other/sidebar-left.twig' %}
+    </div>
+    <div class="col-sm-8 col-md-9">
+
+        <h2 class="title">{{ lang.contact_title }}</h2>
+
+        {% include 'templates/other/notify.twig' %}
+
+        {% if was_sent == 1 %}
+            {{ lang.goto }} <a href="{{ constant("CMS_URL") }}/" title="{{ lang.main_page }}">{{ lang.main_page }}</a>
+        {% else %}
+        <p>{{ lang.contact_form }}</p>
+
+        <form id="sendForm" method="post" action="{{ server('PHP_SELF') }}" class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{ lang.contact_section }}</label>
+                <div class="col-sm-9">
+                    {% for contact in contacts %}
+                        {% if loop.first %}<select class="form-control" name="contact_id">{% endif %}
+                            <option value="{{ contact.id }}">{{ contact.name }}</option>
+                        {% if loop.last %}</select>{% endif %}
+                    {% endfor %}                         
+                </div>
+            </div>
+            <div class="form-group required-field">
+                <label class="col-sm-3 control-label">{{ lang.contact_subject }}</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" name="subject" value="{% if parameter("subject", 'post') %}{{ parameter("subject", 'post') }}{% endif %}">
+                </div>
+            </div>
+            <div class="form-group required-field">
+                <label class="col-sm-3 control-label">{{ lang.contact_l2 }}</label>
+                <div class="col-sm-9">
+                    <textarea class="form-control" name="content">{% if parameter("content", 'post') %}{{ parameter("content", 'post') }}{% endif %}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{ lang.contact_first_name }}</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" name="first_name" value="{% if parameter("first_name", 'post') %}{{ parameter("first_name", 'post') }}{% endif %}" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{ lang.contact_last_name }}</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" name="last_name" value="{% if parameter("last_name", 'post') %}{{ parameter("last_name", 'post') }}{% endif %}" />
+                </div>
+            </div>
+            <div class="form-group required-field">
+                <label class="col-sm-3 control-label">{{ lang.contact_email }}</label>
+                <div class="col-sm-9">
+                    <input type="email" class="form-control" name="email" value="{% if parameter("email", 'post') %}{{ parameter("email", 'post') }}{% endif %}">
+                </div>
+            </div> 
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{ lang.contact_phone }}</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" name="phone" value="{% if parameter("contact_phone", 'post') %}{{ parameter("contact_phone", 'post') }}{% endif %}" />
+                </div>
+            </div>                
+            {% for entity in captcha %}
+                {% if loop.first %}                
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">{{ lang.captcha }}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="captcha" value="" />
+                            <div class="captcha">
+                {% endif %}
+                <img style="position:relative;top:{{ entity.top }}px;" src="{{ constant('TPL_URL') }}/images/captcha/{{ entity.src }}.gif" alt="{{ entity.alt }}" title="{{ entity.title }}" />
+                {% if loop.last %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <input type="hidden" name="action" value="send" />
+
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                    <div class="required-field">
+                        <label></label><small>{{ lang.contact_fill }}</small>
+                    </div>
+                    <button type="submit" class="btn btn-default">{{ lang.contact_send }}</button>
+                </div>
+            </div>
+                
+            {{ pageContactForm|raw }}                
+        </form>
+
+        {% endif %}
+    </div>
+</div>    
+
+{% endblock %}

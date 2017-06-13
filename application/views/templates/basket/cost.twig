@@ -1,0 +1,35 @@
+<div id="basket-cost">
+    {% if constant("LOGGED") and customer.only_netto_prices == 1 %}
+    <div class="basket-value-netto">
+        <p>{{ lang.basket_value_netto }}:<span>{{ conf.currency_left }}{{ summary.sum_netto }}{{ conf.currency_right }}</span></p>        
+    </div>       
+    {% endif %}
+    
+    <div class="basket-value">
+        <p>{{ lang.basket_value }}: <span>{{ conf.currency_left }}{{ summary.sum }}{{ conf.currency_right }}</span></p>        
+    </div> 
+
+    {% if session[constant("CUSTOMER_CODE")]['discount'] and session[constant("CUSTOMER_CODE")]['discount'] > 0 %}
+    <div class="basket-discount percent">
+        <p>{{ lang.order_discount }} <span>{{ session[constant("CUSTOMER_CODE")]['discount'] }}%</span></p>                              
+    </div>
+        
+    <div class="basket-discount pay">
+        <p>{{ lang.order_discount4 }} <span>{{ conf.currency_left }}{{ discountTotal }}{{ conf.currency_right }}</span></p>        
+    </div>
+    {% endif %}
+    
+    <div class="delivery-cost">
+        <p>{{ lang.delivery_cost }}: <span>{{ conf.currency_left }}{{ summary.delivery }}{{ conf.currency_right }}</span></p>        
+    </div>
+    
+    <div class="basket-total">
+        <strong>{{ lang.basket_total_order }}: <span>
+        {% if session[constant("CUSTOMER_CODE")]['discount'] and session[constant("CUSTOMER_CODE")]['discount'] > 0 %}
+            {{ conf.currency_left }}{{ summaryTotal }}{{ conf.currency_right }}
+        {% else %}
+            {{ conf.currency_left }}{{ summary.total }}{{ conf.currency_right }}
+        {% endif %}        
+        </span></strong>        
+    </div>
+</div>

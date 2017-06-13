@@ -1,0 +1,22 @@
+{% if feature is not defined %}
+    {% set feature = 1 %}
+{% endif %}
+        
+{% for entity in entities %}
+    <option data-variation-id="{{ entity.id2 }}" data-price1="{{ entity.price|number_format(2) }}" data-price2="{{ entity.price2|number_format(2) }}" data-price3="{{ entity.price3|number_format(2) }}" data-price1-gross="{{ entity.price_gross }}" data-price2-gross="{{ entity.price2_gross }}" data-price3-gross="{{ entity.price3_gross }}" data-price-rrp="{{ entity.price_rrp }}" data-qty="{{ entity.qty }}" data-promotion="{{ entity.promotion }}" data-special-link-content="{{ entity.special_link_content }}" data-special-link-url="{{ entity.special_link_url }}" 
+        {% if entity.promotion == 1 %}
+            data-price-promotion="{{ entity.price_promotion }}" data-price-promotion-gross="{{ entity.price_promotion_gross }}"
+        {% else %}
+            data-price-promotion="" data-price-promotion-gross=""
+        {% endif %}                 
+        
+        {% if entity.qty == 0 and conf.stock_availability == 0 %} disabled{% endif %}
+        
+        data-feature-value-id="{{ attribute(entity, 'feature' ~ feature ~ '_value_id') }}"
+        >
+        
+        {{ attribute(entity, 'feature' ~ feature ~ '_value') }}
+        
+        {% if entity.qty == 0 %}[{{ lang.out_of_stock }}]{% endif %}
+    </option>
+{% endfor %}

@@ -1,0 +1,117 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function showDiv(id) {
+           $('.lang').hide(); 
+           $('.lang-switcher').removeClass('active'); 
+           $('#link' + id).addClass('active'); 
+           $('#divEdit' + id).show();
+        }
+          
+        $(document).ready(function () {
+        {% for key, trans in entity.desc %}    
+            {% if loop.first %}    
+                $('div#divEdit{{ key }}').show();
+                $('a#link{{ key }}').addClass('active');
+                toggleEditor("edytor{{ key }}");                   
+            {% endif %}    
+        {% endfor %}   
+        });   
+    </script>    
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <form id="form" method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}" enctype="multipart/form-data">
+            <div class="form-body"> 
+                {% for key, trans in entity.desc %}
+                    <a id="link{{ key }}" class="btn btn-default lang-switcher" href="javascript:void(0);" onclick="showDiv('{{ key }}', 'lang');" title="{{ trans.lang_name }}">
+                       <img src="{{ constant('TPL_URL') }}/assets/global/img/flags/{{ trans.lang_code }}.png" alt="{{ trans.lang_name }}" />
+                       {{ trans.lang_code }}
+                    </a>                      
+                {% endfor %}
+
+                {% for key, trans in entity.desc %}
+                    <div id="divEdit{{ key }}" class="lang" style="display: none;">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"><img src="{{ constant('TPL_URL') }}/assets/global/img/flags/{{ trans.lang_code }}.png" alt="{{ trans.lang_name }}" title="{{ trans.lang_name }}" /> {{ lang.title }}</label>
+                            <div class="col-md-4">
+                                <input class="form-control" type="text" name="desc[{{ key }}][name]" value="{{ trans.name }}" />
+                            </div>                     
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"><img src="{{ constant('TPL_URL') }}/assets/global/img/flags/{{ trans.lang_code }}.png" alt="{{ trans.lang_name }}" title="{{ trans.lang_name }}" /> {{ lang.desc_short }}</label>
+                            <div class="col-md-4">
+                                <textarea class="form-control" name="desc[{{ key }}][desc_short]">{{ trans.desc_short }}</textarea>
+                            </div>                     
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"><img src="{{ constant('TPL_URL') }}/assets/global/img/flags/{{ trans.lang_code }}.png" alt="{{ trans.lang_name }}" title="{{ trans.lang_name }}" /> {{ lang.tags }}</label>
+                            <div class="col-md-4">
+                                <input class="form-control" type="text" name="desc[{{ key }}][tag1]" value="{{ trans.tag1 }}" />
+                                <input class="form-control" type="text" name="desc[{{ key }}][tag2]" value="{{ trans.tag2 }}" />
+                                <input class="form-control" type="text" name="desc[{{ key }}][tag3]" value="{{ trans.tag3 }}" />
+                            </div>                     
+                        </div>                            
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"><img src="{{ constant('TPL_URL') }}/assets/global/img/flags/{{ trans.lang_code }}.png" alt="{{ trans.lang_name }}" title="{{ trans.lang_name }}" /> {{ lang.desc }}</label>
+                            <div class="col-md-4">
+                                <textarea id="edytor{{ key }}" class="edytor" name="desc[{{ key }}][desc]">{{ trans.desc }}</textarea>
+                            </div>                     
+                        </div>
+                    </div>
+                {% endfor %} 
+              
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ lang.option }}</label>
+                        <div class="col-md-4">
+                            <input type="checkbox" name="item[active]" id ="active" value="1" {% if entity.item.active == 1 %}checked="true"{% endif %} />{{ lang.show_art }}
+                        </div>                     
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ lang.photo_art }}</label>
+                        <div class="col-md-4">
+                            <input type="file" name="file" size="96" />
+                        </div>                     
+                    </div>                         
+                                        
+                    {% if option_gallery %}
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ lang.gallery_select }}</label>
+                        <div class="col-md-4">
+                            {% for option in option_gallery %}
+                               {% if loop.first %}<select name="item[gallery_id]" class="form-control"><option value="">{{ lang.select }}</option>{% endif %}
+                                  <option value="{{ trans.id }}" {% if option.id == entity.item.gallery_id %}selected="true"{% endif %}>{{ trans.title }}</option>
+                               {% if loop.last %}</select>{% endif %}
+                           {% endfor %}                            
+                        </div>                     
+                    </div>   
+                    {% endif %}
+         
+
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                        <a href="?" class="btn default">{{ lang.btn_cancel }}</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

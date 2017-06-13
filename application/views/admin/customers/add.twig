@@ -1,0 +1,243 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(function () {
+           $('#type1').click(function () {
+              $('#type_tr_1').fadeOut();
+              $('#type_tr_2').fadeOut();
+           });
+           $('#type2').click(function () {
+              $('#type_tr_1').fadeIn();
+              $('#type_tr_2').fadeIn();
+           });
+        });
+        $(function () {
+           $('select[name=country]').change(function () {
+              var country = $(this).val();
+              if (country != 'GB')
+              {
+                 $('#p1').hide();
+                 $('#p2').show();
+              }
+              else
+              {
+                 $('#p2').hide();
+                 $('#p1').show();
+              }
+           });
+        });
+        $(function () {
+           $("input[name=email]").change(function () {
+              var value = $(this).val();
+              var temp = new Array();
+              temp = value.split('@');
+              $("input[name=login]").val(temp[0]);
+           });
+        }); 
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="center"><span class="star">{{ lang.customers_filed }}</span></div>
+        <form id="form" method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+            <div class="form-body">                
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.first_name }}
+                        <span class="required" aria-required="true"> * </span></label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="first_name" value="{{ entity.first_name }}" />
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.last_name }}
+                        <span class="required" aria-required="true"> * </span></label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="last_name" value="{{ entity.last_name }}" />
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.email }}
+                    <span class="required" aria-required="true"> * </span></label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                            <input name="email" type="email" placeholder="Email Address" class="form-control" value="{{ entity.email }}"> </div>
+                    </div>
+                </div>  
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.login }}
+                        <span class="required" aria-required="true"> * </span></label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="login" value="{{ entity.login }}" />
+                        <span class="help-block"> {{ lang.customers_check_login }} </span>
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.password }}
+                        <span class="required" aria-required="true"> * </span>
+                    </label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input name="pass" type="password" placeholder="{{ lang.password }}" class="form-control" value="{{ entity.pass }}">
+                            <span class="help-block"> {{ lang.customers_check_password }} </span>
+                        </div>                                              
+                    </div>
+                </div>   
+                        
+                <h4 class="section">{{ lang.customers_data2 }}</h4>
+                <div class="form-group">
+                    <label class="col-md-3 control-label"></label>
+                    <div class="col-md-4">
+                        <div class="radio-list">
+                            <label class="radio-inline">
+                                <input type="radio" name="type" id="type1" value="1" {% if entity.type != 2 %}checked="true"{% endif %}> {{ lang.customers_person }}</label>
+                            <label class="radio-inline">
+                                <input type="radio" name="type" id="type2" value="2" {% if entity.type == 2 %}checked="true"{% endif %}> {{ lang.customers_company }} </label>
+                        </div>
+                    </div>
+                </div>
+                        
+                <div id="type_tr_1" class="form-group" {% if entity.type != 2 %}style="display:none;"{% endif %}>
+                    <label class="col-md-3 control-label">{{ lang.customers_company_name }}
+                        <span class="required" aria-required="true"> * </span></label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="company_name" value="{{ entity.company_name }}" />
+                    </div>                     
+                </div>                        
+                <div id="type_tr_2" class="form-group" {% if entity.type != 2 %}style="display:none;"{% endif %}>
+                    <label class="col-md-3 control-label">{{ lang.customers_nip }}
+                        <span class="required" aria-required="true"> * </span></label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="nip" value="{{ entity.nip }}" />
+                    </div>                     
+                </div>                        
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.customers_country }}</label>
+                    <div class="col-md-4">
+                        <select name="country" class="form-control">
+                            {% for row in transportEnabledCountries %}
+                                <option value="{{ row.code }}" {% if entity.country == row.code %}selected="true"{% endif %}>{{ row.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.customers_address1 }}
+                        <span class="required" aria-required="true"> * </span></label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="address1" value="{{ entity.address1 }}" />
+                    </div>                     
+                </div>                          
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.customers_address2 }}</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="address2" value="{{ entity.address2 }}" />
+                    </div>                     
+                </div>                          
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.customers_address3 }}</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="address3" value="{{ entity.address3 }}" />
+                    </div>                     
+                </div>                    
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.customers_post_code }}
+                        <span class="required" aria-required="true"> * </span></label>
+                    <div class="col-md-4 form-inline">
+                        <input class="form-control" type="text" name="post_code" value="{{ entity.post_code }}" maxlength="12" /> 
+                        
+{#                        <span id="p1" {% if entity.country != 'GB' and entity.country != '' %}style="display:none;"{% endif %}>
+                           <input class="form-control" style="width:60px;" type="text" name="post_code1" value="{{ entity.post_code1 }}" maxlength="4" />
+                           <input class="form-control" style="width:60px;" type="text" name="post_code2" value="{{ entity.post_code2 }}" maxlength="3" />
+                        </span>
+                        <span id="p2" {% if entity.country == 'GB' or entity.country == '' %}style="display:none;"{% endif %}>
+                           <input class="form-control" type="text" name="post_code" value="{{ entity.post_code }}" maxlength="12" />               
+                        </span>#}
+                    </div>                     
+                </div>                                              
+                        
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.customers_city }}
+                        <span class="required" aria-required="true"> * </span></label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="city" value="{{ entity.city }}" />
+                    </div>                     
+                </div>                          
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.phone }}
+                        <span class="required" aria-required="true"> * </span></label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="phone" value="{{ entity.phone }}" />
+                    </div>                     
+                </div>      
+                    
+                <h4 class="section">{{ lang.customers_data3 }}</h4>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.customers_status }}</label>
+                    <div class="col-md-4">
+                        <select name="active" class="form-control">
+                            <option value="0" {% if entity.active == 0 %}selected="true"{% endif %}>{{ lang.status2 }}</option>
+                            <option value="1" {% if entity.active == 1 or entity.active == '' %}selected="true"{% endif %}>{{ lang.status }}</option>
+                        </select>
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.customers_discount }}</label>
+                    <div class="col-md-4 form-inline">
+                        <input class="form-control" style="width:60px;" type="text" name="discount" value="{{ entity.discount }}" /> %
+                    </div>                     
+                </div>
+                {% if static('Cms','modules')['price_groups'] %}                    
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ lang.price_group }}</label>
+                        <div class="col-md-4">
+                            <select name="price_group" class="form-control">
+                                <option value="1" {% if entity.price_group == 1 %}selected="true"{% endif %}>{{ lang.group }} 1</option>
+                                <option value="2" {% if entity.price_group == 2 %}selected="true"{% endif %}>{{ lang.group }} 2</option>
+                                <option value="3" {% if entity.price_group == 3 %}selected="true"{% endif %}>{{ lang.group }} 3</option>
+                            </select>
+                        </div>                     
+                    </div>
+                {% endif %}                    
+                        
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.show_netto_prices_instead_brutto }}</label>
+                    <div class="col-md-4">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="only_netto_prices" value="1" {% if entity.only_netto_prices == 1 %}checked{% endif %} />{{ lang.show_netto_prices_instead_brutto }}
+                            </label>
+                        </div>                                       
+                    </div>                     
+                </div>                
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" name="action" value="add" />
+                        <input type="hidden" name="lang" value="{{ lang }}" />                        
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                        <a href="?" class="btn default">{{ lang.btn_cancel }}</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

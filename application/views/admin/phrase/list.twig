@@ -1,0 +1,157 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}    
+    {{ parent() }}    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.uniform.restore();
+            
+            $('input[name="klient_uzyc"').click(function () {
+               $('input[name="klient_uzyc_h"').val($(this).val());
+
+            });
+        });
+        
+          function showDiv(id)
+          {
+             $('#' + id).show();
+          }
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+{% for entity in entities %}
+    {% if loop.first %}
+        <table id="example1" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+            <tr>
+                <th>{{ lang.lp }}</th>
+                <th>{{ lang.phrase }}</th>
+                <th>{{ lang.discount }} (%)</th>
+                <th>{{ lang.date_from }}</th>
+                <th>{{ lang.date_to }}</th>
+                <th>{{ lang.max_use_number }}</th>
+                <th>{{ lang.client_can_use }}</th>
+                <th>{{ lang.used }}</th>         
+                <th class="text-center">{{ lang.edit }}</th>
+                <th class="text-center">{{ lang.delete }}</th>
+           </tr>
+    {% endif %}
+
+    {% if parameter("id") == entity.id %}
+       <form method="post" action="{{ server('PHP_SELF') }}">   
+          <tr>
+             <td>{{ loop.index }}</td>
+             <td><input class="form-control" type="text" name="fraza" value="{{ entity.fraza }}" /></td>
+             <td><input class="form-control" type="text" name="wartosc" value="{{ entity.wartosc }}" /></td>
+             <td><input class="form-control datepicker" type="text" name="data_od" value="{{ entity.data_od }}" /></td>
+             <td><input class="form-control datepicker" type="text" name="data_do" value="{{ entity.data_do }}" /></td>
+             <td><input class="form-control" type="text" name="max_uzyc" value="{{ entity.max_uzyc }}" /></td>
+             <td>
+                <input type="radio" name="klient_uzyc" id="uzyca{{ loop.index }}" value="1" {% if entity.klient_uzyc==1 %}checked{% endif %} /> <label for="uzyca{{ loop.index }}">{{ lang.once }}</label>
+                <input type="radio" name="klient_uzyc" id="uzycb{{ loop.index }}" value="2" {% if entity.klient_uzyc==2 %}checked{% endif %} /> <label for="uzycb{{ loop.index }}">{{ lang.many }}</label>
+             </td>
+             <td colspan="3" class="text-center">
+                <input type="hidden" name="action" value="save" />
+                <input type="hidden" name="id" value="{{ entity.id }}" />
+                <input type="hidden" name="klient_uzyc_h" value="1" />
+                <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+             </td>
+          </tr>
+       </form>
+    {% else %}
+       <tr class="{% if parameter("id") == entity.id %}active{% endif %}">
+          <td>{{ loop.index }}</td>
+          <td>{{ entity.fraza }}</td>
+          <td>{{ entity.wartosc }}</td>
+          <td>{{ entity.data_od }}</td>
+          <td>{{ entity.data_do }}</td>
+          <td>{{ entity.max_uzyc }}</td>
+          <td>{% if entity.klient_uzyc == 2 %}{{ lang.many }}{% else %}{{ lang.once }}{% endif %}</td>
+          <td {% if entity.uzyto > entity.max_uzyc %}class="red"{% endif %}>{{ entity.uzyto }}</td>
+          <td class="text-center">
+             <a href="?id={{ entity.id }}&amp;action=edit" title="{{ lang.edit }}">
+                <i class="fa fa-edit"></i>
+             </a>
+          </td>
+          <td class="text-center">
+              <a href="#" data-href="?id={{ entity.id }}&amp;action=delete" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-remove"></i></a>
+          </td>
+       </tr>
+    {% endif %}
+    {% if loop.last %}</table>{% endif %}
+{% endfor %}
+
+   <form method="post" action="{{ server('PHP_SELF') }}">
+      <table id="example2" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+         <tr>
+            <th>{{ lang.lp }}</th>
+            <th>{{ lang.phrase }}</th>
+            <th>{{ lang.discount }} (%)</th>
+            <th>{{ lang.date_from }}</th>
+            <th>{{ lang.date_to }}</th>
+            <th>{{ lang.max_use_number }}</th>
+            <th>{{ lang.client_can_use }}</th>
+            <th class="text-center">{{ lang.edit }}</th>
+         </tr>
+         <tr class="tableListHeader"><td></td><td class="left" colspan="8"><strong>{{ lang.add_new }}</strong></td></tr>
+         <tr>
+            <td></td>
+            <td><input class="form-control" type="text" name="fraza" value="" /></td>
+            <td><input class="form-control" type="text" name="wartosc" value="" /></td>
+            <td><input class="form-control datepicker" type="text" name="data_od" value="" /></td>
+            <td><input class="form-control datepicker" type="text" name="data_do" value="" /></td>
+            <td><input class="form-control" type="text" name="max_uzyc" value="" /></td>
+            <td>            
+               <input type="radio" name="klient_uzyc" id="uzyc1" value="1" checked /> <label for="uzyc1">{{ lang.once }}</label>
+               <input type="radio" name="klient_uzyc" id="uzyc2" value="2" /> <label for="uzyc2">{{ lang.many }}</label>
+            </td>
+            <td class="text-center">
+               <input type="hidden" name="action" value="add" />
+               <button class="btn green" type="submit">{{ lang.btn_add }}</button>
+            </td>
+         </tr>
+   </form>
+</table>
+<br /><br /><hr /><br />      
+
+{% for item in uzycia %}
+   {% if loop.first %}
+        <h4>Użycia fraz promocyjnych</h4>
+        <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>{{ lang.phrase }}</th>
+                <th>{{ lang.phrase_expiration_date }}</th>
+                <th>{{ lang.date_of_use }}</th>
+                <th>{{ lang.order_id }}</th>
+                <th>{{ lang.order_sum }} [ {{ conf.currency }}]</th>
+                <th>{{ lang.discount_value }} [ {{ conf.currency }}] / {{ lang.discount }} [%]</th>
+                <th>Status</th>
+                <th>{{ lang.user }}</th>
+            </tr>
+        </thead>
+        <tbody>       
+    {% endif %}
+        <tr class="{% if parameter("id") == item.id %}active{% endif %}">
+           <td>{{ item.id }}</td>
+           <td><strong>{{ item.fraza }}</strong></td>
+           <td>{{ item.data_od }} - {{ item.data_do }}</td>
+           <td>{{ item.data }}</td>
+           <td><a href="{{ constant('CMS_URL') }}/admin/shop-orders.html?id={{ item.id_zam }}&action=details" title="{{ item.id_order }}" target="_blank">{{ item.id_zam }}</a></td>
+           <td>{{ item.sum }}</td>
+           <td>{{ item.discount_val }} / {{ item.discount }}</td>
+           <td>{{ item.status }}</td>
+           <td><a href="{{ constant('CMS_URL') }}/admin/customers.html?id={{ item.id_user }}&action=edit" title="{{ item.login }}" target="_blank">{{ item.login }}</a></td>
+        </tr>
+
+      {% if loop.last %}</tbody></table>{% endif %}
+   {% endfor %}
+   
+   {% include 'admin/other/confirm.twig' %}
+
+{% endblock %}
+

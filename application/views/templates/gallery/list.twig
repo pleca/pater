@@ -1,0 +1,15 @@
+<div id="pageTitle">
+   <h1>{{ lang.gallery_title }}</h1>
+</div>
+
+<div id="pageContent">
+    {% for entity in entities %}
+      <div class="galleryPhoto">
+         {% if entity.photo.small %}<a href="{{ entity.url }}" title="{{ entity.title }}"><img src="{{ entity.photo.small }}" alt="{{ entity.title }}" /></a><br />{% endif %}
+         <a href="{{ entity.url }}" title="{{ entity.title }}">{{ entity.title }}</a>
+      </div>
+      {% if loop.index % 5 == 4 %}<div class="clear"></div>{% endif %}
+   {% endfor %}
+
+    {% include 'templates/other/pages.twig' %}
+</div>

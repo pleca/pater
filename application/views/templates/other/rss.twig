@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+   <channel>
+      <title>{{ seo.title }}</title>
+      <link>{{ constant('SERVER_URL') }}</link>
+      <description>{{ seo.meta_description }}</description>
+      <language>pl</language>
+        {% for product in products %}
+         <item>
+            <title>{{ product.name }}</title>
+            <pubDate>{{ product.date_add }}</pubDate>
+            <guid>{{ product.url }}</guid>
+            <link>{{ product.url }}</link>
+            <description>{{ product.content_short }}</description>
+            <category>{{ product.category_url }}</category>
+         </item>
+        {% endfor %}
+      
+{#      {*{foreach from=$aPages item=v}
+         <item>
+            <title>{$v.title}</title>
+            <pubDate>{$v.date_add}</pubDate>
+            <guid>{$v.url}</guid>
+            <link>{$v.url}</link>
+            <description>{$v.desc_short}</description>
+            <category>{$v.category}</category>
+         </item>
+      {/foreach}
+      {foreach from=$aNews item=v}
+         <item>
+            <title>{$v.title}</title>
+            <pubDate>{$v.date_add}</pubDate>
+            <guid>{$v.url}</guid>
+            <link>{$v.url}</link>
+            <description>{$v.desc_short}</description>
+            <category>{$v.category}</category>
+         </item>
+      {/foreach}
+      {foreach from=$aArticles item=v}
+         <item>
+            <title>{$v.title}</title>
+            <pubDate>{$v.date_add}</pubDate>
+            <guid>{$v.url}</guid>
+            <link>{$v.url}</link>
+            <description>{$v.desc_short}</description>
+            <category>{$v.category}</category>
+         </item>
+      {/foreach}
+      {foreach from=$aGallery item=v}
+         <item>
+            <title>{$v.title}</title>
+            <pubDate>{$v.date_add}</pubDate>
+            <guid>{$v.url}</guid>
+            <link>{$v.url}</link>
+            <description>{$v.desc_short}</description>
+            <category>{$v.category}</category>
+         </item>
+      {/foreach}*}#}
+      
+   </channel>
+</rss>

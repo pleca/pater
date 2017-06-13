@@ -1,0 +1,24 @@
+{% extends "templates/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            getMiniBasketList();
+        });
+    </script>
+{% endblock %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block content %}
+    <div class="row profile-page">
+
+        <div class="col-xs-12">            
+            {% include 'templates/customer/top.twig' %}                        
+            {% include 'templates/other/notify.twig' %}
+        </div>
+    </div> 
+{% endblock %}

@@ -1,0 +1,17 @@
+{% if numSliders %}
+    <div class="slider">
+        <div class="cycle-slideshow" data-cycle-fx="scrollHorz" data-cycle-timeout="5000" data-speed="800" data-cycle-log="false" data-cycle-swipe="true" data-cycle-slides=">a,> .slide" data-cycle-pause-on-hover="true">
+            <div class="cycle-pager"></div>
+            <div class="cycle-prev cycle-navi"><i class="mdi mdi-chevron-left"></i></div>
+            <div class="cycle-next cycle-navi"><i class="mdi mdi-chevron-right"></i></div>
+
+            {% for entity in slider if entity.active and entity.src %} 
+                {% if entity.url %}
+                    <a class="slide" href="{{ entity.url }}"  style="background-image: url({{ entity.src }});"></a>
+                {% else %}
+                    <div class="slide" src="{{ entity.url }}" style="background-image: url({{ entity.src }});"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

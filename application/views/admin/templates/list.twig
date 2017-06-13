@@ -1,0 +1,41 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <form id="form" method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+            <h2>Choose template</h2>
+            <div class="form-body">                               
+                <div class="radio-list">    
+                {% for entity in entities %}
+                    <label>
+                        <input type="radio" name="id" value="{{ entity.id }}" {% if entity.active %}checked="checked"{% endif %} {% if entity.id != 1 and not actionTemplateChange %} disabled{% endif %}> 
+                        {{ entity }}{% if entity.active %} <a href="{{ server('PHP_SELF') }}?template_id={{ entity.id }}&action=colors" >[{{ lang.btn_edit }}]</a>{% endif %} 
+                    </label>                       
+                {% endfor %}
+                </div>
+            </div>
+                
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-9">
+                        <input type="hidden" name="action" value="edit" />
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                    </div>
+                </div>
+            </div>                
+        <form>
+    </div>
+</div>
+
+{% include 'admin/other/confirm.twig' %}
+
+{% endblock %}

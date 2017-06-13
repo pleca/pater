@@ -1,0 +1,225 @@
+{% extends "templates/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    {% include 'templates/product/show_js.twig' %}        
+{% endblock %}
+
+{% block content_top %}   
+    {% if conf.breadcrumbs_display %}    
+        {{ breadcrumbs(' &raquo; ', lang.home, entity.name)|raw }}
+    {% endif %}
+{% endblock %}
+
+{% if static('Cms','modules')['price_groups'] %}
+    {% set price_group = session[constant("CUSTOMER_CODE")]['price_group'] %}
+
+    {% if price_group == 1 %} 
+        {% set price_group = "" %}
+    {% endif %}
+{% else %}
+    {% set price_group = "" %}
+{% endif %}
+
+{% if constant("LOGGED") and customer.only_netto_prices == 1 %}
+    {% set price_name = 'price' ~ price_group %}
+{% else %}
+    {% set price_name = 'price' ~ price_group ~ '_gross' %}
+{% endif %}
+            
+{% block content %}
+    
+    <div id="notify-alert" class="alert alert-success alert-dismissible text-center" role="alert" style="display:none;">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <strong id="notify"></strong>
+        <div id="notify"></div>
+    </div>
+    
+    <div class="row row-tiny">
+        <div class="col-sm-4 col-md-3">            
+            {% include 'templates/other/sidebar-left.twig' %}            
+        </div>
+        <div class="col-sm-8 col-md-9" itemscope itemtype="http://schema.org/Product">
+            <div class="product-frame">
+                <div class="row">
+                    <div class="col-sm-6 product-image-frame">
+
+                        {% if entity.default_variation.photos | length > 0 and entity.default_variation.photos[0]['photo'] %}
+                        <div class="product-image-wrapper">
+                            <div class="cycle-slideshow" data-cycle-auto-init="false">   
+                                {% for photo in entity.default_variation.photos %}
+                                    <div class="product-img">
+                                        <div class="product-img-inner">
+                                            <a href="{{ photo.photo.normal }}" class="ilightbox"><img src="{{ photo.photo.middle }}" alt="{{ entity.name }}"></a>                                            
+                                        </div>
+                                    </div>                                    
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="product-image-captions"> 
+                            {% if entity.default_variation.photos|length > 4 %}
+                            <i class="mdi mdi-chevron-left product-img-nav cycle-prev"></i>
+                            <i class="mdi mdi-chevron-right product-img-nav cycle-next"></i>
+                            {% endif %}
+                            <!-- jeżeli obrazków jest mniej < 5 to nie pokazuj powyżych <i> oraz zabierz klasę 'cycle-slideshow' ponizszemu divovi (zostaw go bez klasy) -->
+
+                            <div class="cycle-slideshow" data-cycle-auto-init="false">
+                                {% for photo in entity.default_variation.photos %}
+                                    <div class="product-img">
+                                        <div class="product-img-inner">
+                                            <div class="product-caption-wrapper">
+                                                <img src="{{ photo.photo.small }}" alt="{{ entity.name }}">
+                                            </div>                                            
+                                        </div>
+                                    </div>                                             
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% else %}
+                            <img src="{{ constant("CMS_URL") }}/files/no-picture2.png" alt="{{ entity.name }}" />
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-6 product-order-frame">
+                        <h1 itemprop="name">{{ entity.name }}</h1>
+                        {% if entity.producer %}<span class="help-block">{{ lang.product_manufacturer }}: <strong><a href="{{ entity.producer.url }}" itemprop="manufacturer">{{ entity.producer.name }}</a></strong></span>{% endif %}
+                        <form method="" action="" class="form-horizontal">
+                            {% if (entity.status_id == 1 or entity.status_id ==2) and entity.variations|length > 0 and entity.type == 1 %}
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">{{ entity.feature1_name }}</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control feature" id="feature1" name="feature1">
+                                    {% for variation in entity.variations %}
+                                        <option data-variation-id="{{ variation.id2 }}" data-feature-value-id="{{ variation.feature1_value_id }}" data-price1="{{ variation.price|number_format(2) }}" data-price2="{{ variation.price2|number_format(2) }}" data-price3="{{ variation.price3|number_format(2) }}" data-price1-gross="{{ variation.price_gross }}" data-price2-gross="{{ variation.price2_gross }}" data-price3-gross="{{ variation.price3_gross }}" data-price-rrp="{{ variation.rrp }}" data-qty="{{ variation.qty }}" data-promotion="{{ variation.promotion }}" data-special-link-content="{{ variation.special_link_content }}" data-special-link-url="{{ variation.special_link_url }}" 
+                                                {% if variation.promotion == 1 %}
+                                                    data-price-promotion="{{ variation.price_promotion }}" data-price-promotion-gross="{{ variation.price_promotion_gross }}"
+                                                {% else %}
+                                                    data-price-promotion="" data-price-promotion-gross=""
+                                                {% endif %}
+
+                                                {% if variation.qty == 0 and conf.stock_availability == 0 %} disabled{% endif %}
+                                                >{{ variation.feature1_value }}{% if variation.qty == 0 and not variation.feature2_value %}[{{ lang.out_of_stock }}]{% endif %}</option>
+{#                                                >{{ variation.feature1_value }}{% if variation.qty == 0 and not variation.others_in_stock %}[{{ lang.out_of_stock }}]{% endif %}</option>#}
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <div class="form-group feature2" style="display:none;">
+                                <label class="col-sm-3 control-label">{{ entity.feature2_name }}</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control feature" id="feature2" name="feature2"></select>
+                                </div>
+                            </div>
+                                
+                            <div class="form-group feature3" style="display:none;">
+                                <label class="col-sm-3 control-label">{{ entity.feature3_name }}</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control feature" id="feature3" name="feature3"></select>
+                                </div>
+                            </div>                                
+
+                            {% if entity.status_id == 1 or entity.status_id == 2 %}    
+                            <div class="form-prices-footer" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                                {% if entity.variations and entity.default_variation.promotion == 1 %}
+                                    {% set promotion = 1 %}
+                                    {% set price_name = 'price_promotion_gross' %}
+                                {% else %}
+                                    {% set promotion = 0 %}
+                                {% endif %}                      
+                                
+                                <div class="special-offer" {% if not entity.default_variation.mega_offer %}style="display:none;"{% endif %}>{{ lang.mega_offer }}</div>
+                                <span class="help-block">{{ lang.product_available }}
+                                    <strong id="qty">
+                                        {% if entity.default_variation.qty > 0 and entity.default_variation.price_gross > 0 and (entity.status_id == 1 or entity.status_id == 2) %}
+                                            <link itemprop="availability" href="http://schema.org/InStock" />
+                                            {% if conf.stock_show_qty == 1 %}
+                                                {{ entity.default_variation.qty }}
+                                            {% else %}
+                                                {{ lang.product_in_stock }}
+                                            {% endif %}    
+                                        {% else %}
+                                            <link itemprop="availability" href="http://schema.org/OutOfStock" />
+                                            {{ lang.basket_not_available }}
+                                        {% endif %}                                        
+                                    </strong>
+                                </span>
+
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        <label class="control-label">{{ lang.quantity }}</label>
+                                        <input class="form-control" id="quantityBasket" name="qty" value="1" maxlength="3" data-available='{{ entity.default_variation.qty }}'></input>
+                                    </div>
+                                </div>
+                                <div class="product-prices">  
+                                    <span itemprop="priceCurrency" content="{{ conf.currency }}"></span>
+                                    <span itemprop="price" content="{{ entity.default_variation.price_name }}" {% if not promotion %}style="display: none;"{% endif %}">{{ lang.price }} 
+                                        <strong class="price-gross">{{ conf.currency_left }}{{ attribute(entity.default_variation, price_name)}}{{ conf.currency_right }}</strong>
+                                    </span>                                                                        
+
+                                    <span itemprop="price" content="{{ attribute(entity.default_variation, price_name)|number_format(2) }}" {% if promotion or static('Cms','modules')['price_groups'] and not constant("LOGGED") or attribute(entity.default_variation, price_name) == 0 %}style="display:none;"{% endif %}>
+                                        {{ lang.price }} <strong class="price-gross">{{ conf.currency_left }}{{ attribute(entity.default_variation, price_name)|number_format(2) }}{{ conf.currency_right }}</strong>
+                                    </span>
+
+                                    <span class="price-rrp" {% if entity.default_variation.price_rrp > 0 %}{% else %}style="display:none;"{% endif %}>{{ lang.rrp }} {{ conf.currency_left }}{{ entity.default_variation.price_rrp }}{{ conf.currency_right }}</span>
+                                </div>
+
+                                <a href="javascript:void(0);" class="btn btn-default button-basket" id="addCart" onclick="addProductToBasket('{{ entity.id }}', '{{ entity.default_variation.id2 }}');" {% if not entity.default_variation.qty or static('Cms','modules')['price_groups'] and not constant("LOGGED") or attribute(entity.default_variation, price_name) == 0 %}style="display:none;"{% endif %}>{{ lang.shop_add }}</a>
+
+                                <div id="button-stock-availability" class="pull-right" {% if entity.default_variation.qty or not conf.stock_availability == 1 %}style="display:none;"{% endif %}>
+                                    <a class="btn btn-default" data-target="#stock-availability-form" data-toggle="modal" href="#" data-whatever="{{ customer.email }}">{{ lang.stock_availability_inform }}</a>
+                                </div>                           
+                            </div>
+                            {% else %}
+                                <div class="center bold red" style="font-size:12px;">{{ lang.basket_not_available }}</div>
+                            {% endif %}
+
+                            <div id="shopping-thresholds">
+                                {% if entity.default_variation.lastShoppingThreshold and not entity.default_variation.mega_offer %}
+                                    <span class="special" data-toggle="tooltip" data-html="true" title="{{ pageTooltipDiscount }}">+{{ entity.default_variation.lastShoppingThreshold.value }} | {{ conf.currency_left }}{{ entity.default_variation.lastShoppingThreshold.priceAfterDiscount }}{{conf.currency_right }}</span>
+                                {% endif %}      
+                            </div>  
+                            <div id="special-link">
+                                <a href="{{ entity.default_variation.special_link_url|raw }}" target="_blank">{{ entity.default_variation.special_link_content }}</a>            
+                            </div>
+        
+                            <input id="variation_id" type="hidden" name="variation_id" value="{{ entity.default_variation.id2 }}">
+                        </form>
+                                                
+                    </div>
+                </div>  
+  
+            </div>
+
+            <h2 class="title">{{ lang.product_description }}</h2>
+
+            <article>
+                <span itemprop="description">
+                {{ entity.content|raw }}
+                </span>
+                
+                {% if entity.tag1 or entity.tag2 or entity.tag3 %}
+                <div class="product-tags">
+                    <span>Tags:</span>
+                    <ul>
+                        {% if entity.tag1 %}<li><a href="{{ constant("CMS_URL") }}/search/{{ entity.tag1_url }}.html" title="{{ entity.tag1 }}">{{ entity.tag1 }}</a></li>{% endif %}
+                        {% if entity.tag2 %}<li><a href="{{ constant("CMS_URL") }}/search/{{ entity.tag2_url }}.html" title="{{ entity.tag2 }}">{{ entity.tag2 }}</a></li>{% endif %}
+                        {% if entity.tag3 %}<li><a href="{{ constant("CMS_URL") }}/search/{{ entity.tag3_url }}.html" title="{{ entity.tag3 }}">{{ entity.tag3 }}</a></li>{% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+            </article>
+
+            {% include 'templates/shop/also-bought.twig' %} 
+            
+            {% include 'templates/product/reviews.twig' %} 
+        </div>
+    </div>   
+            
+            
+{% if conf.stock_availability %} 
+    {% include 'templates/shop/stock-availability-modal-form.twig' %} 
+{% endif %}            
+ 
+{% endblock %}

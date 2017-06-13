@@ -1,0 +1,63 @@
+{% block content %}
+    <style>
+        th {text-align: center;}    
+    </style>
+    
+    <div style="margin-left: 10px;margin-right:15px;">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>SKU</th>
+                <th>EAN</th>
+                {% if product.feature1_name %}<th>{{ product.feature1_name }}</th>{% endif %}
+                {% if product.feature2_name %}<th>{{ product.feature2_name }}</th>{% endif %}
+                {% if product.feature3_name %}<th>{{ product.feature3_name }}</th>{% endif %}
+                <th>{{ lang.p_gross }}</th>
+                <th>{{ lang.p_amount }}</th>
+            </tr>
+        </thead>
+        <tbody>
+    {% if variations and variations[0]['id2'] %}
+            {% for entity in variations %}               
+                <tr>
+                    <td><a href="?action=variation_edit&amp;variation_id={{ entity.id2 }}" target="_blank">{{ entity.id2 }}</a></td>
+                    <td>{{ entity.sku }}</td>
+                    <td>{{ entity.ean }}</td>
+                    {% if product.feature1_name %}<td>{{ entity.feature1_value }}</td>{% endif %}
+                    {% if product.feature2_name %}<td>{{ entity.feature2_value }}</td>{% endif %}
+                    {% if product.feature3_name %}<td>{{ entity.feature3_value }}</td>{% endif %}
+                    <td>{{ entity.price_gross }}</td>     
+                    <td>{{ entity.qty }}</td>     
+                </tr>
+            {% endfor %}
+    {% endif %}
+        </tbody>
+    </table>
+    </div>
+{% endblock %}
+
+
+{#{% block content %}
+    <style>
+        ul {margin-left: 10px; margin-top: 10px;padding-left: 5px;}    
+    </style>
+
+<small>
+
+{% if variations and variations[0]['id2'] %}
+    <ul>
+        {% for entity in variations %}
+            <li>
+                <a href="?action=variation_edit&amp;variation_id={{ entity.id2 }}" target="_blank">
+                {{ entity.sku }}
+                {% if product.feature1_name %}<b>{{ product.feature1_name }}</b>: {{ entity.feature1_value }}{% endif %}
+                {% if product.feature2_name %}<b>{{ product.feature2_name }}</b>: {{ entity.feature2_value }}{% endif %}
+                {% if product.feature3_name %}<b>{{ product.feature3_name }}</b>: {{ entity.feature3_value }}{% endif %}       
+                </a>        
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+</small>
+{% endblock %}#}

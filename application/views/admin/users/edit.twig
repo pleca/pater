@@ -1,0 +1,167 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}</h3>
+
+<a class="btn btn-default" href="?"><i class="fa fa-arrow-left"></i> {{ lang.back }}</a><br /><br />
+    
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+            <div class="form-body">
+                <div class="form-group last">
+                    <label class="col-md-3 control-label">{{ lang.login }}</label>
+                    <div class="col-md-4">
+                        <p class="form-control-static"> {{ entity.login }} </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.account_status }}</label>
+                    <div class="col-md-4">
+                        <select name="active" class="form-control">
+                            <option value="0" {% if entity.active != 1 %}selected="true"{% endif %}>{{ lang.account_inactive }}</option>
+                            <option value="1" {% if entity.active == 1 %}selected="true"{% endif %}>{{ lang.account_active }}</option>
+                        </select>
+                    </div>
+                </div>                     
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.level }}</label>
+                    <div class="col-md-4">
+                        <select name="level" class="form-control">
+                            <option value="3" {% if entity.level == 3 or not entity.level %}selected="true"{% endif %}>{{ lang.user }}</option>
+                            {% if user.level == 1 or user.level == 2 %}
+                            <option value="2" {% if entity.level == 2 %}selected="true"{% endif %}>{{ lang.admin }}</option>
+                            {% endif %}
+                            {% if user.level == 1 %}
+                            <option value="1" {% if entity.level == 1 %}selected="true"{% endif %}>{{ lang.super_admin }}</option>      
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>          
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.first_name }}</label>
+                    <div class="col-md-4">
+                        <input name="name" type="text" placeholder="{{ lang.first_name }}" class="form-control" value="{{ entity.name }}">
+                    </div>
+                </div>                        
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.last_name }}</label>
+                    <div class="col-md-4">
+                        <input name="surname" type="text" placeholder="{{ lang.last_name }}" class="form-control" value="{{ entity.surname }}">
+                    </div>
+                </div>                      
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Email Address
+                    <span class="required" aria-required="true"> * </span></label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                            <input name="email" type="email" placeholder="Email Address" class="form-control" value="{{ entity.email }}"> </div>
+                    </div>
+                </div>   
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" name="action" value="save" />
+                        <input type="hidden" name="sid" value="{{ entity.shid }}" />
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        {% if user.level in [1,2] or user.id == entity.id %}        
+        <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+            <h4>{{ lang.change_user_password }}</h4>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.password }}
+                        <span class="required" aria-required="true"> * </span></label>
+                    <div class="col-md-4">
+                        <input name="pass" type="password" class="form-control" value="">
+                    </div>
+                </div> 
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.repeat_password }}
+                        <span class="required" aria-required="true"> * </span></label>
+                    <div class="col-md-4">
+                        <input name="pass2" type="password" class="form-control" value="">
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" name="action" value="savePass" />
+                        <input type="hidden" name="sid" value="{{ entity.shid }}" />
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        {% endif %}
+
+        {% if user.level in [1,2] %}
+        <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}" role="form">
+            <h4>{{ lang.user_access_to_modules }}</h4>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.modules }}</label>
+                    <div class="col-md-9">
+                        <div class="checkbox-list">
+                            {% for privilege in entity.privilege %}
+                                <label><input type="checkbox" name="privilege[]" value="{{ privilege.id }}" {% if privilege.status == 1 %} checked="true"{% endif %} /> {{ privilege.name }} </label>
+                            {% endfor %}                            
+                        </div>
+                    </div>
+                </div>                      
+            </div>                
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" name="action" value="savePriv" />
+                        <input type="hidden" name="sid" value="{{ entity.shid }}" />
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+                    
+        <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}" role="form">
+            <h4>{{ lang.user_actions }}</h4>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.actions }}</label>
+                    <div class="col-md-9">
+                        <div class="checkbox-list">
+                            {% for available_action in entity.available_actions %}
+                                <label><input type="checkbox" name="available_actions[]" value="{{ available_action.id }}" {% if available_action.status == 1 %} checked="true"{% endif %} /> {{ available_action.name }} </label>
+                            {% endfor %}                          
+                        </div>
+                    </div>
+                </div>                      
+            </div>                
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" name="action" value="saveActions" />
+                        <input type="hidden" name="sid" value="{{ entity.shid }}" />
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                    </div>
+                </div>
+            </div>
+        </form>                    
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

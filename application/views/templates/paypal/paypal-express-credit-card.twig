@@ -1,0 +1,15 @@
+{% extends "templates/base.twig" %}
+
+{% block content %}
+
+<div class="profile box">
+    <div id="pageTitle">
+       <h1>{{ title }}</h1>
+    </div>
+
+    <div id="pageContent">
+        {% include 'templates/other/notify.twig' %} 
+        {% if form %} {{ form|raw }} {% endif %}
+    </div>
+</div>
+{% endblock %}

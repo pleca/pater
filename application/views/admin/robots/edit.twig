@@ -1,0 +1,47 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+       $(document).ready(function () {
+           d = new Date();
+           $("#robots").attr("href", "{{ constant('CMS_URL') }}/robots.txt?"+d.getTime());
+       });
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body">        
+        <form method="post" action="{{ server('PHP_SELF') }}" enctype="multipart/form-data">
+            <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">              
+                <tbody>
+                    <tr>
+                        <td>Robots.txt:<br /><small>(format txt)</small></td>
+                        <td>{% if file_exists(robotsFile) %}<a id="robots" href="{{ constant('CMS_URL') }}/robots.txt" target="_blank">Robots.txt{% endif %}</td>
+                        <td><input type="file" name="robots" size="60" /></td>                        
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="center">
+                            <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                            <input type="hidden" name="action" value="{{ lang.btn_save }}" />
+                        </td>
+                    </tr>                    
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+                    
+{% endblock %}

@@ -1,0 +1,375 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+    // <![CDATA[
+        var tax = new Array();
+        {% for tax in taxes %}
+            tax[{{ tax.id }}] = {{ tax.value }};
+        {% endfor %}
+
+        $(function () {
+            $('select[name=tax_id]').change(function () {
+                updatePrices();
+            });
+            $('input[name=price_purchase]').keyup(function () {
+                updatePrices();
+            });
+             $('.price-group').keyup(function () {
+                 updatePrices();
+             });           
+            $('input[name=price_promotion]').keyup(function () {
+                updatePrices();
+            });
+            
+            $("#transport_group").change(function () {
+                var groupId = $(this).val();
+                var unitId = "{{ entity.transport_unit_id }}";
+
+                var method = 'getTransportGroupUnits';
+
+                $.post(CMS_URL + "/admin/ajax/product.php", {method: method, groupId: groupId, unitId: unitId})
+                    .done(function (data) {
+                        $("#transport_unit").html(data);
+                    });
+            }).change(); 
+            
+{#            if ($("#is-advertaising-material").is(':checked')) {
+                $("#transport-unit").hide();              
+            } else {
+                $("#transport-unit").show();
+            }
+            
+            $("#is-advertaising-material").change(function () {
+                if ($(this).is(':checked')) {
+                    $("#transport-unit").hide();
+                } else {
+                    $("#transport-unit").show();
+                }
+            });#}
+        });
+
+        $(document).ready(function () {
+            $("input[name=promotion]").click(function () {
+                if ($('input[name=promotion]').is(':checked')) {
+                    $(".div_promotion").show();
+                }
+                else {
+                    $(".div_promotion").hide();
+                }
+            });
+            updatePrices();
+        });
+
+        function updatePrices() {
+            var tax_value = tax[$('select[name=tax_id]').val()];
+            var price_purchase = Math.round($('input[name=price_purchase]').val() * 10000) / 10000;
+            var price = Math.round($('input[name=price]').val() * 10000) / 10000;
+            var price_promotion = Math.round($('input[name=price_promotion]').val() * 10000) / 10000;
+
+            var price_purchase_gross = Math.round((price_purchase + price_purchase * tax_value / 100) * 100) / 100;
+            var price_gross = Math.round((price + price * tax_value / 100) * 100) / 100;
+            var price_promotion_gross = Math.round((price_promotion + price_promotion * tax_value / 100) * 100) / 100;
+            var price_purchase_tax = price_purchase_gross - price_purchase;
+            var price_tax = price_gross - price;
+            var price_promotion_tax = price_promotion_gross - price_promotion;
+
+            price_purchase_gross = price_purchase_gross.toFixed(2);
+            price_gross = price_gross.toFixed(2);
+            price_promotion_gross = price_promotion_gross.toFixed(2);
+            price_purchase_tax = price_purchase_tax.toFixed(2);
+            price_tax = price_tax.toFixed(2);
+            price_promotion_tax = price_promotion_tax.toFixed(2);
+
+            $('input[name=price_purchase_gross]').val(price_purchase_gross);
+            $('input[name=price_gross]').val(price_gross);
+            $('input[name=price_promotion_gross]').val(price_promotion_gross);
+            $('input[name=price_purchase_tax]').val(price_purchase_tax);
+            $('input[name=price_tax]').val(price_tax);
+            $('input[name=price_promotion_tax]').val(price_promotion_tax);
+
+            var price2 = Math.round($('input[name=price2]').val() * 10000) / 10000;
+            var price3 = Math.round($('input[name=price3]').val() * 10000) / 10000;
+            var price2_gross = Math.round((price2 + price2 * tax_value / 100) * 100) / 100;
+            var price3_gross = Math.round((price3 + price3 * tax_value / 100) * 100) / 100;
+            price2_gross = price2_gross.toFixed(2);
+            price3_gross = price3_gross.toFixed(2);
+            var price2_tax = price2_gross - price2;
+            var price3_tax = price3_gross - price3;
+            price2_tax = price2_tax.toFixed(2);
+            price3_tax = price3_tax.toFixed(2);
+
+            $('input[name=price2_gross]').val(price2_gross);
+            $('input[name=price3_gross]').val(price3_gross);
+            $('input[name=price2_tax]').val(price2_tax);
+            $('input[name=price3_tax]').val(price3_tax);
+        }
+    // ]]>
+    </script>
+
+    <style>
+    .form-inline .form-control {
+        width: 100px;
+    }    
+    </style> 
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        
+        <div class="btn-group">
+            <a class="btn btn-default" href="?"><i class="fa fa-arrow-left"></i> {{ lang.back }}</a>
+            <a class="btn btn-default" href="?action=edit&amp;id={{ product.id }}"><i class="fa fa-home"></i> Dane podstawowe</a>
+            <a class="btn btn-default" href="?action=expanded&amp;id={{ product.id }}"><i class="fa fa-globe"></i> Dane rozszerzone</a>
+            <a class="btn btn-default active" href="?action=variation&amp;id={{ product.id }}"><i class="fa fa-sitemap"></i> Wariacje</a>
+            <a class="btn btn-default" href="?action=image&amp;id={{ product.id }}"><i class="fa fa-photo"></i> Zdjęcia</a>
+        </div>
+        
+        <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+            <div class="form-body">  
+                <div class="form-group">
+                      <label class="col-md-3 control-label">Stawka podatku</label>
+                      <div class="col-md-4">
+                        {% for tax in taxes %}
+                            {% if loop.first %}<select name="tax_id" class="form-control">{% endif %}
+                                <option value="{{ tax.id }}" {% if entity.tax_id == tax.id %}selected="true"{% endif %}>{{ tax.value }}</option>
+                            {% if loop.last %}</select>{% endif %}
+                        {% endfor %}
+                      </div>                     
+                  </div>                    
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Cena RRP</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="price_rrp" value="{{ entity.price_rrp }}" />
+                    </div>                     
+                </div>
+                <div class="form-group form-inline">
+                    <label class="col-md-3 control-label">Cena zakupu</label>
+                    <div class="col-md-6">
+                        netto <input class="form-control" type="text" name="price_purchase" value="{{ entity.price_purchase }}" />
+                        brutto <input class="form-control" type="text" name="price_purchase_gross" value="" disabled="true" />
+                        wartość podatku <input class="form-control" type="text" name="price_purchase_tax" value="" disabled="true" />
+                    </div>                     
+                </div>
+                <div class="form-group form-inline">
+                    <label class="col-md-3 control-label">Cena sprzedaży {% if static('Cms','modules')['price_groups'] %}{{ lang.group }} 1{% endif %}</label>
+                    <div class="col-md-6">
+                        netto <input class="form-control price-group" type="text" name="price" value="{{ entity.price }}" />
+                        brutto <input class="form-control" type="text" name="price_gross" value="" disabled="true" />
+                        wartość podatku <input class="form-control" type="text" name="price_tax" value="" disabled="true" />
+                    </div>                     
+                </div>
+                        
+                {% if static('Cms','modules')['price_groups'] %}         
+                <div class="form-group form-inline">
+                    <label class="col-md-3 control-label">Cena sprzedaży {{ lang.group }} 2</label>
+                    <div class="col-md-6">
+                        netto <input class="form-control price-group" type="text" name="price2" value="{{ entity.price2 }}" />
+                        brutto <input class="form-control" type="text" name="price2_gross" value="" disabled="true" />
+                        wartość podatku <input class="form-control" type="text" name="price2_tax" value="" disabled="true" />
+                    </div>                     
+                </div>                        
+                <div class="form-group form-inline">
+                    <label class="col-md-3 control-label">Cena sprzedaży {{ lang.group }} 3</label>
+                    <div class="col-md-6">
+                        netto <input class="form-control price-group" type="text" name="price3" value="{{ entity.price3 }}" />
+                        brutto <input class="form-control" type="text" name="price3_gross" value="" disabled="true" />
+                        wartość podatku <input class="form-control" type="text" name="price3_tax" value="" disabled="true" />
+                    </div>                     
+                </div>                        
+                {% endif %}
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Waluta</label>
+                    <div class="col-md-6">
+                        <p class="form-control-static"> <strong>{{ conf.currency }}</strong> </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Promocja</label>
+                    <div class="col-md-6">
+                        <input type="checkbox" id="promotion" class="form-control" name="promotion" value="1" {% if entity.promotion == 1 %}checked="true"{% endif %} /> <label for="promotion"><strong>produkt w promocji</strong></label>
+                    </div>                     
+                </div>                    
+                <div class="form-group div_promotion form-inline" {% if entity.promotion != 1 %}style="display:none;"{% endif %}>
+                    <label class="col-md-3 control-label">Cena promocyjna</label>
+                    <div class="col-md-7">
+                    netto: <input class="form-control" type="text" name="price_promotion" value="{{ entity.price_promotion }}" />
+                    brutto: <input class="form-control" type="text" name="price_promotion_gross" value="" disabled="true" />
+                    wartość podatku: <input class="form-control" type="text" name="price_promotion_tax" value="" disabled="true" />
+                    data zakończenia: <input class="form-control datepicker" type="text" name="date_promotion" value="{{ entity.date_promotion }}" />                        
+                    </div>            
+                </div>                    
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Bestseller</label>
+                    <div class="col-md-4">
+                        <input type="checkbox" id="bestseller" class="form-control" name="bestseller" value="1" {% if entity.bestseller == 1 %}checked="true"{% endif %} /> <label for="bestseller"><strong>produkt bestseller</strong></label>
+                    </div>                     
+                </div>                    
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Polecany</label>
+                    <div class="col-md-6">
+                        <input type="checkbox" id="recommended" class="form-control" name="recommended" value="1" {% if entity.recommended == 1 %}checked="true"{% endif %} /> <label for="recommended"><strong>produkt polecany</strong></label>
+                    </div>                     
+                </div>                    
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Widoczny na stronie głównej</label>
+                    <div class="col-md-6">
+                        <input type="checkbox" id="main-page" class="form-control" name="main_page" value="1" {% if entity.main_page == 1 %}checked="true"{% endif %} /> <label for="main-page"><strong>produkt widoczny na stronie głównej</strong></label>
+                    </div>                     
+                </div>                    
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Mega oferta</label>
+                    <div class="col-md-6">
+                        <input type="checkbox" id="mega-offer" class="form-control" name="mega_offer" value="1" {% if entity.mega_offer == 1 %}checked="true"{% endif %} /> <label for="mega-offer"><strong>mega oferta</strong></label>
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <span class="col-md-3 control-label">Link specjalny</span>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="inputKey" class="col-md-1 control-label">Tekst</label>
+                            <div class="col-md-3">
+                                <input type="text" name="special_link[content]" class="form-control" id="inputKey" placeholder="Tekst" value="{{ entity.special_link_content }}">
+                            </div>
+                            <label for="inputValue" class="col-md-1 control-label">Url</label>
+                            <div class="col-md-5">
+                                <input type="url" name="special_link[url]" class="form-control" id="inputValue" placeholder="Url" value="{{ entity.special_link_url }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>                     
+                {% if static('Cms','modules')['unit_transport'] %}
+                    <div class="form-group form-inline">
+                        <label class="col-md-3 control-label">{{ lang.length }}<small> [cm]</small></label>
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" name="length" value="{{ entity.length }}" />
+                        </div>                     
+                    </div>                  
+                    <div class="form-group form-inline">
+                        <label class="col-md-3 control-label">{{ lang.width }} <small> [cm]</small></label>
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" name="width" value="{{ entity.width }}" />
+                        </div>                     
+                    </div>                  
+                    <div class="form-group form-inline">
+                        <label class="col-md-3 control-label">{{ lang.height }} <small> [cm]</small></label>
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" name="height" value="{{ entity.height }}" />
+                        </div>                     
+                    </div>                              
+{#                    <div class="form-group form-inline">
+                        <label class="col-md-3 control-label">{{ lang.is_advertaising_material }}</label>
+                        <div class="col-md-6">
+                            <input class="form-control" id="is-advertaising-material" type="checkbox" name="is_advertaising_material" value="1" {% if entity.is_advertaising_material == 1 %}checked="true"{% endif %}/> <label for="is_advertaising_material"><strong>{{ lang.is_advertaising_material }}</strong></label>
+                        </div>                     
+                    </div>  #}       
+                    <div id="transport-unit">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">{{ lang.transport_group }}</label>
+                            <div class="col-md-4">
+                                {% for row in unitTransportGroups %}
+                                    {% if loop.first %}<select id="transport_group" name="transport_group_id" class="form-control"><option value="">{{ lang.select }}</option>{% endif %}
+                                        <option value="{{ row.id }}" {% if entity.transport_group_id == row.id %}selected="true"{% endif %}>{{ row.name }}</option>
+                                    {% if loop.last %}</select>{% endif %}
+                                {% endfor %}
+                            </div>                     
+                        </div>                         
+                        <div class="form-group">
+                                <label class="col-md-3 control-label">{{ lang.transport_unit }}</label>
+                                <div class="col-md-4">
+                                    <select id="transport_unit" name="transport_unit_id" class="form-control"></select>
+                                </div>                     
+                        </div>  
+                    </div>
+                {% endif %}                    
+                <div class="form-group form-inline">
+                    <label class="col-md-3 control-label">Waga do transportu</label>
+                    <div class="col-md-6">
+                        <input class="form-control" type="text" name="weight" value="{{ entity.weight }}" /> g
+                    </div>                     
+                </div>                    
+                <div class="form-group form-inline">
+                    <label class="col-md-3 control-label">Dostępność/magazyn</label>
+                    <div class="col-md-6">
+                        <input class="form-control" type="text" name="qty" value="{{ entity.qty }}" /> szt
+                    </div>                     
+                </div>                    
+                <div class="form-group">
+                    <label class="col-md-3 control-label">SKU</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="sku" value="{{ entity.sku }}" />
+                    </div>                     
+                </div>                    
+                <div class="form-group">
+                    <label class="col-md-3 control-label">EAN</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="ean" value="{{ entity.ean }}" />
+                    </div>                     
+                </div>                    
+                        
+                {% if product.feature1_id %}                    
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Feature: {{ product.feature1_name }}</label>
+                        <div class="col-md-4">
+                            <select name="feature1_value_id" class="form-control"><option value="">{{ lang.select }}</option>
+                            {% for row in featureValues if row.feature_id == product.feature1_id %}
+                                <option value="{{ row.id }}" {% if entity.feature1_value_id == row.id %}selected="true"{% endif %}>{{ row.name }}</option>
+                            {% endfor %}         
+                            </select>
+                        </div>                     
+                   </div>
+                {% endif %}
+                
+                {% if product.feature2_id %}                    
+                    <div class="form-group">
+                       <label class="col-md-3 control-label">Feature: {{ product.feature2_name }}</label>
+                        <div class="col-md-4">
+                            <select name="feature2_value_id" class="form-control"><option value="">{{ lang.select }}</option>
+                            {% for row in featureValues if row.feature_id == product.feature2_id %}
+                                <option value="{{ row.id }}" {% if entity.feature2_value_id == row.id %}selected="true"{% endif %}>{{ row.name }}</option>
+                            {% endfor %}         
+                            </select>
+                        </div>                    
+                   </div>
+                {% endif %}
+                
+                {% if product.feature3_id %}                    
+                    <div class="form-group">
+                       <label class="col-md-3 control-label">Feature: {{ product.feature3_name }}</label>
+                        <div class="col-md-4">
+                            <select name="feature3_value_id" class="form-control"><option value="">{{ lang.select }}</option>
+                            {% for row in featureValues if row.feature_id == product.feature3_id %}
+                                <option value="{{ row.id }}" {% if entity.feature3_value_id == row.id %}selected="true"{% endif %}>{{ row.name }}</option>
+                            {% endfor %}         
+                            </select>
+                        </div>                     
+                   </div>
+                {% endif %}
+                
+            </div>                     
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" name="action" value="variation_add" />
+                        <input type="hidden" name="id" value="{{ product.id }}" />
+                        <button class="btn green" type="submit">{{ lang.btn_add }}</button>
+                        <a href="?" class="btn default">{{ lang.btn_cancel }}</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <form id="form" method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+            <div class="form-body">                
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.first_name }}</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="first_name" value="{{ entity.first_name }}" />
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.last_name }}</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="last_name" value="{{ entity.last_name }}" />
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.email }}
+                    <span class="required" aria-required="true"> * </span></label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                            <input name="email" type="email" placeholder="Email Address" class="form-control" value="{{ entity.email }}"> </div>
+                    </div>
+                </div>  
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Język</label>
+                    <div class="col-md-4">
+                        <select name="lang_id" class="form-control">
+                            <option value="1" {% if entity.lang_id == 1 %}selected="true"{% endif %}>angielski</option>
+                            <option value="2" {% if entity.lang_id == 2 %}selected="true"{% endif %}>polski</option>
+                        </select>
+                    </div>                     
+                </div>                   
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Status konta</label>
+                    <div class="col-md-4">
+                        <select name="active" class="form-control">
+                            <option value="0" {% if entity.active == 0 %}selected="true"{% endif %}>nieaktywne</option>
+                            <option value="1" {% if entity.active == 1 %}selected="true"{% endif %}>aktywne</option>
+                        </select>
+                    </div>                     
+                </div>
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" name="action" value="addUser" />
+                        <button class="btn green" type="submit">{{ lang.btn_add }}</button>
+                        <a href="?action=listUsers" class="btn default">{{ lang.btn_cancel }}</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

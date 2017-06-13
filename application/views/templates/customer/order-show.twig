@@ -1,0 +1,202 @@
+{% extends "templates/base.twig" %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block content %}
+    <div class="row profile-page">
+
+        <div class="col-xs-12">
+            {% include 'templates/customer/top.twig' %}
+
+            <div class="row">
+                <div class="col-xs-4">
+                    <dl class="dl-horizontal">
+                        <dt>{{ lang.order_number }}</dt>
+                        <dd>{{ entity.id }}</dd>
+
+                        <dt>{{ lang.order_date }}</dt>
+                        <dd>{{ entity.time_add }}</dd>
+
+                        <dt>{{ lang.order_payment }}</dt>
+                        <dd>{{ entity.payment }}</dd>
+
+                        <dt>{{ lang.order_transport }}</dt>
+                        <dd>{{ entity.transport_name }} - {{ conf.currency_left }}{{ entity.transport_price }}{{ conf.currency_right }}</dd>
+
+                        <dt>{{ lang.order_status }}</dt>
+                        <dd><span class="label" style="background-color: {{ entity.status_color }};">{{ entity.status }}</span></dd>
+                    </dl>
+                </div>
+                <div class="col-xs-4">
+                    <h4 class="text-center">{{ lang.basket_shipping_address }}<h4>                           
+                    <dl class="dl-horizontal"> 
+                    {% if entity.shipping_company_name %}
+                        <dt>{{ lang.c_company_name }}</dt>
+                        <dd>{{ entity.shipping_company_name }}</dd>
+                    {% endif %}                            
+                        <dt>{{ lang.c_first_name }}</dt>
+                        <dd>{{ entity.shipping_first_name }}</dd>
+
+                        <dt>{{ lang.c_last_name }}</dt>
+                        <dd>{{ entity.shipping_last_name }}</dd>
+
+                        <dt>{{ lang.c_address1 }}</dt>
+                        <dd>{{ entity.shipping_address1 }}</dd>
+
+                    {% if entity.shipping_address2 %}
+                        <dt>{{ lang.c_address2 }}</dt>
+                        <dd>{{ entity.shipping_address2 }}</dd>                            
+                    {% endif %}
+
+                    {% if entity.shipping_address3 %}
+                        <dt>{{ lang.c_address3 }}</dt>
+                        <dd>{{ entity.shipping_address3 }}</dd>
+                    {% endif %}
+
+                        <dt>{{ lang.c_postcode }}</dt>
+                        <dd>{{ entity.shipping_post_code }}</dd>   
+
+                        <dt>{{ lang.c_city }}</dt>
+                        <dd>{{ entity.shipping_city }}</dd>   
+
+                        <dt>{{ lang.c_country }}</dt>
+                        <dd>{{ entity.shipping_country }}</dd>                     
+                    </dl>                                                                                     
+                </div>
+                    
+                <div class="col-xs-4">
+                    {% if entity.first_name %}
+                        <h4 class="text-center">{{ lang.basket_billing_address }}<h4>
+                                
+                        <dl class="dl-horizontal">
+                        {% if entity.company_name %}
+                            <dt>{{ lang.c_company_name }}</dt>
+                            <dd>{{ entity.company_name }}</dd>
+                        {% endif %}
+                        {% if entity.nip %}
+                            <dt>{{ lang.c_nip }}</dt>
+                            <dd>{{ entity.nip }}</dd>
+                        {% endif %}
+
+                            <dt>{{ lang.c_first_name }}</dt>
+                            <dd>{{ entity.first_name }}</dd>
+
+                            <dt>{{ lang.c_last_name }}</dt>
+                            <dd>{{ entity.last_name }}</dd>
+
+                            <dt>{{ lang.c_address1 }}</dt>
+                            <dd>{{ entity.address1 }}</dd>
+
+                        {% if entity.address2 %}    
+                            <dt>{{ lang.c_address2 }}</dt>
+                            <dd>{{ entity.address2 }}</dd>
+                        {% endif %}
+
+                        {% if entity.address3 %} 
+                            <dt>{{ lang.c_address3 }}</dt>
+                            <dd>{{ entity.address3 }}</dd>
+                        {% endif %}
+
+                            <dt>{{ lang.c_postcode }}</dt>
+                            <dd>{{ entity.post_code }}</dd>
+
+                            <dt>{{ lang.c_city }}</dt>
+                            <dd>{{ entity.city }}</dd>
+
+                            <dt>{{ lang.c_country }}</dt>
+                            <dd>{{ entity.country }}</dd>
+                        </dl>                                      
+                    {% endif %}                    
+                </div>
+            </div>
+
+            <div class="basket">
+            {% for product in entity.products %}
+                {% if loop.first %}     
+                    <div class="table-responsive">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>{{ lang.photo }}</th>
+                                    <th>{{ lang.basket_product_name }}</th>
+                                    <th>{{ lang.basket_quantity }}</th>
+                                    <th>{{ lang.order_price }}</th>
+                                    <th>{{ lang.basket_total_price }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                {% endif %}
+                
+                        <tr>
+                            <td class="basket-item-photo">                            
+                                <img src="{% if product.image %}{{ product.image }} {% else %}{{ constant("CMS_URL") }}/files/no-picture.png{% endif %}">
+                            </td>
+                            <td class="basket-item-name">
+                                <strong>{{ product.name }}</strong>
+                                {% set features = product.desc|split(',') %}
+                    
+                                {% for feature in features %}
+                                    <span>{{ feature }}</span>
+                                {% endfor %}
+                            </td>
+                            <td>{{ product.qty }}</td>
+                            <td>{{ conf.currency_left }}{{ product.price }}{{ conf.currency_right }}</td>
+                            <td>{{ conf.currency_left }}{{ product.sum }}{{ conf.currency_right }}</td>
+                        </tr>
+
+                {% if loop.last %}
+                    </tbody></table></div>
+                {% endif %}
+                
+            {% endfor %}
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 text-right">
+                    <hr>
+                    <ul class="list-group price-summary">
+                        <li class="list-group-item">
+                            <p>{{ lang.order_value2 }}<span class="badge">{{ conf.currency_left }}{{ entity.price_val }}{{ conf.currency_right }}</span></p>
+                        </li>
+                        {% if entity.discount > 0 %}
+                        <li class="list-group-item">
+                            <p>{{ lang.order_discount }}<span class="badge">{{ entity.discount }}%</span></p>
+                        </li>                       
+                        <li class="list-group-item">
+                            <p>{{ lang.order_discount4 }}<span class="badge">{{ conf.currency_left }}{{ entity.sum }}{{ conf.currency_right }}</span></p>                                                                                 
+                        </li>                               
+                        {% endif %}
+                        <li class="list-group-item">
+                            <p>{{ lang.order_transport }}:<span class="badge">{{ conf.currency_left }}{{ entity.transport_price }}{{ conf.currency_right }}</span></p>                        
+                        </li>                        
+                        
+                        {% if entity.discount > 0 %}
+                        <li class="list-group-item list-group-item-success">
+                            <strong>{{ lang.basket_total_order }}:</strong>
+                            <span class="badge">{{ conf.currency_left }}{{ entity.total }}{{ conf.currency_right }}</span>
+                        </li>
+                        {% endif %}
+                        
+                        <li class="list-group-item">
+                            <p>{{ lang.order_discount2 }}<span class="badge">{{ conf.currency_left }}{{ entity.saving }}{{ conf.currency_right }}</span></p>
+                        </li>                         
+                    </ul>
+                </div>
+                        
+            {% if entity.comment %}
+                <div>
+                    {{ lang.order_comments2 }}<br />
+                    <i>{{ entity.comment }}</i>
+                </div>
+            {% endif %}
+
+            <br /><br />                        
+            </div>
+                   
+        {% include 'templates/customer/bottom.twig' %}            
+        </div>
+    </div>
+    
+{% endblock %}

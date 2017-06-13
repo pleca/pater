@@ -1,0 +1,69 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="table-toolbar">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="btn-group">
+                        <a href="?action=addForm">
+                        <button id="sample_editable_1_new" class="btn sbold green"> {{ lang.add_new }}
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <div class="table-scrollable">
+        {% for trans in attribute(entities, constant('LOCALE')) %}
+            {% if loop.first %}
+                <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+                <thead>
+                    <tr>
+                        <th>{{ lang.lp }}</th>
+                        <th>{{ lang.name }}</th>
+                        <th>{{ lang.feature }}</th>                        
+                        <th class="text-center">{{ lang.edit }}</th>
+                        <th class="text-center">{{ lang.delete }}</th>                       
+                    </tr>
+                </thead>              
+                <tbody>
+            {% endif %}                       
+                    <tr class="{% if parameter("id") == trans.id %}active{% endif %}">
+                        <td>{{ interval + loop.index }}</td>                                               
+                        <td>{{ trans.name }}</td>           
+                        <td>{{ features[trans.feature_id]['name'] }}</td>
+                        <td class="text-center">
+                           <a href="?id={{ trans.id }}&amp;action=edit" title="{{ lang.edit }}">
+                              <i class="fa fa-edit"></i>
+                           </a>
+                        </td>
+                        <td class="text-center">
+                            {% if trans.id not in disabledFeatureValuesIds %} 
+                              <a href="#" data-href="?id={{ trans.id }}&amp;action=delete" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-remove"></i></a>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+            {% if loop.last %}</tbody></table>{% endif %}
+        {% endfor %}
+
+                        {% include 'admin/other/pages.twig' %} 
+        </div>
+    </div>
+</div>
+
+{% include 'admin/other/confirm.twig' %}
+
+{% endblock %}

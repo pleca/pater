@@ -1,0 +1,67 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+            <div class="form-body">  
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.weight_2 }}</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="weight_from" value="{{ entity.weight_from }}" />
+                        <span class="help-block">{{ lang.weight_unit }}</span>
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.weight_3 }}</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="weight_to" value="{{ entity.weight_to }}" />
+                        <span class="help-block">{{ lang.weight_unit }}</span>
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.transport_cost }}</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="price" value="{{ entity.price }}" />{{ conf.currency }}
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.transport_tax }}</label>
+                    <div class="col-md-4">
+                        <select name="tax_id" class="form-control">
+                        {% for tax in taxes %}
+                            <option value="{{ tax.id }}" {% if entity.tax_id == tax.id %}selected="selected"{% endif %}>{{ tax.value }}</option>
+                        {% endfor %}                             
+                        </select>
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.transport_delivery_time }}</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="delivery_time" value="{{ entity.delivery_time }}" />
+                    </div>                     
+                </div>                        
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                        <a href="{{ url_back }}" class="btn default">{{ lang.btn_cancel }}</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

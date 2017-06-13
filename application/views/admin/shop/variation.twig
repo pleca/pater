@@ -1,0 +1,179 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+       $(document).ready(function () {
+            $('select[name=allegro_template]').change(function () {
+                var variation_id = $(this).attr('data-variation-id');
+                var template_id = $(this).val();
+
+                if (template_id) {
+                    var url = '?action=generate_allegro_template&variation_id=' + variation_id + '&template_id=' + template_id;
+                    window.location.href = url;
+                }
+           });
+
+       });
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="table-toolbar">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="btn-group">
+                    {% if enabledAddingVariation %}
+{#                    {% if item.type == 1 or not variations %}#}
+                       <a href="?action=variation_add&amp;id={{ item.id }}">
+                        <button id="sample_editable_1_new" class="btn sbold green"> {{ lang.add_new }}
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        </a>
+                    {% endif %}                        
+                    </div>
+                </div>
+            </div>
+        </div>
+                    
+        <div class="btn-group">
+            <a class="btn btn-default" href="?"><i class="fa fa-arrow-left"></i> {{ lang.back }}</a>
+            <a class="btn btn-default" href="?action=edit&amp;id={{ item.id }}"><i class="fa fa-home"></i> Dane podstawowe</a>
+            <a class="btn btn-default" href="?action=expanded&amp;id={{ item.id }}"><i class="fa fa-globe"></i> Dane rozszerzone</a>
+            <a class="btn btn-default active" href="?action=variation&amp;id={{ item.id }}"><i class="fa fa-sitemap"></i> Wariacje</a>
+            <a class="btn btn-default" href="?action=image&amp;id={{ item.id }}"><i class="fa fa-photo"></i> Zdjęcia</a>
+        </div>                                      
+
+        {% if entities and entities[0].id2 %}
+        <div class="table-scrollable">
+            {% for entity in entities %}
+                {% if loop.first %}
+                <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+                <thead>
+                    <tr>
+                        <th>{{ lang.lp }}</th>
+                        <th>{{ lang.id }}</th>
+                        <th>SKU</th>
+                        <th>EAN</th>
+                        {% if item.feature1_id %}<th>Feature: {{ item.feature1_name }}</th>{% endif %}
+                        {% if item.feature2_id %}<th>Feature: {{ item.feature2_name }}</th>{% endif %}
+                        {% if item.feature3_id %}<th>Feature: {{ item.feature3_name }}</th>{% endif %}
+                        <th>Cena sprzedaży netto</th>
+                        <th>Cena sprzedaży brutto</th>
+                        <th>Waluta</th>
+                        <th>Ilość</th>
+                        <th class="text-center">Promocja</th>
+                        <th class="text-center">Bestseller</th>
+                        <th class="text-center">Polecany</th>
+                        <th colspan="3" class="text-center">{{ lang.options }}</th>             
+                    </tr>
+                </thead>              
+                <tbody>
+                {% endif %}             
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ entity.id2 }}</td>
+                        <td>{{ entity.sku }}</td>
+                        <td>{{ entity.ean }} {{ entity.feature1_value_id }}</td>
+                        {% if item.feature1_name %}
+                            <td>
+                            {% for row in featureValues if row.id == entity.feature1_value_id %}
+                                {{ row.name }}
+                            {% endfor %}
+                            </td>
+                        {% endif %}
+                        {% if item.feature2_name %}
+                            <td>
+                            {% for row in featureValues if row.id == entity.feature2_value_id %}
+                                {{ row.name }}
+                            {% endfor %}
+                            </td>
+                        {% endif %}
+                        {% if item.feature3_name %}
+                            <td>
+                            {% for row in featureValues if row.id == entity.feature3_value_id %}
+                                {{ row.name }}
+                            {% endfor %}
+                            </td>
+                        {% endif %}
+                        <td>
+                            {{ entity.price }}
+                            {% if entity.promotion == 1 %}({{ entity.price_promotion }}){% endif %}
+                        </td>
+                        <td>
+                            {{ entity.price_gross }}
+                            {% if entity.promotion == 1 %}({{ entity.price_promotion_gross }}){% endif %}
+                        </td>
+                        <td>{{ conf.currency }}</td>
+                        <td>{{ entity.qty }}</td>
+                        <td class="text-center">
+                            {% if entity.promotion == 1 %}
+                                <i class="fa fa-check" title="{{ lang.yes }}"></i>
+                            {% else %}
+                                <i class="fa fa-minus" title="{{ lang.no }}"></i>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            {% if entity.bestseller == 1 %}
+                                <i class="fa fa-check" title="{{ lang.yes }}"></i>
+                            {% else %}
+                                <i class="fa fa-minus" title="{{ lang.no }}"></i>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            {% if entity.recommended == 1 %}
+                                <i class="fa fa-check" title="{{ lang.yes }}"></i>
+                            {% else %}
+                                <i class="fa fa-minus" title="{{ lang.no }}"></i>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            {% if allegroTemplates %}
+{#                            {% if item.type == 1 and allegroTemplates %}#}
+                                <select name="allegro_template" class="form-control input-sm" data-variation-id="{{ entity.id2 }}" data-variation-id="{{ entity.id2 }}">
+                                {% for allegroTemplate in allegroTemplates %}
+                                    {% if loop.first %}<option value="">{{ lang.choose }} Generuj {{ lang.template|lower }} Allegro</option>{% endif %}
+                                    <option value="{{ allegroTemplate.id }}">- {{ allegroTemplate.name }}</option>
+                                {% endfor %}
+                                </select>
+{#                                <a href="?action=allegro_template&amp;variation_id={{ entity.id2 }}" title="{{ lang.template }}"><i class="fa fa-copy"></i></a>#}
+                            {% endif %}
+                        </td>                        
+                        <td class="text-center">
+                            {% if item.type == 1 %}
+                                <a href="?action=variation_duplicate&amp;variation_id={{ entity.id2 }}" title="{{ lang.btn_duplicate }}"><i class="fa fa-copy"></i></a>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <a href="?action=variation_edit&amp;variation_id={{ entity.id2 }}" title="{{ lang.btn_edit }}"><i class="fa fa-edit"></i></a>
+                        </td>
+                        
+                        {% if session[constant("USER_CODE")]['available_actions']['variation_delete'] %}
+                        <td class="text-center">                                                        
+                            <a href="#" data-href="?action=variation_delete&amp;id={{ entity.product_id }}&amp;variation_id={{ entity.id2 }}" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-remove"></i></a>                        
+                        </td>    
+                        {% endif %}
+                    </tr>  
+                {% if loop.last %}</tbody></table>{% endif %}
+            {% endfor %}
+
+                    {% include 'admin/other/pages.twig' %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% include 'admin/other/confirm.twig' %} 
+
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+           {% for row in static('Cms','langs') %}
+                   toggleEditor("edytor{{ row.code }}");
+           {% endfor %}
+        });        
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <ul class="nav nav-tabs">  
+            {% for row in static('Cms','langs') %}
+            <li {% if row.code == constant('LOCALE') %}class="active"{% endif %}>
+                <a href="#tab_{{ row.code }}" data-toggle="tab" aria-expanded="true"> {{ attribute(lang, row.code) }} 
+                <img src="{{ constant('TPL_URL') }}/assets/global/img/flags/{{ row.code }}.png" alt="{{ row.name }}" title="{{ row.name }}" />
+                </a>                
+            </li>
+            {% endfor %}
+        </ul> 
+        
+        <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+            <div class="form-body">  
+{#                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.product_name }}</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="name" value="{{ entity.name }}" />
+                    </div>                     
+                </div>   #}
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.category }}</label>
+                    <div class="col-md-4">
+                    {% for category in categories %}            
+                        {% if loop.first %}<select class="form-control" name="category_id"><option value="">{{ lang.select }}</option>{% endif %}
+                            <option value="{{ category.id }}" {% if entity.category_id == category.id %}selected="true"{% endif %}>{{ category.name }}</option>
+                            {% for subcategory in category.subcategories %} 
+                                <option value="{{ subcategory.id }}" {% if entity.category_id == subcategory.id %}selected="true"{% endif %}>&nbsp;&nbsp;&nbsp; {{ subcategory.name }}</option>
+                            {% endfor %}
+                        {% if loop.last %}</select>{% endif %}
+                    {% endfor %}
+                    </div>                     
+                </div>                                       
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.manufacturer }}</label>
+                    <div class="col-md-4">
+                    {% for producer in producersSelect %} 
+                       {% if loop.first %}<select class="form-control" name="producer_id"><option value="">{{ lang.select }}</option>{% endif %}
+                          <option value="{{ producer.id }}" {% if entity.producer_id == producer.id %}selected="true"{% endif %}>{{ producer.name }}</option>
+                       {% if loop.last %}</select>{% endif %}
+                    {% endfor %}
+                    </div>                     
+                </div>                    
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Status</label>
+                    <div class="col-md-4">
+                    {% for status in statuses %}
+                        {% if loop.first %}<select class="form-control" name="status_id">{% endif %}
+                           <option value="{{ status.id }}" {% if entity.status_id == status.id %}selected="true"{% endif %}>{{ status.name }}</option>
+                        {% if loop.last %}</select>{% endif %}
+                    {% endfor %}
+                    </div>                     
+                </div>                    
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.type }}</label>
+                    <div class="col-md-4">
+                        <select class="form-control" name="type">
+                           <option value="1" {% if entity.type == 1 %}selected{% endif %}>{{ lang.with_variations }}</option>
+                           <option value="2" {% if entity.type == 2 %}selected{% endif %}>{{ lang.without_variations }}</option>
+                        </select>
+                    </div>                     
+                </div>                
+                <div class="tab-content">            
+                    {% for row in static('Cms','langs') %}                                          
+                        <div class="tab-pane fade {% if row.code == constant('LOCALE') %}active in{% endif %}" id="tab_{{ row.code }}">                
+                                <div class="form-body">  
+                                {% for tran in attribute(entities, row.code) if tran.name == parameter('name') %}
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">{{ lang.name }}</label>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" name="{{ row.code }}[name]" value="{{ entity.name }}" />
+                                        </div>                     
+                                    </div>   
+                                    <hr />
+                                    <h3>SEO</h3>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">Seo Title</label>
+                                        <div class="col-md-4">
+                                            <input maxlength="60" name="{{ row.code }}[seo_title]" type="text" class="form-control" value="{{ tran.seo_title }}">
+                                        </div>
+                                    </div>                                     
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">{{ lang.desc_short }}</label>
+                                        <div class="col-md-4">
+                                            <textarea class="form-control" name="{{ row.code }}[content_short]">{{ entity.desc_short }}</textarea>
+                                        </div>                     
+                                    </div>
+                                    <hr />    
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">{{ lang.desc }}</label>
+                                        <div class="col-md-4">
+                                            <textarea id="edytor{{ row.code }}" class="edytor" name="{{ row.code }}[content]">{{ tran.desc }}</textarea>
+                                        </div>                     
+                                    </div>    
+                                {% else %}
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">{{ lang.name }}</label>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="text" name="{{ row.code }}[name]" />
+                                        </div>                     
+                                    </div>      
+                                    <hr />
+                                    <h3>SEO</h3>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">Seo Title</label>
+                                        <div class="col-md-4">
+                                            <input maxlength="60" name="{{ row.code }}[seo_title]" type="text" class="form-control">
+                                        </div>
+                                    </div>                                        
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">{{ lang.desc_short }}</label>
+                                        <div class="col-md-4">
+                                            <textarea class="form-control" name="{{ row.code }}[content_short]"></textarea>
+                                        </div>                     
+                                    </div> 
+                                    <hr />    
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">{{ lang.desc }}</label>
+                                        <div class="col-md-4">
+                                            <textarea id="edytor{{ row.code }}" class="edytor" name="{{ row.code }}[content]"></textarea>
+                                        </div>                     
+                                    </div>                       
+                                {% endfor %}                                                                                                     
+                            </div>             
+                        </div>                                                                  
+                    {% endfor%}            
+                </div>                                          
+            </div>                     
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" name="action" value="add" />
+                        <button class="btn green" type="submit">{{ lang.btn_add }}</button>
+                        <a href="?" class="btn default">{{ lang.btn_cancel }}</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

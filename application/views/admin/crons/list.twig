@@ -1,0 +1,76 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="table-toolbar">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="btn-group">
+                        <a href="?action=addForm">
+                        <button id="sample_editable_1_new" class="btn sbold green"> {{ lang.add_new }}
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        </a>                 
+                    </div>
+                </div>
+            </div>
+        </div>
+                    
+        <div class="table-scrollable">
+        {% for entity in entities %}
+            {% if loop.first %}
+                <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+                <thead>
+                    <tr>
+                        <th>{{ lang.lp }}</th>
+                        <th>{{ lang.name }}</th>
+                        <th>{{ lang.description }}</th>    
+                        <th class="col-md-1">Run</th>                               
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th class="col-md-1">Last Run</th>
+                        <th class="text-center">{{ lang.active }}</th>
+                        <th class="text-center">{{ lang.edit }}</th>                     
+                        <th class="text-center">{{ lang.delete }}</th>                     
+                    </tr>
+                </thead>              
+                <tbody>
+            {% endif %}                       
+                    <tr class="{% if parameter("id") == entity.id %}active{% endif %}">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ entity.name }} </td>
+                        <td>{{ entity.description }}</td>                     
+                        <td>{{ entity.minute }} {{ entity.hour }} {{ entity.dayOfMonth }} {{ entity.month }} {{ entity.dayOfWeek }}</td>
+                        <td>{{ entity.startDate is empty ? "" : entity.startDate|date('Y-m-d H:i') }} </td>
+                        <td>{{ entity.endDate is empty ? "" : entity.endDate|date('Y-m-d H:i') }} </td>                        
+                        <td>{{ entity.lastRun is empty ? "" : entity.lastRun|date('Y-m-d H:i') }} </td>                        
+                        <td class="text-center">
+                        {% if entity.active == 1 %}<i class="fa fa-check" alt="{{ lang.yes }}" title="{{ lang.yes }}"></i>{% else %}<i class="fa fa-ban" alt="{{ lang.no }}" title="{{ lang.no }}"></i>{% endif %}
+                        </td>                        
+                        <td class="text-center">
+                            <a href="?id={{ entity.id }}&amp;action=edit" title="{{ lang.edit }}">
+                                <i class="fa fa-edit"></i>
+                            </a>                              
+                        </td>
+                        <td class="text-center">
+                            <a href="#" data-href="?id={{ entity.id }}&amp;action=delete" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-remove"></i></a>
+                        </td>                          
+                    </tr>
+            {% if loop.last %}</tbody></table>{% endif %}
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% include 'admin/other/confirm.twig' %}
+
+{% endblock %}

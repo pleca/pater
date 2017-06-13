@@ -1,0 +1,4 @@
+tax.value.not_blank: Please enter tax value.
+cron.name.not_blank: Proszę podać nazwę zadania.
+product_review.comment_title.not_blank: Please enter comment title value.
+product_review.comment.not_blank: Please enter comment value.

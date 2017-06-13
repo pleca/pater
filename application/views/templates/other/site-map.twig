@@ -1,0 +1,37 @@
+{% extends "templates/base.twig" %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block content %}
+<div id="pageTitle">
+   <h1>{{ lang.sitemap_title }}</h1>
+</div>
+
+<div id="pageContent">
+   {% for entity in aMenu %}
+      <a href="{{ entity.url }}" title="{{ entity.name }}">{{ entity.name }}</a><br />
+   {% endfor %}
+   <br />
+
+   {% for entity in aProducts %}
+      <a href="{{ entity.url }}" title="{{ entity.title }}">{{ entity.title }}</a> {% if not entity.active == 1 %}[Produkt archiwalny]{% endif %}<br />
+   {% endfor %}
+   <br />
+
+   {% for entity in aNews %}
+      <a href="{{ entity.url }}" title="{{ entity.title }}">{{ entity.title }}</a> {% if not entity.active == 1 %}[Artykuł archiwalny]{% endif %}<br />
+   {% endfor %}
+   <br />
+
+   {% for entity in aArticles %}
+      <a href="{{ entity.url }}" title="{{ entity.title }}">{{ entity.title }}</a> {% if not entity.active == 1 %}[Artykuł archiwalny]{% endif %}<br />
+   {% endfor %}
+   <br />
+
+   {% for entity in aGallery %}
+      <a href="{{ entity.url }}" title="{{ entity.title }}">{{ entity.title }}</a> {% if not entity.active == 1 %}[Artykuł archiwalny]{% endif %}<br />
+   {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "templates/base.twig" %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block content %}
+<div id="pageTitle">
+    <h1>{{ lang.newsletter_title }}</h1>
+</div>
+
+<div id="pageContent">
+    {% include 'templates/other/notify.twig' %} 
+    
+    <form id="addForm" class="form-horizontal" method="post" action="{{ server("PHP_SELF") }}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{{ lang.newsletter_first_name }}</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" name="first_name" value="{{ entity.first_name }}">
+            </div>
+        </div>         
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{{ lang.newsletter_last_name }}</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" name="last_name" value="{{ entity.last_name }}">
+            </div>
+        </div>         
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{{ lang.newsletter_email }}</label>
+            <div class="col-sm-3">
+                <input type="email" class="form-control" name="email" value="{% if entity.newsletter.email %} {{ entity.newsletter.email }} {% else %} {{ entity.email }} {% endif %}">
+            </div>
+        </div>         
+{#        <div class="form-group">
+            <label class="col-sm-2 control-label">{{ lang.newsletter_email_2 }}</label>
+            <div class="col-sm-3">
+                <input type="email" class="form-control" name="email2" value="{{ entity.email2 }}">
+            </div>
+        </div> #}     
+        <input type="hidden" name="action" value="add" />
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">{{ lang.newsletter_add }}</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,123 @@
+body, header, section.content, header .main-top, .slider{ 
+background-color: #ffffff !important;}
+
+body{ 
+color: #2e2d2e;}
+
+.dropdown-menu{ 
+color: #2e2d2e;}
+
+a:hover, a:focus{ 
+color: #f54900;}
+
+.btn-default:hover, .btn-default:focus, .btn-default:active{ 
+background-color: #f54900 !important;}
+
+.btn-primary{ 
+background-color: #f54900 !important;}
+
+.checkbox a{ 
+color: #f54900 !important;}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{ 
+background-color: #f54900;}
+
+header nav{ 
+border-bottom: 3px solid #f54900;}
+
+header nav ul{ 
+border-bottom-color: #f54900;}
+
+header nav #top-menu li.active a, header nav #top-menu li a:hover, header nav button:not(.collapsed){ 
+background-color: #f54900 !important;}
+
+header address span i{ 
+background-color: #f54900;}
+
+header nav #top-menu li:hover a{ 
+color: #f54900;}
+
+header nav button:not(.collapsed){ 
+background-color: #f54900 !important;}
+
+@media (max-width: 767px){ 
+aside.side-bar h2.title{ 
+background-color: #f54900 !important;}
+
+}
+
+footer .second-footer-row .social-icons a i:hover{ 
+color: #f54900;}
+
+section.content article a{ 
+color: #f54900 !important;}
+
+.search-form input:focus + .input-group-btn button{ 
+background-color: #f54900 !important;}
+
+.search-form input:focus + .input-group-btn button{ 
+border-color: #f54900 !important;}
+
+.products-list li .product-price-data .special{ 
+color: #f54900;}
+
+.product-frame .product-image-frame .product-image-captions .product-img-nav{ 
+background-color: #f54900;}
+
+.pagination li.active a, .pagination li:hover a{ 
+background-color: #f54900 !important;}
+
+ul.pagination>li:first-child>a:hover, ul.pagination>li:last-child>a:hover{ 
+color: #f54900 !important;}
+
+aside.side-bar > ul > li.active > a{ 
+background-color: #f54900 !important;}
+
+aside.side-bar > ul > li:not(.active) > i:hover,aside.side-bar ul ul li.active a{ 
+color: #f54900;}
+
+.login-page i{ 
+color: #f54900;}
+
+footer .first-footer-row ul li a:before{ 
+color: #f54900;}
+
+aside.side-bar ul li a{ 
+color: #304269;}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active{ 
+background-color: #304269 !important;}
+
+header nav{ 
+background-color: #304269;}
+
+header nav ul{ 
+background-color: #304269;}
+
+header nav ul li,header nav #top-menu > li > a{ 
+background-color: #304269 !important;}
+
+.btn-default{ 
+background-color: #304269 !important;}
+
+.text-primary{ 
+color: #304269;}
+
+.label-primary{ 
+background-color: #304269;}
+
+section.content h2.title{ 
+background: #304269;}
+
+footer .second-footer-row .social-icons a i{ 
+color: #304269;}
+
+.login-page i{ 
+text-shadow: 1px 1px 0px #304269;}
+
+footer .first-footer-row{ 
+background-color: #f5f5f5;}
+
+footer .second-footer-row{ 
+background-color: #e8e8e8;}
+

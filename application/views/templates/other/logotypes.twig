@@ -1,0 +1,101 @@
+<style>
+
+.vcenter-me {
+  line-height: {{ conf.container_height }}px;
+{#  {% if conf.container_width == 2 %}
+  display: table-cell;
+  {% endif %}#}
+  vertical-align: middle;
+   
+} 
+
+.logotypes {
+    background-color: {{ conf.container_bg_color }};  
+    min-height: {{ conf.container_height }}px; 
+{#    overflow:hidden;#}
+{#    width: 100%;#}
+}
+
+.logotypes img:hover {
+    opacity: 0.8;    
+}
+
+.logotypes ul {
+    text-align: center;
+}
+
+.logotypes li {
+    float: left;
+}
+
+{#.logotypes .thumbnail {
+    border:none;
+    border-radius: 0;
+}#}
+
+</style>
+
+{% if logotypes %}
+    <div class="logotypes vcenter-me {% if conf.align == 1%}text-center{% elseif conf.align == 2%}text-right{%else%}text-left{% endif %}">
+        {% for logotype in logotypes %}
+            {% set is_url = logotype.url %}
+            {% if is_url %}
+                <a href="{{ is_url }}" target="_blank">
+            {% endif %}
+            <img src="{{ logotype.photo }}">       
+            
+            {% if is_url %}</a>{% endif %}            
+        {% endfor %}
+    </div>        
+{% endif %}
+
+
+{#<br />
+<ul class="logotypes list-unstyled thumbnails">
+        {% for logotype in logotypes %}
+            <li>
+            {% set is_url = logotype.url %}
+            {% if is_url %}
+                <a href="{{ is_url }}" target="_blank">
+            {% endif %}
+            <img src="{{ logotype.photo }}">                   
+            {% if is_url %}</a>{% endif %}      
+            </li>
+        {% endfor %}    
+</ul>#}
+
+{#<br />
+<div class="logotypes">
+    <div class="row">
+                {% for logotype in logotypes %}
+                <div class="col-xs-6 col-md-2">               
+                    <div class="thumbnail">
+                    {% set is_url = logotype.url %}
+                    {% if is_url %}
+                        <a href="{{ is_url }}" target="_blank">
+                    {% endif %}
+                    <img src="{{ logotype.photo }}">                   
+                    {% if is_url %}</a>{% endif %}      
+                    </div>
+                </div>
+                {% endfor %}    
+    </div>
+</div>#}
+    
+{#<br />
+<div class="container">
+    <div class="row">    
+        {% for logotype in logotypes %}
+        <div class="col-lg-3 col-md-4 col-xs-6 thumb">            
+            <div class="thumbnail">               
+                {% set is_url = logotype.url %}
+                {% if is_url %}
+                    <a href="{{ is_url }}" target="_blank">
+                {% endif %}
+                <img src="{{ logotype.photo }}" class="img-responsive">                   
+                {% if is_url %}</a>{% endif %}      
+            </div>
+        </div>
+        {% endfor %}    
+    </div>
+</div>#}

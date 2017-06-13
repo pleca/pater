@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<urlset
+		   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+		   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		   xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+				 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+		
+		<url>
+		<loc>http://pattern.idea4me.pl/</loc>
+		<priority>1.0</priority>
+		<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+		<changefreq>daily</changefreq>
+		</url>
+<url>
+<loc>http://pattern.idea4me.pl/shop.html</loc>
+<priority>0.8</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/recommended.html</loc>
+<priority>0.8</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/bestsellers.html</loc>
+<priority>0.8</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/categories.html</loc>
+<priority>0.8</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/contact-form.html</loc>
+<priority>0.8</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/basket.html</loc>
+<priority>0.8</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/producers.html</loc>
+<priority>0.8</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/admin.html</loc>
+<priority>0.8</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/address-top.html</loc>
+<priority>0.7</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/contact.html</loc>
+<priority>0.7</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/contactform.html</loc>
+<priority>0.7</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/delivery.html</loc>
+<priority>0.7</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/delivery-details.html</loc>
+<priority>0.7</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/privacy-policy.html</loc>
+<priority>0.7</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/returns.html</loc>
+<priority>0.7</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/terms-and-conditions.html</loc>
+<priority>0.7</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/tooltipdiscount.html</loc>
+<priority>0.7</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/tooltipmegaoffer.html</loc>
+<priority>0.7</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>http://pattern.idea4me.pl/tooltipyourprice.html</loc>
+<priority>0.7</priority>
+<lastmod>2017-06-12T09:00:01+00:00</lastmod>
+<changefreq>daily</changefreq>
+</url>
+	</urlset>

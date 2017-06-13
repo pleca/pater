@@ -1,0 +1,49 @@
+<nav role="navigation">
+    <div class="container">
+        <button class="btn btn-default dropdown-toggle collapsed pull-left" type="button" data-toggle="collapse" data-target="#top-menu" aria-expanded="false" aria-controls="top-menu">
+            <i class="mdi mdi-menu"></i> Menu
+            <span class="caret"></span>
+        </button>
+        <ul id="top-menu" class="collapse">
+            {% for entity in menuTop %}                
+                {% if entity.submenu %}
+                    <li {% if selected == entity.url %}class="active"{% endif %}>
+                    <ul>
+                        {% for submenu in entity.submenu %}
+                            <li {% if selected == submenu.url %}class="active"{% endif %}><a href="{{ submenu.url }}">{{ submenu.name }}</a></li>
+                        {% endfor %}                        
+                    </ul>
+                    <a href="#">{{ entity.name }}</a>
+                    </li>
+                {% elseif entity.type is constant('Menu::TYPE_MODULE') and entity.module_name == 'categories' %}
+                    <li {% if selected == entity.url or 'categories' in selected %}class="active"{% endif %}>
+                    <ul>
+                        {% for submenu in categories %}
+                            <li {% if selected == submenu.url %}class="active"{% endif %}><a href="{{ submenu.url }}">{{ submenu.name }}</a></li>
+                        {% endfor %}                        
+                    </ul>
+                    <a href="#">{{ entity.name }}</a>
+                    </li>                   
+                {% elseif entity.type == 'module' and entity.module_name == 'producers' %}
+                    <li {% if selected == entity.url or 'producers' in selected %}class="active"{% endif %}>
+                    <ul>
+                        {% for producer in aProducers %}
+                            <li {% if selected == producer.url or selected == entity.url %}class="active"{% endif %}><a href="{{ producer.url }}">{{ producer.name }}</a></li>
+                            
+                            {% if loop.last %}
+                                <li class="divider" role="separator"></li>
+                                <li><a href="{{ constant('URL') }}/producers.html">{{ lang.producers_list }}</a></li>
+                            {% endif %}
+                        {% endfor %}    
+                    </ul>                    
+                    <a href="#">{{ entity.name }}</a>          
+                    </li>
+                {% else %}
+                    <li {% if selected == entity.url %}class="active"{% endif %}>
+                        <a href="{{ entity.url }}">{{ entity.name }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</nav>

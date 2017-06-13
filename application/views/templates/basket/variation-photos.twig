@@ -1,0 +1,196 @@
+<script type="text/javascript">
+   $(function () {
+       itemGalleryInit();
+   });
+</script>
+
+{% if variationImages | length > 0 and variationImages[0]['photo'] %}
+    <div class="product-image-wrapper">
+        <div class="cycle-slideshow" data-cycle-auto-init="false">
+            {% for photo in variationImages %}
+            <div class="product-img">
+                <div class="product-img-inner">
+                    <a href="{{ photo.photo.normal }}" class="ilightbox"><img src="{{ photo.photo.middle }}" alt="{{ entity.name }}"></a>                                            
+                </div>
+            </div>
+            {% endfor %}    
+        </div>
+    </div>                
+    
+    <div class="product-image-captions"> 
+        {% if variationImages|length > 4 %}
+        <i class="mdi mdi-chevron-left product-img-nav cycle-prev"></i>
+        <i class="mdi mdi-chevron-right product-img-nav cycle-next"></i>
+        {% endif %}
+        <!-- jeżeli obrazków jest mniej < 5 to nie pokazuj powyżych <i> oraz zabierz klasę 'cycle-slideshow' ponizszemu divovi (zostaw go bez klasy) -->
+
+        <div class="cycle-slideshow" data-cycle-auto-init="false">
+            {% for photo in variationImages %}
+                <div class="product-img">
+                    <div class="product-img-inner">
+                        <div class="product-caption-wrapper">
+                            <img src="{{ photo.photo.small }}" alt="{{ entity.name }}">
+                        </div>                                            
+                    </div>
+                </div>                                             
+            {% endfor %}
+        </div>
+    </div>
+
+{% elseif productImages | length > 0 and productImages[0]['photo']%}
+    
+    <div class="product-image-wrapper">
+        <div class="cycle-slideshow" data-cycle-auto-init="false">
+            {% for photo in productImages %}
+            <div class="product-img">
+                <div class="product-img-inner">
+                    <a href="{{ photo.photo.normal }}" class="ilightbox"><img src="{{ photo.photo.middle }}" alt="{{ entity.name }}"></a>                                            
+                </div>
+            </div>
+            {% endfor %}    
+        </div>
+    </div>                
+    
+    <div class="product-image-captions"> 
+        {% if productImages|length > 4 %}
+        <i class="mdi mdi-chevron-left product-img-nav cycle-prev"></i>
+        <i class="mdi mdi-chevron-right product-img-nav cycle-next"></i>
+        {% endif %}
+        <!-- jeżeli obrazków jest mniej < 5 to nie pokazuj powyżych <i> oraz zabierz klasę 'cycle-slideshow' ponizszemu divovi (zostaw go bez klasy) -->
+
+        <div class="cycle-slideshow" data-cycle-auto-init="false">
+            {% for photo in productImages %}
+                <div class="product-img">
+                    <div class="product-img-inner">
+                        <div class="product-caption-wrapper">
+                            <img src="{{ photo.photo.small }}" alt="{{ entity.name }}">
+                        </div>                                            
+                    </div>
+                </div>                                             
+            {% endfor %}
+        </div>
+    </div>    
+    
+    
+{% else %}
+    <img src="{{ constant("CMS_URL") }}/files/no-picture2.png" alt="{{ entity.name }}" />
+{% endif %}    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+{#    {% set photo = productImages[0] %}
+
+    <div class="product-img">
+        <div class="product-img-inner">
+            <a href="{{ photo.photo.normal }}" class="ilightbox"><img src="{{ photo.photo.middle }}" alt="{{ entity.name }}"></a>                                            
+        </div>
+    </div>
+
+    <div class="product-image-captions"> 
+        {% if productImages|length > 4 %}
+        <i class="mdi mdi-chevron-left product-img-nav cycle-prev"></i>
+        <i class="mdi mdi-chevron-right product-img-nav cycle-next"></i>
+        {% endif %}
+        <!-- jeżeli obrazków jest mniej < 5 to nie pokazuj powyżych <i> oraz zabierz klasę 'cycle-slideshow' ponizszemu divovi (zostaw go bez klasy) -->
+
+        <div class="cycle-slideshow" 
+            data-cycle-slides="> div"
+            data-cycle-timeout="0"
+            data-cycle-prev=".product-image-captions .cycle-prev"
+            data-cycle-next=".product-image-captions .cycle-next"
+            data-cycle-fx="carousel"
+            data-cycle-carousel-visible="4"
+            data-cycle-carousel-fluid="true"
+            data-allow-wrap="false"
+            data-cycle-log="false">
+
+            {% for photo in productImages %}
+                <div class="product-img">
+                    <div class="product-img-inner">
+                        <div class="product-caption-wrapper">
+                            <img src="{{ photo.photo.small }}" alt="{{ entity.name }}">
+                        </div>                                            
+                    </div>
+                </div>                                             
+            {% endfor %}
+        </div>
+    </div> #}           
+
+
+
+
+{#{% if variationImages | length > 0 and variationImages[0]['photo'] %}
+    {% for photo in variationImages %}
+        <div id="productFotoId{{ photo.id }}" class="productFotoId" {% if loop.first %}style="display: table;"{% endif %} {% if not loop.first %}style="display:none;"{% endif %}>
+            {% if photo.photo.middle %}
+                <a href="{{ photo.photo.normal }}" title="{{ entity.name }}" class="fancybox" rel="fancybox">
+                    <img src="{{ photo.photo.middle }}" alt="{{ entity.name }}" />
+                </a>
+            {% else %}
+                <img src="{{ constant("CMS_URL") }}/files/no-picture2.png" alt="{{ entity.name }}" />
+            {% endif %}        
+        </div>
+    {% else %}
+    <div class="productFotoId" style="display: table;">
+        <a>
+            <img src="{{ constant("CMS_URL") }}/files/no-picture2.png" alt="{{ entity.name }}" />
+        </a>
+    </div>
+    {% endfor %}
+
+    {% if variationImages | length > 1 %}
+        <div class="product-images">
+        {% for key, photo in variationImages %}
+            <div class="image">
+                {% if photo.photo.middle %}
+                    <a id="adv2A-{{ photo.id }}" class="adv2A {% if key == 0 %}adv2ASelected{% endif %}" href="javascript:void(0);" title="" onclick="showImg('{{ photo.id }}');">
+                        <img class='image' src="{{ photo.photo.small }}" alt="" />
+                    </a>
+                {% endif %}  
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+    
+{% else %}
+    {% for photo in productImages %}
+        <div id="productFotoId{{ photo.id }}" class="productFotoId" {% if loop.first %}style="display: table;"{% endif %} {% if not loop.first %}style="display:none;"{% endif %}>
+            {% if photo.photo.middle %}
+                <a href="{{ photo.photo.normal }}" title="" class="fancybox" rel="fancybox">
+                    <img src="{{ photo.photo.middle }}" alt="" />
+                </a>
+            {% else %}
+                <img src="{{ constant("CMS_URL") }}/files/no-picture2.png" alt="{{ entity.name }}" />
+            {% endif %}        
+        </div>
+    {% else %}
+    <div class="productFotoId" style="display: table;">
+        <a>
+            <img src="{{ constant("CMS_URL") }}/files/no-picture2.png" alt="{{ entity.name }}" />
+        </a>
+    </div>
+    {% endfor %}    
+
+    {% if productImages | length > 1 %}
+        <div class="product-images">
+        {% for key, photo in productImages %}
+            <div class="image">
+                {% if photo.photo.middle %}
+                    <a id="adv2A-{{ photo.id }}" class="adv2A {% if key == 0 %}adv2ASelected{% endif %}" href="javascript:void(0);" title="" onclick="showImg('{{ photo.id }}');">
+                        <img class='image' src="{{ photo.photo.small }}" alt="" />
+                    </a>
+                {% endif %}  
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %} 
+{% endif %}#}

@@ -1,0 +1,204 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        var id = "{{ parameter("id")}}";
+
+        $(document).ready(function () {    
+            var type = $('input[name=type]:checked').val();
+            var locale = $('.nav-tabs li.active').attr('data-locale');
+
+            processSelectedType(type, locale);
+            
+            $('[name="url_module"]').change(function () {
+                var selected = $(this).find(":selected");
+
+                var urlModules = $('[name="url_module"]');
+                urlModules.val(selected.val());                
+            });
+            
+            $('.nav-tabs li, .type').click(function () {
+
+                if ($(this).hasClass('type')) {
+                    var locale = $('.nav-tabs li.active').attr('data-locale');
+                } else {
+                    var locale = $(this).attr('data-locale'); 
+                }
+
+                if (!locale) {
+                    locale = '{{ constant('LOCALE') }}'
+                }
+
+                var type = $('input[name=type]:checked').val();
+                
+                processSelectedType(type, locale);
+            });
+
+            function processSelectedType(type, locale) {
+                if (type) {                                                            
+                    switch (type) {
+                        case 'url':
+                            var moduleType = $('[data-type="module"]');
+                            moduleType.hide();
+                            var pageType = $('[data-type="page"]');
+                            pageType.hide();                            
+                            
+                            var typeDivs = $('[data-type="' + type + '"]');
+                            typeDivs.hide();
+
+                            $('[data-type="' + type + '"][data-locale="' + locale +'"]').show();
+                            break;
+                        case 'module':
+                            var urlType = $('[data-type="url"]');
+                            urlType.hide();
+                            var pageType = $('[data-type="page"]');
+                            pageType.hide();
+                            
+                            var typeDivs = $('[data-type="' + type + '"]');
+                            typeDivs.hide();
+                                                        
+                            $('[data-type="' + type + '"][data-locale="' + locale +'"]').show();
+                            break;
+                        case 'page':
+                            var urlType = $('[data-type="url"]');
+                            urlType.hide();
+                            var moduleType = $('[data-type="module"]');
+                            moduleType.hide();
+                            
+                            var typeDivs = $('[data-type="' + type + '"]');
+                            typeDivs.hide();
+                            
+                            $('[data-type="' + type + '"][data-locale="' + locale +'"]').show();                            
+                            break;
+                    }
+                }
+            }
+
+
+        });
+
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <ul class="nav nav-tabs">  
+            {% for row in static('Cms','langs') %}
+            <li {% if row.code == constant('LOCALE') %}class="active"{% endif %} data-locale="{{ row.code }}">
+                <a href="#tab_{{ row.code }}" data-toggle="tab" aria-expanded="true"> {{ attribute(lang, row.code) }} 
+                <img src="{{ constant('TPL_URL') }}/assets/global/img/flags/{{ row.code }}.png" alt="{{ row.name }}" title="{{ row.name }}" />
+                </a>                
+            </li>
+            {% endfor %}
+        </ul>
+        
+        <form id="form" method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}" enctype="multipart/form-data">
+            <div class="form-group">
+                <label class="col-md-3 control-label">Menu</label>
+                <div class="col-md-2">
+                {% for row in groups %}
+                    {% if loop.first %}
+                        <select name="group" class="form-control" {% if parameter('parent_id') > 0 %} disabled{% endif %}>
+                    {% endif %}
+                        <option value="{{ row }}" {% if group == row %}selected="true"{% endif %}> {{ attribute(lang, 'menu_' ~ row) }}</option>
+                    {% if loop.last %}</select>{% endif %}           
+                {% endfor %}                    
+                </div>
+            </div>               
+            <div class="tab-content">                        
+                {% for row in static('Cms','langs') %}                                          
+                    <div class="tab-pane fade {% if row.code == constant('LOCALE') %}active in{% endif %}" id="tab_{{ row.code }}" data-locale="{{ row.code }}">                
+                        <div class="form-body">  
+                            {% set tran = attribute(entity.trans, row.code) %}
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ lang.menu_item_name }}</label>
+                                <div class="col-md-4">
+                                    <input name="{{ row.code }}[name]" type="text" class="form-control" value="{{ tran.name }}">
+                                </div>
+                            </div>                                                                                                                                                                          
+                        </div>
+                    </div>                                                                  
+                {% endfor%}            
+            </div>
+            <div class="form-group div-type">
+                <label class="col-md-3 control-label">{{ lang.menu_type }}</label>
+                <div class="col-md-4">
+                    <div class="radio-list">
+                        <label>
+                            <input type="radio" class="type" name="type" value="url" {% if entity.type is constant('Menu::TYPE_URL') %}checked="true"{% endif %}> {{ lang.menu_url }}</label>
+                        <label>
+                            <input type="radio" class="type" name="type" value="module" {% if entity.type is constant('Menu::TYPE_MODULE') %}checked="true"{% endif %}> {{ lang.menu_modules }} </label>
+                        <label>
+                            <input type="radio" class="type" name="type" value="page" {% if entity.type is constant('Menu::TYPE_PAGE') %}checked="true"{% endif %}> {{ lang.menu_pages }} </label>
+                    </div>
+                </div>
+            </div>                 
+  
+            {% for row in static('Cms','langs') %}
+                {% set tran = attribute(entity.trans, row.code) %}
+                <div class="form-group" data-type="url" data-locale="{{ row.code }}" style="display: none;">
+                    <label class="col-md-3 control-label">{{ lang.menu_url }}</label>
+                    <div class="col-md-4 form-inline">
+                        {{ lang.menu_url_http }}<br />
+                        <input class="form-control" type="text" name="{{ row.code }}[url_www]" value="{% if entity.type is constant('Menu::TYPE_URL') %}{{ tran.url }} {% else %}http://{% endif %}" />
+                   </div>
+                </div>
+                <div class="form-group" data-type="module" data-locale="{{ row.code }}" style="display: none;">
+                    <label class="col-md-3 control-label">{{ lang.menu_url }}</label>
+                    <div class="col-md-4">
+                        {{ lang.menu_set_module }}<br />
+                        {% for row in modules %}  
+                            {% if loop.first %}
+                                <select name="url_module" class="form-control"><option value="">{{ lang.select }}</option>
+                            {% endif %}
+                                <option value="{{ row }}" {% if entity.type is constant('Menu::TYPE_MODULE') and row == tran.url %}selected{% endif %}>{{ row }}</option>
+                                {% if loop.last %}</select>{% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group" data-type="page" data-locale="{{ row.code }}" style="display: none;">
+                    <label class="col-md-3 control-label">{{ lang.menu_url }}</label>
+                    <div class="col-md-4 form-inline">
+                        {{ lang.menu_set_page }}<br />
+                        {% for page in pages[row.code] %}
+                            {% if loop.first %}<select name="{{ row.code }}[url_page]" class="form-control"><option value="">{{lang.select }}</option>{% endif %}
+                                <option value="{{ page.slug }}" {% if entity.type is constant('Menu::TYPE_PAGE') and page.slug == tran.url %}selected{% endif %}>{{ page.title }}</option>
+                            {% if loop.last %}</select>{% endif %}    
+                        {% endfor %}
+                    </div>
+                </div>                     
+            {% endfor %}    
+
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" name="action" value="save" />
+                        <input type="hidden" name="id" value="{{ entity.id }}" />
+                        <input type="hidden" name="parent_id" value="{{ parameter("parent_id") }}" />
+                        <input type="hidden" name="group" value="{{ group }}" />
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                        <a class="btn default" href="?group={{ group }}{% if parameter("parent_id") > 0 %}&amp;parent_id={{ parameter("parent_id") }}{% endif %}">
+                            {{ lang.btn_cancel }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% include 'admin/other/confirm.twig' %} 
+
+{% endblock %}

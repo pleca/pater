@@ -1,0 +1,15 @@
+{% extends "templates/base.twig" %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block content %}
+<form method="post" action="{{ constant("URL") }}/{{ lang.module_newsletter }}.html">
+   {{ lang.newsletter_sign }}
+   <input class="inpNewsleter" type="text" name="email" value="{{ lang.newsletter_type }}" onclick="inputClear('email');" />
+   <div class="snText"><input type="radio" id="yes" name="action" value="yes" checked="checked" /> <label for="yes">{{ lang.newsletter_sign_up }}</label></div>
+   <div class="snText"><input type="radio" id="no" name="action" value="no" /> <label for="no">{{ lang.newsletter_sign_out }}</label></div>
+   <div class="right"><input class="inpSend" type="submit" value="{{ lang.newsletter_send }}" /></div>
+</form>
+{% endblock %}

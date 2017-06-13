@@ -1,0 +1,49 @@
+{% extends "templates/base.twig" %}
+
+{% block content %}
+<div class="list alphabet-list">
+    <div class="title"><h1>{{ pageTitle }}</h1></div>
+
+    <div class="alphabet text-center">
+        <a title="A" href="#letter-A">A</a><a title="B" href="#letter-B">B</a><a title="C" href="#letter-C">C</a><a title="D" href="#letter-D">D</a><a title="E" href="#letter-E">E</a><a title="F" href="#letter-F">F</a><a title="G" href="#letter-G">G</a><a title="H" href="#letter-H">H</a><a title="I" href="#letter-I">I</a><a title="J" href="#letter-J">J</a><a title="K" href="#letter-K">K</a><a title="L" href="#letter-L">L</a><a title="M" href="#letter-M">M</a><a title="N" href="#letter-N">N</a><a title="O" href="#letter-O">O</a><a title="P" href="#letter-P">P</a><a title="Q" href="#letter-Q">Q</a><a title="R" href="#letter-R">R</a><a title="S" href="#letter-S">S</a><a title="T" href="#letter-T">T</a><a title="U" href="#letter-U">U</a><a title="V" href="#letter-V">V</a><a title="W" href="#letter-W">W</a><a title="X" href="#letter-X">X</a><a title="Y" href="#letter-Y">Y</a><a title="Z" href="#letter-Z">Z</a>
+    </div>
+
+    {% for key, entity in entities %}
+        {% if entity|length %}
+        <div id="letter-{{ key|upper }}" class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ key|upper }} <a href="#top" class="pull-right upper-link"><span class="glyphicon glyphicon-circle-arrow-up"></span> Do góry</a></h3>
+            </div>
+            <div class="panel-body">
+                {% set row_num = 4 %}
+                {% for row in entities[key] %}
+{#                {foreach from=$items[$k] item=v name=n}#}
+                    {% if loop.first %}<ul type="square" class="pull-left">{% endif %}
+
+                    {% if row_num %}
+                        {% if loop.index != 0 and loop.index % row_num == 0 %}
+                            </ul><ul type="square" class="pull-left">
+                        {% endif %}
+                    {% endif %}
+
+                    <li> <a href="{{ row.url }}" title="{{ row.name }}">{% if row.photo.small %}<img src="{{ row.photo.small }}" alt="{{ row.name }}" />{% endif %} {{ row.name }}</a></li>
+
+                    {% if loop.last %}</ul>{% endif %}            
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+
+   
+
+
+{#    {foreach from=$aProducers item=v name=n}
+       {if $smarty.foreach.n.first}<div class="bg lastViews">{$lang.shop_producers_title}</div><div class="clear"></div><div>{/if}
+          <div>
+             <a href="{$v.url}" title="{$v.name}">{$v.name}</a>
+          </div>
+          {if $smarty.foreach.n.last}</div>{/if}
+    {/foreach}#}
+</div>
+{% endblock %}

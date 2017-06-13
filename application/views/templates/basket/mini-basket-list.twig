@@ -1,0 +1,50 @@
+{% if basket %}  
+    {% for entity in basket %}
+        <li data-basket-id='{{ entity.id }}'><a href="{{ entity.url }}">
+            <div class="row row-extratiny">
+                <div class="col-sm-3 col-xs-3 cart-item-image">
+                    <img src="{% if entity.image %}{{ entity.image }}{% else %}{{ constant("CMS_URL") }}/files/no-picture.png{% endif %}">
+                </div>
+                <div class="col-sm-6 col-xs-6 cart-item-details">
+                    <p>{{ entity.name }}</p>
+                    {% set features = entity.desc|split(',') %}
+                    
+                    {% for feature in features %}
+                        <span>{{ feature }}</span>
+                    {% endfor %}
+                </div>
+                <div class="col-sm-3 col-xs-3 cart-item-price">
+                    <span>
+                    {{ entity.qty }}x
+                    {% if constant("LOGGED") and customer.only_netto_prices == 1 %}
+                        {{ conf.currency_left }}{{ entity.price|number_format(2) }}{{ conf.currency_right }}
+                    {% else %}
+                        {{ conf.currency_left }}{{ entity.price_gross }}{{ conf.currency_right }}
+                    {% endif %}                       
+                    </span>
+                </div>
+            </div>
+        </a></li>      
+    {% endfor %}
+
+    <li class="cart-ammount">{{ lang.basket_total }}: 
+        <strong>{{ conf.currency_left -}}
+            
+            {% if constant("LOGGED") and customer.only_netto_prices == 1 %}
+                {{- summary.total_netto }}
+            {% else %}
+                {{- summary.total }}
+            {% endif %}
+            
+            {{ conf.currency_right }}
+        </strong>
+    </li>
+{#    <hr />#}
+    <li><a class="btn btn-default go-to-basket" href="{{ constant("URL") }}/{{ lang.url_basket }}.html">{{ lang.gotobasket }}
+{#            <i class="mdi mdi-cart-outline pull-right"></i>#}
+        </a></li>
+    
+{% else %}
+    <li class="disabled"><a href="{{ constant("URL") }}/{{ lang.url_basket }}.html" class="text-center">{{ lang.basket_empty3 }}</a></li>   
+{% endif %}
+

@@ -1,0 +1,8 @@
+<h1>Customer profile <small class="pull-right label label-primary">{{ customer.first_name }} {{ customer.last_name }}</small></h1>
+
+<ul class="nav nav-tabs">
+    <li {% if selected == lang.module_order %}class="active"{% endif %}><a href="{{ constant("URL") }}/{{ lang.module_customer }}/{{ lang.module_order }}.html">{{ lang.c_order }}</a></li>
+    <li {% if selected == lang.module_edit %}class="active"{% endif %}><a href="{{ constant("URL") }}/customer/{{ lang.module_edit }}.html">{{ lang.c_edit }}</a></li>
+    <li {% if selected == lang.module_password %}class="active"{% endif %}><a href="{{ constant("URL") }}/customer/{{ lang.module_password }}.html">{{ lang.c_password4 }}</a></li>
+    <li {% if selected == lang.module_basket %}class="active"{% endif %}><a href="{{ constant("URL") }}/{{ lang.url_basket }}.html">{{ lang.basket_title2 }} <span class="badge">{{ basket|length }}</span></a></li>
+</ul>

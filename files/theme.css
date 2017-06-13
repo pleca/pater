@@ -1,0 +1,50 @@
+body {
+background-color:#ffffff;}
+
+body {
+color:#333333;}
+
+#menu-top .navbar, .navbar-brand, .list .panel-default > .panel-heading, .list .title h1, #pageTitle h1, .product-desc h1, .button-basket, .basket, .account-menu button, #menu-left h3 {
+background-color:#231f20;}
+
+#menu-top a, #menu-top .navbar li.active.dropdown.open .dropdown-menu a, #menu-top .navbar .navbar-nav > .active a, #menu-top .dropdown.open a.dropdown-toggle, .account-menu.dropdown.open button, .account-menu button:hover, .account-menu.dropdown .dropdown-menu > li > a, .account-menu button, .basket a, .list .title h1, #pageTitle h1, .product-desc h1, #menu-left h3, .list .panel-default > .panel-heading, .account-menu .btn:focus {
+color:#ffffff;}
+
+#menu-top .navbar { 
+border: 0;
+border-radius: inherit;
+border-bottom: 4px solid #f15a29;}
+
+#menu-top a:hover {
+color:#f15a29;}
+
+.menu-module .nav-layer ul li {
+color:#f15a29;}
+
+#menu-top .navbar li.active.dropdown.open .dropdown-menu a:hover {
+background-color: #f5f5f5;color:#f15a29}
+
+#menu-top .navbar li.active a, #menu-top .nav .open > a.dropdown-toggle, .nav .open > a:focus, .nav .open > a:hover {
+background-color:#f15a29;}
+
+.dropdown-menu,.account-menu .dropdown-menu, .account-menu.dropdown.open button, .account-menu button:hover, #menu-left > ul > li > a { 
+background-color: #f15a29;}
+
+.item .name a, a.producer-name, .tags a, a.button-continue-shopping, .accept-terms a, .alphabet-list a {
+color:#663300;}
+
+#footer1 {
+background-color:#eeeeee;}
+
+#footer2 {
+background-color:#dddddd;}
+
+.button-basket {
+background-color:#231f20;}
+
+.button-basket a {
+color:#ffffff;}
+
+.button-basket a:hover {
+color:#f15a29;}
+

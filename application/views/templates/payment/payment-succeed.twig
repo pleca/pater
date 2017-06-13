@@ -1,0 +1,50 @@
+{% extends "templates/base.twig" %}
+
+{% block content %}
+<div class="payment-succeed profile box">
+    <div class="center-block" style="width:50%">
+        <h1>{{ lang.order_thanks }}</h1>
+
+        <div class="order-details">
+            <div>
+                <span>{{ lang.order_id2 }}:</span>
+                <span class="order-id">{{ order.id }}</span>
+            </div>
+
+            <div>
+                <span>{{ lang.order_payment_method }}:</span>
+                <span class="payment-method">{{ order.payment }}</span>            
+            </div>
+
+            <div>
+                <span>{{ lang.order_amount_due }}:</span>
+                <span>{{ order.total }}</span>            
+            </div>
+            
+            {% if payment.name_url == 'odbiorosobisty' %}
+                <div><br />
+                    <span>{{ conf.company_address|raw }}</span>
+                </div>              
+            {% endif %} 
+            
+            {% if payment.name_url == 'banktransfer' %}
+                <div>
+                    <span>{{ lang.order_send_to_bank_accout }}:</span>         
+                </div>
+                <div class='bank-account'>
+                    <span>{{ conf.payment_bank_account|raw }}:</span>         
+                </div>
+                <div>
+                    <span>{{ conf.payment_msg3|raw }} {{ order.id }}</span>         
+                </div>                
+            {% endif %}            
+        </div>
+            
+        {% if payment.name_url != 'zapobraniem' and payment.name_url != 'odbiorosobisty' %}
+        <p class="proceed-info">{{ conf.payment_msg1|raw }}</p>          
+        <p class="more-information">{{ conf.payment_msg2|raw }}</p>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

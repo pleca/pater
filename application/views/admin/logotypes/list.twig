@@ -1,0 +1,172 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function showDiv(id) {
+           $('#' + id).show();
+        }      
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+    <small>Lista grafik w stopce reprezentująca różne marki</small>
+</h3>
+
+{% if url_back %}
+    <a class="btn btn-default" href="{{ url_back }}"><i class="fa fa-arrow-left"></i> {{ lang.btn_back }}</a><br /><br /> 
+{% endif %}
+   
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="table-toolbar">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="btn-group">
+                    {% if not item.id %}
+                       <a href="javascript:void(0);" onclick="showDiv('divAdd');">
+                        <button id="sample_editable_1_new" class="btn sbold green"> {{ lang.add_new }}
+                            <i class="fa fa-plus"></i>
+                        </button>                           
+                       </a>
+                     {% endif %}                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if not item.id %}
+           <div id="divAdd" style="display:none;">
+              <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Nazwa Logotypu</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="name" value="" />
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.file }}:<br /><small>[{{ lang.pic_size }}: {{ constant('PRODUCER_IMG_X1') }}x{{ constant('PRODUCER_IMG_Y1') }} px]</small></label>
+                    <div class="col-md-4">
+                        <input type="file" id="file" name="file" size="100"/>
+                        <div id="file-list" style="margin: 20px;"></div>
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Url</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="url" value="" />
+                    </div>                     
+                </div>                    
+   
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9">
+                            <input type="hidden" name="action" value="add" />
+                            <button class="btn green" type="submit">{{ lang.btn_add }}</button>
+                            <a href="{{ url_back }}" class="btn default">{{ lang.btn_cancel }}</a>
+                        </div>
+                    </div>
+                </div>
+              </form>
+           </div>
+        {% endif %}
+        
+ 
+
+        <div class="table-scrollable">
+        {% for entity in entities %}
+            {% if loop.first %}
+                <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+                <thead>
+                    <tr>
+                        <th>{{ lang.lp }}</th>
+                        <th>{{ lang.id }}</th>
+                        <th>Nazwa logotypu</th>
+                        <th>Url </th>    
+                        <th>{{ lang.order }}</th>    
+                        <th class="text-center">{{ lang.edit }}</th>    
+                        <th class="text-center">{{ lang.delete }}</th>                       
+                    </tr>
+                </thead>              
+                <tbody>
+            {% endif %}           
+            
+            {% if item.id == entity.id %}
+                 <tr id="row-{{ entity.id }}">
+                    <td></td>
+                    <td colspan="8" style="padding: 5px;">
+                       <form class="form-horizontal" method="post" action="{{ server('PHP_SELF') }}" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Nazwa logotypu</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" type="text" name="name" value="{{ item.name }}" />
+                                </div>                     
+                            </div>                                
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ lang.producers_logo }}:<br /><small>[{{ lang.pic_size }}: {{ constant('PRODUCER_IMG_X1') }}x{{ constant('PRODUCER_IMG_Y1') }} px]</small></label>
+                                <div class="col-md-4">
+                                    <input type="file" id="file" name="file" size="100"/>
+                                    <div id="file-list" style="margin: 20px;">
+                                         {% if item.file %}
+                                             <a class="fancybox" href="{{ item.photo }}" rel="fancybox">
+                                                 <img class="toRefresh" src="{{ item.photo }}">
+                                             </a>
+                                             <a href="#" data-href="?action=image_delete&amp;file={{ entity.file }}&amp;id={{ item.id }}" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-remove"></i></a>
+                                         {% endif %}
+                                     </div> 
+                                </div>                     
+                            </div>  
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Url</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" type="text" name="url" value="{{ item.url }}" />
+                                </div>                     
+                            </div>                                      
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <input type="hidden" name="action" value="save" />
+                                        <input type="hidden" name="id" value="{{ item.id }}" />
+                                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                                        <a href="?" class="btn default">{{ lang.btn_cancel }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                       </form>     
+                    </td>
+                </tr>
+              {% else %}
+                 <tr id="row-{{ entity.id }}" class="{% if parameter("id") == entity.id %}active{% endif %}">
+                    <td>{{ loop.index }}</td>
+                    <td>{{ entity.id }}</td>
+                    <td>{{ entity.name }}</td>
+                    <td>{{ entity.url }}</td>
+                    <td>{{ entity.order }}</td>
+                    <td class="text-center">
+                       <a href="?id={{ entity.id }}&amp;action=edit#row-{{ entity.id }}" title="{{ lang.edit }}">
+                           <i class="fa fa-edit"></i>
+                       </a>
+                    </td>
+                    <td class="text-center">
+                        <a href="#" data-href="?id={{ entity.id }}&amp;action=delete" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-remove"></i></a>
+                    </td>
+                 </tr>
+              {% endif %}            
+            
+            {% if loop.last %}</tbody></table>{% endif %}
+        {% endfor %}
+         
+        </div>
+    </div>
+</div>        
+              
+{% include 'admin/other/confirm.twig' %}
+
+{% endblock %}                            

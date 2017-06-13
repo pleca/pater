@@ -1,0 +1,48 @@
+{% extends "templates/base.twig" %}
+
+{% block content %}
+<div id="opinion">
+
+   {% if vote == 1 %}
+      <div class="opinion-1">
+         {{ lang.opinion_thank }}
+      </div>
+      <div class="opinion-2">
+         <img class="opinion-img" src="{{ constant("TPL_URL") }}/img/btnYes.png" alt="yes" />
+         {{ aOpinion.vote_yes }}%
+      </div>
+      <div class="opinion-3">
+         <img class="opinion-img" src="{{ constant("TPL_URL") }}/img/btnNo.png" alt="no" />
+         {{ aOpinion.vote_no }}%
+      </div>
+      <div class="opinion-4">
+         {{ lang.opinion_ratings }} <strong>{{ aOpinion.sum }}</strong>
+      </div>
+   {% else %}
+      <div class="opinion-1">
+         <strong>{{ lang.opinion_rate }}</strong>
+      </div>
+      <div class="opinion-2">
+         <form method="post" action="{{ server('PHP_SELF') }}">
+            <input type="hidden" name="action" value="addOpinion" />
+            <input type="hidden" name="yes" value="1" />
+            <input class="opinion-img" type="image" src="{{ constant("TPL_URL") }}/img/btnYes.png" />
+         </form>
+         {{ aOpinion.vote_yes }}%
+      </div>
+      <div class="opinion-3">
+         <form method="post" action="{{ server('PHP_SELF') }}">
+            <input type="hidden" name="action" value="addOpinion" />
+            <input type="hidden" name="no" value="1" />
+            <input class="opinion-img" type="image" src="{{ constant("TPL_URL") }}/img/btnNo.png" />
+         </form>
+         {{ aOpinion.vote_no }}%
+      </div>
+      <div class="opinion-4">
+         {{ lang.opinion_ratings }} <strong>{{ aOpinion.sum }}</strong>
+      </div>
+   {% endif %}
+
+</div>
+<div class="clear"></div>
+{% endblock %}

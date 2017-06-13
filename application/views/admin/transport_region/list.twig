@@ -1,0 +1,82 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}</h3>
+
+{% if url_back %}
+    <a class="btn btn-default" href="{{ url_back }}"><i class="fa fa-arrow-left"></i> {{ lang.btn_back }}</a><br /><br /> 
+{% endif %}
+   
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="table-toolbar">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="btn-group">
+                    {% if url_add %}
+                       <a href="{{ url_add }}">
+                        <button id="sample_editable_1_new" class="btn sbold green"> {{ lang.add_new }}
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        </a>
+                    {% endif %}                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-scrollable">
+        {% for entity in entities %}
+            {% if loop.first %}
+                <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+                <thead>
+                    <tr>
+                        <th>{{ lang.lp }}</th>
+                        <th>{{ lang.id }}</th>
+                        <th>{{ lang.name }}</th>
+                        <th>{{ lang.code }}</th>
+                        <th>{{ lang.transport_service }}</th>
+                        <th>{{ lang.transport_country }}</th>
+                        <th>{{ lang.transport_postcode }}</th>
+                        <th>{{ lang.status }}</th>
+                        <th>{{ lang.options }}</th>                       
+                    </tr>
+                </thead>              
+                <tbody>
+            {% endif %}             
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ entity.id }}</td>
+                        <td>{{ entity.name }}</td>
+			<td>{{ entity.code }}</td>         
+                        <td><a href="{{ constant("CMS_URL") }}/admin/transport_region_service/list/{{ entity.courier_id }}/{{ entity.type_id }}/{{ entity.id }}.html" title="{{ lang.transport_service }}">{{ lang.transport_service }}</a></td>
+                        <td><a href="{{ constant("CMS_URL") }}/admin/transport_region_country/list/{{ entity.courier_id }}/{{ entity.type_id }}/{{ entity.id }}.html" title="{{ lang.transport_country }}">{{ lang.transport_country }}</a></td>
+                        <td><a href="{{ constant("CMS_URL") }}/admin/transport_region_postcode/list/{{ entity.courier_id }}/{{ entity.type_id }}/{{ entity.id }}.html" title="{{ lang.transport_postcode }}">{{ lang.transport_postcode }}</a></td>                        
+                        <td class="center">
+                        {% for status in statuses if entity.status_id == status.id %} 
+                            <span style="color:{{ status.color }};">{{ status.name }}</span>
+                        {% endfor %}                              
+                        </td>
+                        <td><a href="{{ constant("CMS_URL") }}/admin/{{ module }}/history/{{ entity.courier_id }}/{{ entity.type_id }}/{{ entity.id }}.html" title="{{ lang.btn_history }}"><i class="fa fa-history"></i></a></td>
+                        <td>
+                           {% if user.level in ['1','2'] %}
+                              <a href="{{ constant("CMS_URL") }}/admin/{{ module }}/edit/{{ entity.courier_id }}/{{ entity.type_id }}/{{ entity.id }}.html" title="{{ lang.btn_edit }}"><i class="fa fa-edit"></i></a>
+                           {% endif %}
+                        </td>
+                        <td></td>
+                    </tr>
+            {% if loop.last %}</tbody></table>{% endif %}
+        {% endfor %}
+
+                       {% include 'admin/other/pages.twig' %}            
+        </div>
+    </div>
+</div>
+
+{% endblock %}

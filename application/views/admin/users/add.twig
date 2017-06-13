@@ -1,0 +1,99 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <!-- BEGIN FORM-->
+        <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.login }}
+                        <span class="required" aria-required="true"> * </span>
+                    </label>
+                    <div class="col-md-4">
+                        <input name="login" type="text" placeholder="Enter Login" class="form-control" value="{{ entity.login }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.password }}
+                        <span class="required" aria-required="true"> * </span>
+                    </label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input name="pass" type="password" placeholder="{{ lang.password }}" class="form-control" value="">
+                            <span class="input-group-addon">
+                                <i class="fa fa-user"></i>
+                            </span>
+                        </div>                                              
+                    </div>
+                </div>    
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.account_status }}</label>
+                    <div class="col-md-4">
+                        <select name="active" class="form-control">
+                            <option value="0" {% if entity.active !=1 %}selected="true"{% endif %}>nieaktywne</option>
+                            <option value="1" {% if entity.active ==1 %}selected="true"{% endif %}>aktywne</option>
+                        </select>
+                    </div>
+                </div>                    
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.level }}</label>
+                    <div class="col-md-4">
+                        <select name="level" class="form-control">
+                            <option value="3" {% if entity.level == 3 or not entity.level %}selected="true"{% endif %}>Użytkownik</option>
+                            {% if user.level == 1 %}
+                            <option value="2" {% if entity.level == 2 %}selected="true"{% endif %}>Administrator</option>
+                            {% endif %}
+                            {% if user.level == 1 %}
+                            <option value="1" {% if entity.level == 1 %}selected="true"{% endif %}>Super Administrator</option>      
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>          
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.first_name }}</label>
+                    <div class="col-md-4">
+                        <input name="name" type="text" placeholder="{{ lang.first_name }}" class="form-control" value="{{ entity.name }}">
+                    </div>
+                </div>                        
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.last_name }}</label>
+                    <div class="col-md-4">
+                        <input name="surname" type="text" placeholder="{{ lang.last_name }}" class="form-control" value="{{ entity.surname }}">
+                    </div>
+                </div>                             
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Email Address
+                    <span class="required" aria-required="true"> * </span></label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                            <input name="email" type="email" placeholder="Email Address" class="form-control" value="{{ entity.email }}"> </div>
+                    </div>
+                </div>             
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" name="action" value="add" />
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                        <a href="?" class="btn default">{{ lang.btn_cancel }}</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- END FORM-->
+    </div>
+</div>
+{% endblock %}

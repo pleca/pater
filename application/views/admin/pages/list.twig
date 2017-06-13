@@ -1,0 +1,85 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="table-toolbar">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="btn-group">
+                        <a href="?action=addForm">
+                        <button id="sample_editable_1_new" class="btn sbold green"> {{ lang.add_new }}
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <div class="table-scrollable">
+        {% for trans in attribute(entities, constant('LOCALE')) %}
+            {% if loop.first %}
+                <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+                <thead>
+                    <tr>
+                        <th>{{ lang.lp }}</th>
+                        <th>{{ lang.title }}</th>
+                        <th>{{ lang.desc_short }}</th>
+                        <th>Typ</th>
+                        <th>{{ lang.date_add }}</th>
+                        <th>{{ lang.date_mod }}</th>
+                        <th class="text-center">{{ lang.active }}</th>
+                        <th class="text-center">{{ lang.view }}</th>
+                        <th class="text-center">{{ lang.edit }}</th>
+                        <th class="text-center">{{ lang.delete }}</th>                       
+                    </tr>
+                </thead>              
+                <tbody>
+            {% endif %}                       
+                    <tr class="{% if parameter("id") == trans.id %}active{% endif %}">
+                       <td>{{ interval + loop.index }}</td>
+                       <td>{{ trans.title }}</td>
+                       <td>{{ trans.content_short }} </td>
+                       <td>{{ trans.type }} </td>
+                       <td>{{ trans.date_add }}</td>
+                       <td>{{ trans.date_mod }}</td>
+                       <td class="text-center">
+                           {% if trans.active == 1 %}<i class="fa fa-check" alt="{{ lang.yes }}" title="{{ lang.yes }}"></i>{% else %}<i class="fa fa-ban" alt="{{ lang.no }}" title="{{ lang.no }}"></i>{% endif %}
+                        </td>
+                          <td class="text-center">
+                             <a href="{{ trans.url }}" title="{{ lang.view }}" target="_blank">
+                                 <i class="fa fa-eye"></i>
+                             </a>
+                          </td>
+                          <td class="text-center">
+                             <a href="?id={{ trans.id }}&amp;action=edit" title="{{ lang.edit }}">
+                                <i class="fa fa-edit"></i>
+                             </a>
+                          </td>
+                          <td class="text-center">
+                              {% if trans.title not in ['tooltip_discount', 'contact_form', 'tooltip_your_price', 'address_top', 'footer_accordion'] %} 
+                                <a href="#" data-href="?id={{ trans.id }}&amp;action=delete" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-remove"></i></a>
+                              {% endif %}
+                          </td>
+                       </tr>
+
+            {% if loop.last %}</tbody></table>{% endif %}
+        {% endfor %}
+
+                        {% include 'admin/other/pages.twig' %} 
+        </div>
+    </div>
+</div>
+
+{% include 'admin/other/confirm.twig' %}
+
+{% endblock %}

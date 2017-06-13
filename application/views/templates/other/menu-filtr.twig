@@ -1,0 +1,51 @@
+{% if conf.product_filters_display %}
+    <h2 class="title">
+        {{ lang.view_options }}
+        <i class="mdi mdi-chevron-down collapsed" data-toggle="collapse" data-parent="#category-nav" href="#optionsList" aria-expanded="false"></i>
+    </h2>
+        
+    <form class="form-horizontal view-options-form collapse" id="optionsList" action="{{ server('PHP_SELF') }}">
+        {% if conf.product_filter_producers %}
+        <div class="form-group">
+            <div class="col-xs-12">
+                <select name="producers[]" class="form-control" data-plugin="select2" multiple data-placeholder="{{ lang.product_manufacturer }}">
+                    {% for producer in aProducers %}
+                        <option value="{{ producer.id }}" {% if producer.id in parameter('producers') %} selected{% endif %}>{{ producer.name }}</option>
+                    {% endfor %}                    
+                </select>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if conf.product_filter_prices %}
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                      <input type="text" name="price_from" class="form-control" value="{{ parameter('price_from') }}" placeholder="{{ lang.price_from }}">
+                      <span class="input-group-addon">€</span>
+                    </div>
+                </div>    
+            </div>    
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                      <input type="text" name="price_to" class="form-control" value="{{ parameter('price_to') }}" placeholder="{{ lang.price_to }}">
+                      <span class="input-group-addon">€</span>
+                    </div>
+                </div>    
+            </div>
+        {% endif %}
+        <div class="form-group">
+            <div class="col-xs-12 text-right">
+                <button type="submit" class="btn btn-default">{{ lang.filter }}</button>
+            </div>
+        </div>              
+
+        <select name="sort" class="hidden form-control">
+            <option value="name_asc" {% if parameter('sort') == 'name_asc' %} selected{% endif %}>{{ lang.product_name }} A-Z</option>
+            <option value="name_desc" {% if parameter('sort') == 'name_desc' %} selected{% endif %}>{{ lang.product_name }} Z-A</option>
+            <option value="price_asc" {% if parameter('sort') == 'price_asc' %} selected{% endif %}>{{ lang.price_asc }}</option>
+            <option value="price_desc" {% if parameter('sort') == 'price_desc' %} selected{% endif %}>{{ lang.price_desc }}</option>
+        </select>        
+    </form>
+{% endif %}

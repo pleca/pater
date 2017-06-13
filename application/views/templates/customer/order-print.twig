@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ lang }}">
+   <head>
+      <title>{{ pageTitle }}</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <link rel="stylesheet" type="text/css" href="{{ constant("TPL_URL") }}/css/base/print.css" />
+   </head>
+   <body>
+
+      <table id="container" cellpadding="0" cellspacing="0" border="0">
+         <tr>
+            <td colspan="2"><img class="logo" src="{{ constant("CMS_URL") }}/files/pdf/logo.jpg" alt="{{ conf.company_name }}" /></td>
+         </tr>
+         <tr>
+            <td width="40%" valign="top">
+               <table cellpadding="0" cellspacing="0" border="0">
+                  <tr><td width="100"><strong>{{ lang.basket_shipping_address }}:</strong></td><td>{{ entity.shipping_first_name }} {{ entity.shipping_last_name }}</td></tr>
+                  <tr><td></td><td>{{ entity.shipping_address1 }}</td></tr>
+                  {% if entity.shipping_address2 %}<tr><td></td><td>{{ entity.shipping_address2 }}</td></tr>{% endif %}
+                  {% if entity.shipping_address3 %}<tr><td></td><td>{{ entity.shipping_address3 }}</td></tr>{% endif %}
+                  <tr><td></td><td>{{ entity.shipping_city }}</td></tr>
+                  <tr><td></td><td>{{ entity.shipping_post_code }}</td></tr>
+                  {% if entity.shipping_country %}<tr><td></td><td>{{ entity.shipping_country }}</td></tr>{% endif %}
+                  <tr><td></td><td>{{ entity.shipping_phone }}</td></tr>
+                  <tr><td></td><td>{{ entity.email }}</td></tr>
+               </table>
+               
+               {% if entity.first_name %}
+               <table id="customer" cellpadding="0" cellspacing="0" border="0">
+                    <tr><td></td></tr>
+                  <tr><td width="100"><strong>{{ lang.basket_billing_address }}</strong></td><td>{{ entity.first_name }} {{ entity.last_name }}</td></tr>
+                  <tr><td></td><td>{{ entity.address1 }}</td></tr>
+                  {% if entity.address2 %}<tr><td></td><td>{{ entity.address2 }}</td></tr>{% endif %}
+                  {% if entity.address3 %}<tr><td></td><td>{{ entity.address3 }}</td></tr>{% endif %}
+                  <tr><td></td><td>{{ entity.city }}</td></tr>
+                  <tr><td></td><td>{{ entity.post_code }}</td></tr>
+                  {% if entity.country %}<tr><td></td><td>{{ entity.country }}</td></tr>{% endif %}
+                  
+                  <tr><td></td><td>{{ entity.phone }}</td></tr>
+               </table><br />
+               {% endif %}
+            </td>
+            <td valign="top">
+               <table id="order" cellpadding="0" cellspacing="0" border="0">
+                  <tr><td width="100">{{ lang.print_number }}</td><td>{{ entity.id }}</td></tr>
+                  <tr><td>{{ lang.print_date }}</td><td>{{ entity.date_add }}</td></tr>
+                  {% if entity.payment %}<tr><td>{{ lang.print_payment }}</td><td>{{ entity.payment }}</td></tr>{% endif %}
+                  <tr><td>{{ lang.print_transport }}</td><td>{{ entity.transport_name }}</td></tr>
+               </table>
+            </td>
+         </tr>
+         <tr>
+            <td colspan="2">
+               {% for key,product in entity.products %}
+                  {% if loop.first %} 
+                     <table id="products" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                           <td width="30" class="bt br bl">{{ lang.print_lp }}</td>
+                           <td class="bt br">{{ lang.print_name }}</td>
+                           <td width="50" class="bt br">{{ lang.print_quantity }}</td>
+                           <td width="110" class="bt br">{{ lang.print_net }} [{% if entity.prize == 1 %}{{ lang.points }}{% else %}{{ conf.currency_left }}{{ conf.currency_right }}{% endif %}]</td>
+                           <td width="55" class="bt br">{{ lang.print_vat }} [%]</td>
+                           <td width="110" class="bt br">{{ lang.print_gross }} [{% if entity.prize == 1 %}{{ lang.points }}{% else %}{{ conf.currency_left }}{{ conf.currency_right }}{% endif %}]</td>
+                           <td width="70" class="bt br">{{ lang.print_total }} [{% if entity.prize == 1 %}{{ lang.points }}{% else %}{{ conf.currency_left }}{{ conf.currency_right }}{% endif %}]</td>
+                        </tr>
+                     {% endif %}
+                     <tr {% if key % 2 == 0 %}class="header" {% endif %}>
+                        <td class="bt br bl {% if loop.last %}bb{% endif %}">{{ key + 1 }}.</td>
+                        <td class="bt br {% if loop.last %}bb{% endif %}">{{ product.name }}<br /><small>{{ product.desc }}</small></td>
+                        <td class="bt br {% if loop.last %}bb{% endif %}">{{ product.qty }}</td>
+                        <td class="bt br {% if loop.last %}bb{% endif %}">{% if entity.prize != 1 %}{{ product.price }}{% endif %}</td>
+                        <td class="bt br {% if loop.last %}bb{% endif %}">{{ product.tax_val }}</td>
+                        <td class="bt br {% if loop.last %}bb{% endif %}">{% if entity.prize != 1 %}{{ product.price_gross }}{% endif %}</td>
+                        <td class="bt br {% if loop.last %}bb{% endif %}">{% if entity.prize != 1 %}{{ product.sum }}{% endif %}</td>
+                     </tr>
+                     {% if loop.last %}
+                        <tr>
+                           <td colspan="4" class="br"></td>
+                           <td colspan="2" class="br bb">{{ lang.print_total_net }}</td>
+                           <td class="br bb">{% if entity.prize == 1 %}{{ entity.points }}{% else %}{{ entity.price }}{% endif %}</td>
+                        </tr>
+                        <tr>
+                           <td colspan="4" class="br"></td>
+                           <td colspan="2" class="br bb">{{ lang.print_vat_value }}</td>
+                           <td class="br bb">{{ entity.tax_val }}</td>
+                        </tr>
+                        <tr>
+                           <td colspan="4" class="br"></td>
+                           <td colspan="2" class="br bb">{{ lang.print_gross }}</td>
+                           <td class="br bb">{% if entity.prize == 1 %}{{ entity.points }}{% else %}{{ entity.price_gross }}{% endif %}</td>
+                        </tr>
+                        {% if entity.discount > 0 %}
+                           <tr>
+                              <td colspan="4" class="br"></td>
+                              <td colspan="2" class="br bb">Rabat:</td>
+                              <td class="br bb">{{ entity.discount }} %</td>
+                           </tr>
+                           <tr>
+                              <td colspan="4" class="br"></td>
+                              <td colspan="2" class="br bb">Oszczędzasz:</td>
+                              <td class="br bb">{{ conf.currency_left }}{{ entity.saving }}{{ conf.currency_right }}</td>
+                           </tr>
+                        {% endif %}
+                        <tr>
+                           <td colspan="4" class="br"></td>
+                           <td colspan="2" class="br bb">{{ lang.print_delivery }}</td>
+                           <td class="br bb">{{ entity.transport_price }}</td>
+                        </tr>
+                        <tr>
+                           <td colspan="4" class="br"></td>
+                           <td colspan="2" class="br bb"><strong>{{ lang.print_total_pay }}</strong></td>
+                           <td class="br bb"><strong>{% if entity.prize == 1 %}{{ entity.points }}{% else %}{{ entity.total }}{% endif %}</strong></td>
+                        </tr>
+                     </table>
+                  {% endif %}
+               {% endfor %}
+            </td>
+         </tr>
+         <tr>
+            <td colspan="2">
+               {% if entity.comment %}
+                  <strong>{{ lang.print_comment }}</strong> <i>{{ entity.comment }}</i>
+               {% endif %}
+            </td>
+         </tr>
+         <tr>
+            <td colspan="2" height="40"></td>
+         </tr>
+         <tr>
+            <td colspan="2" align="center" class="bt br bb bl">
+               {{ lang.print_footer2 }}
+            </td>
+         </tr>
+      </table>
+
+      <a class="print" href="javascript:print();" title="{{ lang.print_button }}"><img src="{{ constant("TPL_URL") }}/img/btnPrint2.png" alt="{{ lang.print_button }}" /></a>
+
+   </body>
+</html>

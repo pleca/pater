@@ -1,0 +1,25 @@
+{% if alsoBought %}
+    <h2 class="title">{{ lang.shop_rowniez }}</h2>
+    <ul class="products-list row">
+    {% for entity in alsoBought %}
+        <li class="col-md-3 col-sm-6">
+            <div class="product-wrapper">
+                {% if entity.mega_offer == 1 %}
+                <div class="product-special-ribbon">
+                    <div class="special-ribbon-wrapper"><span>{{ lang. mega_offer }}</span></div>
+                </div>
+                {% endif %}
+                {% if row.status_id == 1 %}<div class="product-new-ribbon"><span>{{ lang.label_new }}</span></div>{% endif %}
+                <div class="product-element">
+                    <a href="{{ entity.url }}" class="product-img"><img src="{{ entity.photo.small }}"></a>
+                    <a href="{{ entity.url }}" class="product-name"><span>{{ entity.name }}</span></a>
+                    <div class="product-price-data">
+                        {% include 'templates/product/prices.twig' %}
+                    </div>
+                    <a href="{{ entity.url }}" class="btn btn-default">{{ 'product_details'|trans }}</a>
+                </div>
+            </div>
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}

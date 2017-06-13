@@ -1,0 +1,84 @@
+{% block content %}
+<script type="text/javascript">
+    var hasThreshold = '{{ shoppingThresholdInfo.hasThreshold }}';
+   
+    if (hasThreshold) {
+        $("#tooltip1").show();
+        drawTooltip();        
+    }
+    
+    function drawTooltip() {
+        var tooltip1 = $('#tooltip1');
+        var thTooltip = tooltip1.parent();            
+        var offset = thTooltip.offset();
+
+        tooltip1.offset({ top: offset.top - 50, left: offset.left - 50});    
+    }    
+</script>
+
+{% if basket %}
+    <table id="basket-table-threshold" class="table table-condensed">
+        <thead>
+            <tr>
+                <th>{{ lang.photo }}</th>
+                <th>{{ lang.name }}</th>
+                <th class="text-center">{{ lang.old_price }}</th>
+                <th class="text-center">                        
+                    <div role="tooltip" class="tooltip fade top in" id="tooltip1" style="display: none;">
+                        <div class="tooltip-arrow" style="left: 50%;"></div>
+                        <div class="tooltip-inner">{{ pageTooltipYourPrice|raw }}</div>                                
+                    </div>    
+                    {{ lang.your_price }}
+                </th>                        
+                <th>{{ lang.quantity }}</th>
+                <th>{{ lang.total }}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set first_mega_offer = 1 %}
+            {% for entity in basket %}
+                {% if entity.mega_offer and first_mega_offer %}
+                    <tr class="mega-offer-header">
+                        <td colspan="2"><span class="mega-offer-label">{{ lang.mega_offer }}</span></td>
+                        <td><span class="mega-price">{{ lang.mega_price }}</span></td>
+                        <td colspan="4"><span class="mega-price">{{ lang.mega_price }}</span></td>
+                    </tr>
+                    {% set first_mega_offer = 0 %}
+                {% endif %}
+
+                <tr data-basket-id='{{ entity.id }}'>
+                    <td class="basket-item-photo">
+                        <img src="{% if entity.image %}{{ entity.image }}{% else %}{{ constant("CMS_URL") }}/files/no-picture.png{% endif %}">
+                    </td>
+                    <td class="basket-item-name">
+                        <a href="{{ entity.url }}">{{ entity.name }}</a>
+                        {% set features = entity.desc|split(',') %}
+
+                        {% for feature in features %}
+                            <span>{{ feature }}</span>
+                        {% endfor %}
+                    </td>                              
+                    <td>{{ entity.price_gross }}</td>
+                    <td class="text-center {% if entity.price_gross != entity.price_after_discount %}red{% endif %}" style="width:10%;">{{ entity.price_after_discount }}</td> 
+                    <td class="basket-item-quatity">
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                  <button class="btn qty" data-action='remove'><i class="mdi mdi-minus-circle-outline"></i></button>
+                            </div>
+                            <input name='product_qty' class="form-control product_qty" type="text" class="form-control" value="{{ entity.qty }}" data-available='{{ entity.available }}'>
+                            <div class="input-group-btn">
+                                  <button class="btn qty" data-action="add"><i class="mdi mdi-plus-circle-outline"></i></button>
+                              </div>
+                        </div>
+                    </td>
+                    <td class='product-total'>{{ entity.sum }}</td>
+                    <td class="basket-item-action">
+                        <button class="btn delete" data-toggle="tooltip" data-placement="left" title="{{ lang.basket_delete }}"><i class="mdi mdi-close"></i></button>
+                    </td>
+                </tr>                                
+            {% endfor %}
+        </tbody>
+    </table>      
+    {% endif %}    
+{% endblock %}

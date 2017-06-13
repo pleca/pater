@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html 
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ language }}" lang="{{ language }}">
+    <head>
+        <title>{{ pageTitle }}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <link href="{{ constant("TPL_URL") }}/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="{{ constant("TPL_URL") }}/css/base/login.css" />
+        <link rel="shortcut icon" href="{{ constant("TPL_URL") }}/img/favicon.ico" />
+        <script src="{{ constant("TPL_URL") }}/js/jquery-2.1.4.min.js"></script>
+        <script src="{{ constant("TPL_URL") }}/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("input[name=login]").focus();
+            });
+        </script>
+    </head>
+    <body>
+        <div id="container">
+            <div id="block">
+                <form class="form-signin" action="{{ constant("CMS_URL") }}/admin.html" method="post">
+                    {% include 'templates/other/notify.twig' %} 
+                    <h2 class="form-signin-heading"><img src="{{ constant("TPL_URL") }}/img/admin/logo.png" alt="{{ conf.company_name }}" /></h2>
+                    <label class="sr-only" for="username">{{ lang.login }}</label>
+                    <input class="form-control" type="text" id="username" name="login" required="required" placeholder="{{ lang.login }}" />
+{#                    <label for="password">{$lang.password}</label>#}
+                    <input class="form-control" type="password" id="password" name="pass" required="required" placeholder="{{ lang.password }}" />
+                    <input type="hidden" name="action" value="login" />
+                    <input class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="{{ lang.login }}" />
+                </form>
+            </div>
+        </div>
+
+    </body>
+</html>

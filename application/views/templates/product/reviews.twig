@@ -1,0 +1,88 @@
+{% block head %}
+    <script type="text/javascript">
+         
+{#        console.log('teeest');
+        var method = 'addReview';
+        var productId = '';
+        var author = '';
+        var datePublished = '';
+        
+        $.post(CMS_URL + "../ajax/product.php", {method: method, productId: productId})
+                .done(function (data) {
+                    if (data) {
+                        element.attr('data-readed', 1);
+                        element.parent().children('.variations').html(data);                                
+                    }
+                });  #}      
+    </script>
+{% endblock %}
+
+<h2 class="title">{{ lang.reviews }}</h2>
+
+{% if logged %}
+    <form id="review-form" method="post" action="{{ server('PHP_SELF') }}" class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Oceń produkt:{{ logged }}</label>
+            <div class="col-sm-9">
+                <select class="form-control" name="reviewValue">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>                                             
+            </div>
+        </div>
+
+        <div class="form-group required-field">
+            <label class="col-sm-3 control-label">Tytuł komentarza:</label>
+            <div class="col-sm-9">
+                <input class="form-control" name="commentTitle" type="text" value="{{ productReview.commentTitle }}">
+            </div>
+        </div>
+
+        <div class="form-group required-field">
+            <label class="col-sm-3 control-label">Komentarz:</label>
+            <div class="col-sm-9">
+                <textarea class="form-control" name="comment">{{ productReview.comment }}</textarea>
+            </div>
+        </div>
+
+        <input type="hidden" name="action" value="addReview" />
+            
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+                <div class="required-field">
+                    <label></label><small>pola obowiązkowe</small>
+                </div>
+                <button id="addReview" type="submit" class="btn btn-default">Publikuj</button>
+            </div>
+        </div>
+    </form>
+{% endif %}
+
+{% if productReviews %}
+    <div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+        Rated <span itemprop="ratingValue">{{ sumReviewRatingValues/productReviews|length }}</span>/5
+        based on <span itemprop="reviewCount">{{ productReviews|length }}</span> customer reviews  
+    </div>
+    
+    <br />
+    
+    <div class="reviews">
+
+    {% for review in productReviews %}        
+        <div itemprop="review" itemscope itemtype="http://schema.org/Review">
+            <span itemprop="name">{{ review.commentTitle }}</span>
+            <span itemprop="author">{{ review.author }}</span>
+            <meta itemprop="datePublished" content="{{ review.datePublished|date() }}">{{ review.datePublished|date() }}
+            <div itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                <meta itemprop="worstRating" content = "1"/>
+                <span itemprop="ratingValue">{{ review.reviewValue }}</span>/<span itemprop="bestRating">5</span> stars                
+            </div>            
+            <span itemprop="description">{{ review.comment }}</span>
+        </div>
+        <br />        
+    {% endfor %}    
+    </div>
+{% endif %}

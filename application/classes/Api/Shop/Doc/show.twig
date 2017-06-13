@@ -1,0 +1,71 @@
+<link href="{{ constant("TPL_URL") }}/css/bootstrap.min.css" rel="stylesheet">
+<div class="container">
+    <h2 class="text-center">API Shop Documentation</h2>
+    <h4>Methods</h4>
+    <table class="table table-bordered">
+        <tr><th>Method name</th><th>Available parameters</th><th>Fields</th><th>Description</th></tr>
+        {% for method in methods %}
+            <tr><td>{{ method.name }}</td>
+            <td>    
+            {% if method.params %}
+                {% for param in method.params %}
+                    {{ param }}{% if not loop.last %},{% endif %}
+                {% endfor %}
+            {% endif %}
+            </td>
+
+            <td>
+            {% if method.fields %}
+                {% for field in method.fields %}
+                    {{ field }}{% if not loop.last %},{% endif %}
+                {% endfor %}
+            {% endif %}
+            </td>
+
+            <td>
+            {% if method.desc %}
+                {{ method.desc }}
+            {% endif  %}
+            </td>
+        {% endfor %}
+    </table>
+    
+    <dl>
+        <dt>Fields</dt>
+        <dd>If not defined then all fields from table are returned</dd>
+        <dt>Params</dt>
+        <dd>Params that can be set in request. If defined than conditions must be met.</dd>
+    </dl> 
+
+    <h5>Examples</h5>
+    <h6>Get all manufacturers (request with defined params)</h6>
+    <code>http://pattern/api/shop?api_key=API_KEY&response=json&method=getManufacturers</code><br />
+    <h6>Get manufacturer with id=5 and only fields name and status_id (request with defined params and selected fields)</h6>
+    <code>http://pattern/api/shop?api_key=API_KEY&response=json&method=getManufacturers&amp;params[id]=5&fields[name]&fields[status_id]</code>
+    <h6>Get orders made 2016-01-05</h6>
+    <code>http://pattern/api/shop?api_key=API_KEY&response=json&method=getOrders&amp;params[time_add][from]=2016-01-05&amp;params[time_add][to]=2016-01-05</code>
+    <h6>Get products with ids 1,2</h6>
+    <code>http://pattern/api/shop?api_key=API_KEY&response=json&method=getProducts&amp;params[id][]=1&amp;params[id][]=2</code>
+    <h6>Get products added 2016-06-02</h6>
+    <code>http://pattern/api/shop?api_key=API_KEY&response=json&method=getProducts&amp;params[date_add][from]=2016-06-02&amp;params[date_add][to]=2016-06-02</code>    
+    
+{#    <h6>Set order. Available only for GA. Change status on 2 for orders with ids 3,4</h6>#}
+{#    <code>http://pattern/api/shop?api_key=API_KEY&response=json&method=setOrders&amp;params[ids]=2,3&status=2</code>#}
+{#    <h6>Set products. Available only for GA. Change qty on 2 for products with ids 3,4</h6>#}
+{#    <code>http://pattern/api/shop?api_key=API_KEY&response=json&method=setOrders&amp;params[ids]=2,3&status=2</code>#}
+    <br /><br />
+    <h4>Errors</h4>
+    <table class="table table-bordered">
+        <tr><th>Error code</th><th>Message</th></tr>
+        {% for key, error in errors %}
+            <tr><td>{{ key }}</td><td>{{ error }}</td></tr>
+        {% endfor %}
+    </table>    
+    <br /><br />
+    <h4>Statuses</h4>
+    <table class="table table-bordered">
+        <tr><th>Status code</th><th>Description</th></tr>
+        <tr><td>{{ 0 }}</td><td>Errors occured</td></tr>
+        <tr><td>{{ 1 }}</td><td>Request correct</td></tr>
+    </table>    
+</div>

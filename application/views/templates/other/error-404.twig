@@ -1,0 +1,11 @@
+{% extends "templates/base.twig" %}
+
+{% block content %}
+    <div id="page-title">
+       <h1>{{ lang.error_404 }}</h1>
+    </div>
+
+    <div id="page-content">
+       {{ lang.error_404_desc | raw }}
+    </div>
+{% endblock %}

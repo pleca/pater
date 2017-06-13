@@ -1,0 +1,16 @@
+{% extends "templates/base.twig" %}
+
+{% block content %}    
+    <div class="row row-tiny">
+        <div class="col-sm-4 col-md-3">            
+            {% include 'templates/other/sidebar-left.twig' %}            
+        </div>
+                
+        <div class="col-sm-8 col-md-9">
+            <h2 class="title">{{ entity.title }}</h2>
+            <article>
+                {{ entity.content| raw }}
+            </article>
+        </div>
+    </div> 
+{% endblock %}

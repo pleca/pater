@@ -1,0 +1,126 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function clearForm(form) {
+           $('#' + form).find('input[type=text]').val('');
+           $('#' + form).find('select').val('');
+        }         
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="table-toolbar">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="btn-group">
+                       <a class="btnInfo" href="?action=addUserForm">
+                        <button id="sample_editable_1_new" class="btn sbold green"> {{ lang.add_new }}
+                            <i class="fa fa-plus"></i>
+                        </button>                           
+                       </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a style="float:right;" onclick="return showConfirm('Czy wybrałeś aktywne emaile?');" href="?action=listUsers&action2=getCsv&first_name={{ parameter("first_name") }}&last_name={{ parameter("last_name") }}&email={{ parameter("email") }}&active={{ parameter("active") }}&lang_id={{ parameter("lang_id") }}" title="{{ lang.newsletter_csv }}">{{ lang.newsletter_csv }}</a>
+
+        <form class="filtr form-inline" id="form_filtr" name="form_filtr" method="get" action="{{ server('PHP_SELF') }}">
+            <strong>{{ lang.search }}</strong>&nbsp;&nbsp;          
+            <div class="form-group">
+                <label>{{ lang.first_name }}</label>
+                <input type="text" class="form-control" name="first_name" value="{{ parameter("first_name") }}">
+            </div>            
+            <div class="form-group">
+                <label>{{ lang.last_name }}</label>
+                <input type="text" class="form-control" name="last_name" value="{{ parameter("last_name") }}">
+            </div>            
+            <div class="form-group">
+                <label>{{ lang.email }}</label>
+                <input type="text" class="form-control" name="email" value="{{ parameter("email") }}">
+            </div>            
+            <div class="form-group">
+                <label>Aktywność</label>
+                <select name="active" class="form-control">
+                    <option value="">wszyscy</option>
+                    <option value="1" {% if parameter("active") == 1 %}selected{% endif %}>aktywni</option>
+                    <option value="2" {% if parameter("active") == 2 %}selected{% endif %}>nieaktywni</option>                    
+                </select>
+            </div>            
+            <div class="form-group">
+                <label>Język</label>
+                <select name="lang_id" class="form-control">
+                    <option value="">wszyscy</option>
+                    <option value="1" {% if parameter("lang_id") == 1 %}selected{% endif %}>Angielski</option>
+                    <option value="2" {% if parameter("lang_id") == 2 %}selected{% endif %}>Polski</option>                   
+                </select>
+            </div>            
+
+            <input type="hidden" name="action" value="listUsers" />
+            <input type="hidden" name="action2" value="search" />
+            &nbsp;&nbsp;
+           <input type="submit" class="btn btn-default" value="{{ lang.show }}" />
+           <input type="button" class="btn btn-default" value="Reset" onclick="clearForm('form_filtr');"/>
+         </form>                
+
+        <div class="table-scrollable">
+        {% for entity in entities %}
+            {% if loop.first %}
+                <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+                <thead>
+                    <tr>
+                        <th>{{ lang.lp }}</th>
+                        <th>{{ lang.first_name }}</th>
+                        <th>{{ lang.last_name }}</th>
+                        <th>{{ lang.email }}</th>
+                        <th>Język</th>
+                        <th class="text-center">{{ lang.active }}</th>
+                        <th class="text-center">{{ lang.edit }}</th>
+                        <th class="text-center">{{ lang.delete }}</th>                        
+                    </tr>
+                </thead>              
+                <tbody>
+            {% endif %}                       
+                    <tr class="{% if parameter("id") == entity.id %}active{% endif %}">
+                       <td>{{ interval + loop.index }}</td>
+                       <td>{{ entity.first_name }} </td>
+                       <td>{{ entity.last_name }}</td>
+                       <td>{{ entity.email }}</td>
+                       <td>{% if entity.lang_id == 2 %}Polski{% else %}Angielski{% endif %}</td>
+                        <td class="text-center">
+                            {% if entity.active == 1 %}<i class="fa fa-check" alt="{{ lang.yes }}" title="{{ lang.yes }}"></i>{% else %}<i class="fa fa-ban" alt="{{ lang.no }}" title="{{ lang.no }}"></i>{% endif %}
+                        </td>
+                        <td class="text-center">
+                           <a href="?id={{ entity.id }}&amp;action=editUser" title="{{ lang.edit }}">
+                               <i class="fa fa-edit"></i>
+                           </a>
+                        </td>
+                        <td class="text-center">
+                            <a href="#" data-href="?id={{ entity.id }}&amp;action=deleteUser" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-remove"></i></a>
+                        </td>       
+                    </tr>
+
+            {% if loop.last %}</tbody></table>{% endif %}
+        {% endfor %}
+
+                       {% include 'admin/other/pages.twig' %}             
+        </div>
+    </div>
+</div>
+
+{% include 'admin/other/confirm.twig' %}
+
+{% endblock %}

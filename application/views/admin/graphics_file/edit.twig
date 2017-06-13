@@ -1,0 +1,66 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+       $(document).ready(function () {
+           d = new Date();
+           $("#logo1").attr("src", "{{ constant('CMS_URL') }}/files/graphics/logo.png?"+d.getTime());
+           $("#favicon").attr("src", "{{ constant('CMS_URL') }}/files/graphics/favicon.ico?"+d.getTime());
+           $("#new").attr("src", "{{ constant('CMS_URL') }}/files/graphics/new.png?"+d.getTime());
+           $("#mega_offer").attr("src", "{{ constant('CMS_URL') }}/files/graphics/mega_offer.png?"+d.getTime());
+       });
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body">        
+        <form method="post" action="{{ server('PHP_SELF') }}" enctype="multipart/form-data">
+            <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">              
+                <tbody>
+                    <tr>
+                        <td>{{ lang.icon_logo }}:<br /><small>({{ lang.recommended_size }}: 220px x 160px, format png)</small></td>
+                        <td>{% if file_exists(logoFile) %}<a href="{{ constant('CMS_URL') }}/files/graphics/logo.png"><img id="logo1" style="max-width: 220px;" src="" alt="{{ conf.company_name }}" /></a>{% endif %}</td>
+                        <td><input type="file" name="logo" size="60" /></td>                        
+                    </tr>
+                    <tr>
+                        <td>{{ lang.icon_favicon }}:<br /><small>({{ lang.recommended_size }}: 16px x 16px, format ico)</small></td>
+                        <td>{% if file_exists(faviconFile) %}<a href="{{ constant('CMS_URL') }}/files/graphics/favicon.ico"><img id="favicon" style="max-width: 32px;" src="" alt="{{ conf.company_name }}" /></a>{% endif %}</td>
+                        <td><input type="file" name="favicon" size="60" /></td>
+                    </tr>
+{#                    <tr>
+                        <td>{{ lang.icon_new_product }}:<br /><small>({{ lang.recommended_size }}: 73px x 73px, format png)</small></td>
+                        <td>{% if file_exists(newProductFile) %}<a href="{{ constant('CMS_URL') }}/files/graphics/new.png"><img id="new" style="max-width: 200px;" src="" alt="{{ conf.company_name }}" /></a>{% endif %}</td>
+                        <td><input type="file" name="new" size="60" /></td>
+                    </tr>
+                    <tr>
+                        <td>{{ lang.icon_mega_offer }}:<br /><small>({{ lang.recommended_size }}: 73px x 73px, format png)</small></td>
+                        <td>{% if file_exists(newProductFile) %}<a href="{{ constant('CMS_URL') }}/files/graphics/mega_offer.png"><img id="mega_offer" style="max-width: 200px;" src="" alt="{{ conf.company_name }}" /></a>{% endif %}</td>
+                        <td><input type="file" name="mega_offer" size="60" /></td>
+                    </tr>#}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="center">
+                            <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                            <input type="hidden" name="action" value="{{ lang.btn_save }}" />
+                            <a href="#" onclick="history.go(-1)" class="btn default">{{ lang.btn_cancel }}</a>
+                        </td>
+                    </tr>                    
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+                    
+{% endblock %}

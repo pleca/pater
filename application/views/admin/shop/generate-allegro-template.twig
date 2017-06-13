@@ -1,0 +1,62 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#edytor").focus(function() {
+                var $this = $(this);
+                $this.select();
+
+                // Work around Chrome's little problem
+                $this.mouseup(function() {
+                    // Prevent further mouseup intervention
+                    $this.unbind("mouseup");
+                    return false;
+                });
+            });
+        });        
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        
+        <div class="btn-group">
+            <a class="btn btn-default" href="?action=variation&amp;id={{ product.id }}"><i class="fa fa-arrow-left"></i> {{ lang.back }}</a>
+            <a class="btn btn-default" href="?action=edit&amp;id={{ product.id }}"><i class="fa fa-home"></i> Dane podstawowe</a>
+            <a class="btn btn-default" href="?action=expanded&amp;id={{ product.id }}"><i class="fa fa-globe"></i> Dane rozszerzone</a>
+            <a class="btn btn-default active" href="?action=variation&amp;id={{ product.id }}"><i class="fa fa-sitemap"></i> Wariacje</a>
+            <a class="btn btn-default" href="?action=image&amp;id={{ product.id }}"><i class="fa fa-photo"></i> Zdjęcia</a>
+        </div>
+        
+        <div class="text-center">
+            Allegro
+        </div>
+    
+        <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+            <div class="form-body">  
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        {{ lang.content }}
+                    </label>
+                    <div class="col-md-7">
+                        <textarea id="edytor" class="edytor form-control" rows="20" name="content">{{ content|raw }}</textarea>
+                    </div>
+                </div>                    
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

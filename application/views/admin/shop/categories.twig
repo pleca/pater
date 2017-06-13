@@ -1,0 +1,196 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function showDiv(id) {
+           $('#' + id).show();
+        }      
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+{% if not item.id %}
+
+{% else %}
+   {#<a class="btn btn-default" href="?{if $parent_id>0}parent_id={$parent_id}{/if}" title="{$lang.back}"><i class="fa fa-arrow-left"></i> {$lang.back}</a><br /><br />#}
+{% endif %}
+{% if parent_id and parent_id > 0 %}
+   <a class="btn btn-default" href="?" title="{{ lang.backLevel }}"><i class="fa fa-level-up"></i> {{ lang.backLevel }}</a><br /><br />
+{% endif %}
+   
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="table-toolbar">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="btn-group">
+                    {% if not item.id %}
+                       <a href="javascript:void(0);" onclick="showDiv('divAdd');">
+                        <button class="btn sbold green"> {{ lang.add_new }}
+                            <i class="fa fa-plus"></i>
+                        </button>                           
+                       </a>
+                     {% endif %}                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form class="filtr form-inline" id="form" method="post" action="{{ server('PHP_SELF') }}">
+            <strong>{{ lang.shop_cat_set_menu }}</strong>&nbsp;&nbsp;
+            {% for category in categoriesSelect %}
+                {% if loop.first %}<select name="parent_id" class="form-control" onchange="this.form.submit()">{% endif %}
+                 <option value="{{ category.id }}" {% if parent_id == category.id %}selected="true"{% endif %}>{{ category.name }}</option>
+                {% if loop.last %}</select>{% endif %}                    
+            {% endfor %}
+
+           <input type="hidden" name="action" value="filtr" />
+           &nbsp;&nbsp;
+           <input type="submit" class="btn btn-default" value="{{ lang.show }}" />
+        </form>
+   
+        {% if not item.id %}
+           <div id="divAdd" style="display:none;"><br />
+              <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.menu_item_name }}</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="name" value="" />
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Status</label>
+                    <div class="col-md-4">
+                    {% for status in statuses %}            
+                        {% if loop.first %}<select class="form-control" name="status_id">{% endif %}
+                           <option value="{{ status.id }}">{{ status.name }}</option>
+                        {% if loop.last %}</select>{% endif %}
+                    {% endfor %}
+                    </div>                     
+                </div>    
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9">
+                            <input type="hidden" name="action" value="add" />
+                            <input type="hidden" name="parent_id" value="{{ parent_id }}" />
+                            <button class="btn green" type="submit">{{ lang.btn_add }}</button>
+                            <a href="{{ url_back }}" class="btn default">{{ lang.btn_cancel }}</a>
+                        </div>
+                    </div>
+                </div>
+              </form>
+           </div>
+        {% endif %}
+
+        <div class="table-scrollable">
+        {% for entity in entities %}
+            {% if loop.first %}
+                <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+                <thead>
+                    <tr>
+                        <th>{{ lang.lp }}</th>
+                        <th>{{ lang.id }}</th>
+                        <th>{{ lang.menu_item_name }}</th>
+                        <th>{{ lang.menu_url }}</th>
+                        <th>Status</th>    
+                        <th>{{ lang.order }}</th>    
+                        <th class="text-center">{{ lang.up }}</th>    
+                        <th class="text-center">{{ lang.down }}</th>    
+                        <th class="text-center">{{ lang.edit }}</th>    
+                        <th class="text-center">{{ lang.delete }}</th>                       
+                    </tr>
+                </thead>              
+                <tbody>
+            {% endif %}           
+            
+            {% if item.id and item.id == entity.id %}
+                 <tr>
+                    <td></td>
+                    <td colspan="8" style="padding: 5px;">
+                       <form class="form-horizontal" method="post" action="{{ server('PHP_SELF') }}">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ lang.menu_item_name }}</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" type="text" name="name" value="{{ item.name }}" />
+                                </div>                     
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Status</label>
+                                <div class="col-md-4">
+                                {% for status in statuses %}            
+                                    {% if loop.first %}<select class="form-control" name="status_id">{% endif %}
+                                       <option value="{{ status.id }}" {% if item.status_id == status.id %}selected{% endif %}>{{ status.name }}</option>
+                                    {% if loop.last %}</select>{% endif %}
+                                {% endfor %}            
+                                </div>                     
+                            </div>                     
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <input type="hidden" name="action" value="save" />
+                                        <input type="hidden" name="id" value="{{ item.id }}" />
+                                        <input type="hidden" name="parent_id" value="{{ item.parent_id }}" />
+                                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                       </form>     
+                    </td>
+                </tr> 
+              {% else %}
+                 <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ entity.id }}</td>
+                    <td>{{ entity.name }}</td>
+                    <td>{{ entity.url }}</td>
+                    <td>
+                        {% for status in statuses if entity.status_id == status.id %} 
+                            <span style="color:{{ status.color }};">{{ status.name }}</span>
+                        {% endfor %}                           
+                    </td>
+                    <td>{{ entity.order }}</td>
+                    <td class="text-center">
+                       {% if not loop.first %}
+                          <a href="?id={{ entity.id }}&amp;parent_id={{ entity.parent_id }}&amp;action=up" title="{{ lang.move_up }}">
+                              <i class="fa fa-arrow-up"></i>
+                          </a>
+                       {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {% if not loop.last %}
+                          <a href="?id={{ entity.id }}&amp;parent_id={{ entity.parent_id }}&amp;action=down" title="{{ lang.move_down }}">
+                              <i class="fa fa-arrow-down"></i>
+                          </a>
+                        {% endif %}
+                    </td>                    
+                    
+                    <td class="text-center">
+                       <a href="?id={{ entity.id }}&amp;parent_id={{ entity.parent_id }}&amp;action=edit" title="{{ lang.edit }}">
+                           <i class="fa fa-edit"></i>
+                       </a>
+                    </td>
+                    <td class="text-center">
+                        <a href="#" data-href="?id={{ entity.id }}&amp;parent_id={{ entity.parent_id }}&amp;action=delete" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-remove"></i></a>
+                    </td>
+                 </tr>
+              {% endif %}            
+            
+            {% if loop.last %}</tbody></table>{% endif %}
+        {% endfor %}         
+        </div>
+    </div>
+</div>
+
+{% include 'admin/other/confirm.twig' %}
+
+{% endblock %}    

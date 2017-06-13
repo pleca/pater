@@ -1,0 +1,91 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}</h3>
+
+{% if url_back %}
+    <a class="btn btn-default" href="{{ url_back }}"><i class="fa fa-arrow-left"></i> {{ lang.btn_back }}</a><br /><br /> 
+{% endif %}
+   
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="table-toolbar">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="btn-group">
+                    {% if url_add %}
+                       <a href="{{ url_add }}">
+                        <button id="sample_editable_1_new" class="btn sbold green"> {{ lang.add_new }}
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        </a>
+                    {% endif %}                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-scrollable">
+        {% for entity in entities %}
+            {% if loop.first %}
+                <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+                <thead>
+                    <tr>
+                        <th>{{ lang.lp }}</th>
+                        <th>{{ lang.id }}</th>
+                        <th>{{ lang.weight_2 }} [{{ lang.weight_unit }}]</th>
+                        <th>{{ lang.weight_3 }} [{{ lang.weight_unit }}]</th>
+                        <th>{{ lang.transport_cost }} [{{ conf.currency }}]</th> 
+                        <th>{{ lang.transport_tax }} [%]</th> 
+                        <th>{{ lang.transport_cost_gross }} [{{ conf.currency }}]</th> 
+                        <th>{{ lang.transport_delivery_time }}</th> 
+                        <th colspan="3">{{ lang.options }}</th>                    
+                    </tr>
+                </thead>              
+                <tbody>
+            {% endif %}             
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ entity.id }}</td>
+                        <td>{{ entity.weight_from }}</td>
+                        <td>{{ entity.weight_to }}</td>
+                        <td>{{ entity.price }}</td>
+                        <td>
+                            {% for tax in taxes if entity.tax_id == tax.id %} 
+                                {{ tax.value }}
+                            {% endfor %}                              
+                        </td>
+                        <td>{{ entity.price_gross }}</td>
+                        <td>{{ entity.delivery_time }}</td>         
+                        <td>
+                           <a href="{{ constant("CMS_URL") }}/admin/{{ module }}/history/{{ courier.id }}/{{ type.id }}/{{ entity.region_id }}/{{ entity.service_id }}/{{ entity.id }}.html" title="{{ lang.btn_history }}"><i class="fa fa-history"></i></a>
+                        </td>
+                        <td>
+                           {% if user.level in ['1','2'] %}
+                              <a href="{{ constant("CMS_URL") }}/admin/{{ module }}/edit/{{ courier.id }}/{{ type.id }}/{{ entity.region_id }}/{{ entity.service_id }}/{{ entity.id }}.html" title="{{ lang.btn_edit }}"><i class="fa fa-edit"></i></a>
+                           {% endif %}
+                        </td>
+                        <td>
+                           {% if user.level in ['1','2'] %}
+                               <a href="#" data-href="{{ constant("CMS_URL") }}/admin/{{ module }}/delete/{{ courier.id }}/{{ type.id }}/{{ entity.region_id }}/{{ entity.service_id }}/{{ entity.id }}.html" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-remove"></i></a>
+                           {% endif %}
+                        </td>                                                  
+                    </tr>
+                    
+            {% if loop.last %}</tbody></table>{% endif %}
+        {% endfor %}
+
+                       {% include 'admin/other/pages.twig' %}            
+        </div>
+    </div>
+</div>
+        
+    {% include 'admin/other/confirm.twig' %} 
+
+{% endblock %}

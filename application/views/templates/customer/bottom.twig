@@ -1,0 +1,31 @@
+{#{foreach from=$aRecent item=v name=n key=k}
+   {if $smarty.foreach.n.first}
+      <div class="productsHeader"><h1>{$lang.shop_recently}</h1></div><div class="productsBox">
+         {/if}
+
+      <div class="productsItem {if $k%3==2}productsItemR{/if}">
+         <div class="productsFoto">
+            <a href="{$v.url}" title="{$v.title}">
+               {if isset($v.photo.small)}<img src="{$v.photo.small}" alt="{$v.name}" />{else}<img src="{$smarty.const.CMS_URL}/files/no-picture.png" alt="{$v.name}" />{/if}
+            </a>
+         </div>
+         <div class="productsTitle"><a href="{$v.url}" title="{$v.name}">{$v.name}</a></div>
+         <div class="productsPrice">
+            <div class="price">
+               {if $v.promotion==1}
+                  {$lang.now} <span class="price2">{$lang.currency_left}{$v.price_promotion_gross}{$lang.currency_right}</span>   
+               {else}
+                  {$lang.now} <span class="price2">{$lang.currency_left}{$v.price_gross}{$lang.currency_right}</span>
+               {/if}
+            </div>
+            <div class="price">
+               {if $v.price_rrp>0}{$lang.rrp} <span class="price1"><span class="through">{$lang.currency_left}{$v.price_rrp}{$lang.currency_right}</span></span>{/if}
+            </div>
+         </div>
+         <div class="productsDesc" id="item{$v.id}">
+            <a class="productsA1" href="{$v.url}" title="{$lang.shop_information}">{$lang.shop_information}</a>
+            <a class="productsA2" href="javascript:void(0);" onclick="addProductToCart('{$v.id}');" title="{$lang.shop_add}" rel="nofollow">{$lang.shop_add}</a>
+         </div>
+      </div>  
+      {if $smarty.foreach.n.last}</div>{/if}
+{/foreach}#}

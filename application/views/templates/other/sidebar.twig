@@ -1,0 +1,16 @@
+<div class="sid-box">
+   <div class="sid-cat">
+         {% for category in categories %}
+            {% if category.name %}<a href="{{ category.url }}" title="{{ category.name }}">{{ category.name }}</a>{% endif %}
+            {% for subcategory in category.submenu %}
+               {% if subcategory.name %}<a href="{{ subcategory.url }}" title="{{ subcategory.name }}">&centerdot; {{ subcategory.name }}</a>{% endif %}
+            {% endfor %}
+         {% endfor %}
+   </div>
+</div>
+<div class="sid-box center">
+   BOX
+</div>
+<div class="sid-box center">
+   BOX
+</div>

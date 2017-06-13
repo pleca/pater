@@ -1,0 +1,304 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        var id = "{{ parameter("id")}}";
+
+          $(document).ready(function () {
+
+             $('#editTypeUrl').click(function () {
+                $('.editDiv').hide();
+                $('#editUrl').show();
+             });
+             $('#editTypeModule').click(function () {
+                $('.editDiv').hide();
+                $('#editModule').show();
+             });
+             $('#editTypePage').click(function () {
+                $('.editDiv').hide();
+                $('#editPage').show();
+             });
+
+            if (id && $('#row-' + id).length) {
+                $('html, body').animate({ scrollTop: $('#row-' + id).offset().top}, 1000);
+            }
+          });
+
+          function showDiv(id)
+          {
+             $('#' + id).show();
+          }
+
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="table-toolbar">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="btn-group">
+                        {% if not item.id %}
+                        <a href="javascript:void(0);" onclick="showDiv('divAdd');">
+                        <button id="sample_editable_1_new" class="btn sbold green"> {{ lang.add_new }}
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>    
+                    
+        {% if not item.id %}
+        {% else %}
+            <a class="btn btn-default" href="?group={{ group }}{% if parent_id > 0 %}&amp;parent_id={{ parent_id }}{% endif %}">
+                <i class="fa fa-arrow-left"></i> {{ lang.back }}</a>
+        {% endif %}
+
+        {% if parent_id > 0 %}
+           <a class="btn btn-default" href="?group={{ group }}" title="{{ lang.backLevel }}">
+               <i class="fa fa-arrow-left"></i> {{ lang.backLevel }}</a>
+        {% endif %}  
+               
+        <form class="form-horizontal" id="form" method="post" action="{{ server('PHP_SELF') }}">
+            <div class="form-group">
+                <label class="col-md-3 control-label">{{ lang.menu_set_menu }}</label>
+                <div class="col-md-2">
+                {% for entity in menu %}
+                    {% if loop.first %}
+                       <select name="group" class="form-control" onchange="this.form.submit()">
+                    {% endif %}
+                      <option value="{{ entity.group }}" {% if group == entity.group %}selected="true"{% endif %}>{{ entity.name }}</option>
+                      {% if loop.last %}</select>{% endif %}                    
+                {% endfor %}                    
+                </div>
+                <input class="btn green" type="submit" value="{{ lang.show }}" />
+            </div>
+           <input type="hidden" name="action" value="filtr" />   
+        </form>  
+            
+        {% if not item.id %}
+            <div id="divAdd" style="display:none;">
+                <form id="form" class="form-horizontal" method="post" action="{{ server('PHP_SELF') }}">
+                {% for lang in aLangs %}  
+                    <div class="form-group">
+                        <label class="col-md-3 control-label"><img src="{{ constant('TPL_URL') }}/assets/global/img/flags/{{ lang.code }}.png" alt="{{ lang.name }}" title="{{ lang.name }}" /> {{ lang.menu_item_name }}</label>
+                        <div class="col-md-4">
+                            <input class="form-control" type="text" name="name[{{ lang.id }}]" value="" />
+                        </div>
+                    </div>                    
+                {% endfor %}
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ lang.menu_type }}</label>
+                        <div class="col-md-4">
+                            <div class="radio-list">
+                                <label>
+                                    <input type="radio" name="type" id="editTypeUrl" value="url"> {{ lang.menu_url }}</label>
+                                <label>
+                                    <input type="radio" name="type" id="editTypeModule" value="module"> {{ lang.menu_modules }} </label>
+                                <label>
+                                    <input type="radio" name="type" id="editTypePage" value="page"> {{ lang.menu_pages }} </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="editUrl" class="editDiv form-group" style="display: none;">
+                        <label class="col-md-3 control-label">{{ lang.menu_url }}</label>
+                        <div class="col-md-4 form-inline">
+                            {{ lang.menu_url_http }}<br />
+                            {% for lang in aLangs %}  
+                                <img src="{{ constant('TPL_URL') }}/assets/global/img/flags/{{ lang.code }}.png" alt="{{ lang.name }}" title="{{ lang.name }}" />
+                                <input class="form-control" type="text" name="url_www[{{ lang.id }}]" value="http://" /><br />
+                            {% endfor %}
+                       </div>
+                    </div>                    
+                    <div id="editModule" class="editDiv form-group" style="display: none;">
+                        <label class="col-md-3 control-label">{{ lang.menu_url }}</label>
+                        <div class="col-md-4">
+                            {{ lang.menu_set_module }}<br />
+                            {% for option in option_modules %}  
+                                {% if loop.first %}
+                                    <select name="url_module" class="form-control"><option value="">{{ lang.select }}</option>
+                                {% endif %}
+                                    <option value="{{ option }}">{{ option }}</option>
+                                    {% if loop.last %}</select>{% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div id="editPage" class="editDiv form-group" style="display: none;">
+                        <label class="col-md-3 control-label">{{ lang.menu_url }}</label>
+                        <div class="col-md-4 form-inline">
+                            {{ lang.menu_set_page }}<br />
+                            {% for lang in aLangs %}  
+                                <img src="{{ constant('TPL_URL') }}/assets/global/img/flags/{{ lang.code }}.png" alt="{{ lang.name }}" title="{{ lang.name }}" />
+                                {% for option in option_pages[lang.id] %} 
+                                    {% if loop.first %}<select name="url_page[{{ lang.id }}]" class="form-control"><option value="">{{lang.select }}</option>{% endif %}
+                                        <option value="{{ option.title_url }}">{{ option.title }}</option>
+                                    {% if loop.last %}</select>{% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>        
+
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                                <input type="hidden" name="action" value="add" />
+                                <input type="hidden" name="group" value="{{ group }}" />
+                                <input type="hidden" name="parent_id" value="{{ parent_id }}" />
+                                <button class="btn green" type="submit">{{ lang.btn_add }}</button>
+                            </div>
+                        </div>
+                    </div>
+              </form>
+           </div>
+        {% endif %}            
+        
+        <div class="table-scrollable">
+        {% for entity in entities %}
+            {% if loop.first %}
+                <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+                <thead>
+                    <tr> 
+                        <th>{{ lang.lp }}</th>
+                        <th>{{ lang.menu_item_name }}</th>
+                        <th>{{ lang.menu_type }}</th>
+                        <th>{{ lang.menu_url }}</th>
+                        <th>{{ lang.order }}</th>
+                        <th class="text-center">{{ lang.up }}</th>
+                        <th class="text-center">{{ lang.down }}</th>
+                        <th class="text-center">{{ lang.edit }}</th>
+                        <th class="text-center">{{ lang.delete }}</th>                        
+                    </tr>
+                </thead>              
+                <tbody>
+            {% endif %}         
+            
+            {% if item.id == entity.id %}
+               <tr id="row-{{ entity.id }}">
+                   <td></td>
+                  <td colspan="8" style="padding: 5px;">
+                     <form id="form" method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+                      {% for trans in aDesc %}
+                          <div class="form-group">
+                              <label class="col-md-3 control-label"><img src="{{ constant('TPL_URL') }}/assets/global/img/flags/{{ trans.lang_code }}.png" alt="{{ trans.lang_name }}" title="{{ trans.lang_name }}" /> {{ lang.menu_item_name }}</label>
+                              <div class="col-md-4">
+                                  <input type="text" class="form-control" name="name[{{ trans.lang_id }}]" value="{{ trans.name }}" />
+                              </div>
+                          </div>                          
+                      {% endfor %}           
+                          <div class="form-group">
+                              <label class="col-md-3 control-label">{{ lang.menu_type }}</label>
+                              <div class="col-md-4">
+                                  <div class="radio-list">
+                                      <label>
+                                          <input type="radio" name="type" id="editTypeUrl" value="url" {% if item.type == 'url' %}checked="true"{% endif %}> {{ lang.menu_url }}</label>
+                                      <label>
+                                          <input type="radio" name="type" id="editTypeModule" value="module" {% if item.type == 'module' %}checked="true"{% endif %}> {{ lang.menu_modules }} </label>
+                                      <label>
+                                          <input type="radio" name="type" id="editTypePage" value="page" {% if item.type == 'page' %}checked="true"{% endif %}> {{ lang.menu_pages }} </label>
+                                  </div>
+                              </div>
+                          </div>                
+                          <div id="editUrl" class="editDiv form-group" {% if item.type != 'url' %}style="display: none;"{% endif %}>
+                              <label class="col-md-3 control-label">{{ lang.menu_url }}</label>
+                              <div class="col-md-4 form-inline">
+                                  {{ lang.menu_url_http }}<br />
+                                  {% for trans in aDesc %}
+                                      <img src="{{ constant('TPL_URL') }}/assets/global/img/flags/{{ trans.lang_code }}.png" alt="{{ trans.lang_name }}" title="{{ trans.lang_name }}" />
+                                      <input class="form-control" type="text" name="url_www[{{ trans.lang_id }}]" value="{% if item.type == 'url' %}{{ trans.url }}{% else %}http://{% endif %}" /><br />
+                                  {% endfor %}
+                             </div>
+                          </div>     
+                          <div id="editModule" class="editDiv form-group" {% if item.type != 'module' %}style="display: none;"{% endif %}>
+                              <label class="col-md-3 control-label">{{ lang.menu_url }}</label>
+                              <div class="col-md-4">
+                                  {{ lang.menu_set_module }}<br />
+                                  {% for option in option_modules %}
+                                    {% if loop.first %}<select name="url_module" class="form-control"><option value="">{{ lang.select }}</option>{% endif %}
+                                          <option value="{{ option }}" {% if option == aDesc.1.url %}selected="true"{% endif %}>{{ option }}</option>
+                                    {% if loop.last %}</select>{% endif %}
+                                  {% endfor %}
+                              </div>
+                          </div>   
+                          <div id="editPage" class="editDiv form-group" {% if item.type != 'page' %}style="display: none;"{% endif %}>
+                              <label class="col-md-3 control-label">{{ lang.menu_url }}</label>
+                              <div class="col-md-4 form-inline">
+                                  {{ lang.menu_set_page }}<br />
+                                  {% for trans in aDesc %}
+                                      <img src="{{ constant('TPL_URL') }}/assets/global/img/flags/{{ trans.lang_code }}.png" alt="{{ trans.lang_name }}" title="{{ trans.lang_name }}" />
+                                      {% for option in option_pages[trans.lang_id] %}
+                                          {% if loop.first %}<select name="url_page[{{ trans.lang_id }}]" class="form-control"><option value="">{{ lang.select }}</option>{% endif %}
+                                              <option value="{{ option.title_url }}" {% if option.title_url == trans.url %}selected="true"{% endif %}>{{ option.title }}</option>
+                                          {% if loop.last %}</select>{% endif %}
+                                      {% endfor %}
+                                  {% endfor %}
+                              </div>
+                          </div>                     
+                          <div class="form-actions">
+                              <div class="row">
+                                  <div class="col-md-offset-3 col-md-9">
+                                      <input type="hidden" name="action" value="save" />
+                                      <input type="hidden" name="id" value="{{ item.id }}" />
+                                      <input type="hidden" name="parent_id" value="{{ item.parent_id }}" />
+                                      <input type="hidden" name="group" value="{{ group }}" /><br />
+                                      <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                                      <a href="?" class="btn default">{{ lang.btn_cancel }}</a>
+                                  </div>
+                              </div>
+                          </div>
+                     </form>
+                  </td>
+               </tr>
+            {% else %}
+               <tr id="row-{{ entity.id }}" class="{% if parameter("id") == entity.id %}active{% endif %}">
+                  <td>{{ loop.index }}</td>
+                  <td>{% if entity.parent_id == 0 %}<a href="?parent_id={{ entity.id }}&amp;group={{ group }}"><strong>{{ entity.name }}</strong></a>{% else %}{{ entity.name }}{% endif %}</td>
+                  <td>{{ entity.type }}</td>
+                  <td>{{ entity.url }}</td>
+                  <td class="date">{{ entity.order }}</td>
+                  <td class="text-center">
+                     {% if not loop.first %}
+                        <a href="?id={{ entity.id }}&amp;parent_id={{ entity.parent_id }}&amp;group={{ group }}&amp;action=up" title="{{ lang.move_up }}">
+                            <i class="fa fa-arrow-up"></i>
+                        </a>
+                     {% endif %}
+                  </td>
+                  <td class="text-center">
+                     {% if not loop.last %}
+                        <a href="?id={{ entity.id }}&amp;parent_id={{ entity.parent_id }}&amp;group={{ group }}&amp;action=down" title="{{ lang.move_down }}">
+                            <i class="fa fa-arrow-down"></i>
+                        </a>
+                     {% endif %}
+                  </td>
+                  <td class="text-center">
+                     <a href="?id={{ entity.id }}&amp;parent_id={{ entity.parent_id }}&amp;group={{ group }}&amp;action=edit" title="{{ lang.edit }}">
+                         <i class="fa fa-edit"></i>
+                     </a>
+                  </td>
+                  <td class="text-center">
+                      <a href="#" data-href="?id={{ entity.id }}&amp;parent_id={{ entity.parent_id }}&amp;group={{ group }}&amp;action=delete" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-remove"></i></a>                
+                  </td>
+               </tr>
+            {% endif %}
+            {% if loop.last %}</tbody></table>{% endif %}
+         {% endfor %}         
+        </div>
+    </div>
+</div>
+
+{% include 'admin/other/confirm.twig' %} 
+
+{% endblock %}

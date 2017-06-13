@@ -1,0 +1,66 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+{% if url_back %}
+    <a class="btn btn-default" href="{{ url_back }}"><i class="fa fa-arrow-left"></i> {{ lang.btn_back }}</a><br /><br /> 
+{% endif %}
+   
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="table-scrollable">
+        {% for entity in entities %}
+            {% if loop.first %}
+                <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+                <thead>
+                    <tr>
+                        <th>{{ lang.lp }}</th>
+                        <th>{{ lang.id }}</th>
+                        <th>{{ lang.name }}</th>
+                        <th>{{ lang.name_url }}</th>
+                        <th>{{ lang.order }}</th>
+                        <th class="text-center">{{ lang.active }}</th>
+                        <th class="text-center">{{ lang.options }}</th>                      
+                        <th class="text-center">{{ lang.settings }}</th>                      
+                    </tr>
+                </thead>              
+                <tbody>
+            {% endif %}             
+                    <tr>
+                        <td>{{ loop.index }}</td>
+			<td>{{ entity.id }}</td>
+                        <td>{{ entity.name }}</td>                
+                        <td>{{ entity.name_url }}</td>
+                        <td>{{ entity.order }}</td>
+                        <td class="text-center">
+                            {% if entity.active == 1 %}<i class="fa fa-check" alt="{{ lang.yes }}" title="{{ lang.yes }}"></i>{% else %}<i class="fa fa-ban" alt="{{ lang.no }}" title="{{ lang.no }}"></i>{% endif %}
+                        </td>
+                        <td class="text-center">
+                           {% if user.level == 1 %}
+                               <a href="{{ constant('CMS_URL') }}/admin/{{ module }}/edit/{{ entity.id }}.html" title="{{ lang.btn_edit }}"><i class="fa fa-edit"></i></a>
+                           {% endif %}
+                        </td>    
+                        
+                        <td class="text-center">
+                            {% if entity.name_url == 'paypal' %}
+                                <a href="{{ constant('CMS_URL') }}/admin/config/20.html" title="{{ lang.btn_edit }}"><i class="fa fa-edit"></i></a>
+                            {% elseif entity.name_url == 'banktransfer' %}
+                                <a href="{{ constant('CMS_URL') }}/admin/config/30.html" title="{{ lang.btn_edit }}"><i class="fa fa-edit"></i></a>
+                            {% endif %}
+                        </td>
+                    </tr>                 
+                    
+            {% if loop.last %}</tbody></table>{% endif %}
+        {% endfor %}       
+        </div>
+    </div>
+</div>
+{% endblock %}

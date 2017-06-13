@@ -1,0 +1,21 @@
+{% if pages > 1 %}
+<nav role="navigation" class="pagination-wrapper text-center">
+    <ul class="pagination">
+        {% for i in 1..pages %}                        
+            
+            {% if loop.first %}          
+                {% if page > 1 %}<li><a href="?page={{ page-1 }}{{ qs }}"><i class="mdi mdi-chevron-left"></i></a></li>{% endif %}
+                <li><input name="page" type="text" class="form-control" value="{{ page }}"></li>
+            {% endif %}
+            
+            {% if loop.last and page < pages %}
+                <li><a href="?page={{ page+1 }}{{ qs }}"><i class="mdi mdi-chevron-right"></i></a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <p class="summary-info">z {{ pages }}</p>
+    
+    <input type="hidden" name="sort" value="{{ qs }}">
+    <input type="hidden" name="pages" value="{{ pages }}">
+</nav>
+{% endif %}

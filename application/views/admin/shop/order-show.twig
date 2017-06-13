@@ -1,0 +1,292 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function hideDiv(id) {
+            $("div#" + id).hide();
+        }
+
+        function getOrderProduct(product_id, variation_id) {
+            var method = 'getOrderProduct';
+
+            $("#ajaxDiv .modal-content").slideDown("slow");
+
+            $.post(CMS_URL + "/admin/ajax/order.php", {method: method, product_id: product_id, variation_id: variation_id}, function (data) {
+                $("#ajaxDiv .modal-content").html(data);
+                $("#ajaxDiv").show();
+            });
+        }
+        
+        function getOrder(order_id) {
+            var method = 'getOrder';
+
+            $("#ajaxDiv .modal-content").slideDown("slow");
+
+            $.post(CMS_URL + "/admin/ajax/order.php", {method: method, order_id: order_id}, function (data) {
+                $("#ajaxDiv .modal-content").html(data);
+                $("#ajaxDiv").show();
+            });
+        }        
+    </script>
+    
+    <style>
+        .right {
+            text-align: right;
+        }    
+        #ajaxDiv .modal-content {
+            padding: 15px;
+        }
+        .productFotoId {
+            margin: 0 auto;
+        }
+    </style>    
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<a class="btn btn-default" href="?" title="{{ lang.btn_back }}"><i class="fa fa-arrow-left"></i> {{ lang.btn_back }}</a>
+<a class="btn btn-default" href="?action=details&id={{ entity.id }}" title="{{ lang.refresh }}"><i class="fa fa-refresh"></i> {{ lang.refresh }}</a>
+<br /><br />
+<div class="row">
+    <div class="col-md-3">
+        <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+            <tbody>
+                <tr><td>{{ lang.o_title }}</td><td>{{ entity.id }}</td></tr>
+                <tr><td>{{ lang.o_date }}</td><td>{{ entity.time_add }}</td></tr>
+                {% if entity.payment %}<tr><td>{{ lang.o_payment }}:</td><td>{{ entity.payment }}</td></tr>{% endif %}
+                <tr><td>{{ lang.o_delivery }}:</td><td>{{ entity.transport_name }}</td></tr>
+                <tr><td>{{ lang.o_status }}:</td><td style="color: {{ entity.status_color }};">{{ entity.status }}</td></tr>
+                <tr><td>{{ lang.weight }}:</td><td>{{ entity.weight }}g</td></tr>
+                <tr><td>{{ lang.order_sum }}:</td><td>{{ entity.price_val }}</td></tr>
+                <tr><td>{{ doc.transport2 }}:</td><td>{{ entity.transport_price }}</td></tr>
+                <tr><td>{{ lang.order_total }}:</td><td class="bold">{{ entity.total }}</td></tr>
+                <tr><td>{{ lang.currency }}:</td><td>{{ conf.currency }}</td></tr>
+            </tbody>
+        </table>       
+    </div>   
+    <div class="col-md-3">
+        <table id="example2" class="table table-striped table-bordered table-hover order-column dataTable no-footer">            
+            <tbody>           
+                <tr><td colspan="2" class="text-center">{{ lang.basket_shipping_address }}</td></tr>
+                {% if entity.shipping_company_name %}<tr><td>{{ lang.o_company_name }}:</td><td>{{ entity.shipping_company_name }}</td></tr>{% endif %}
+                {% if entity.shipping_nip %}<tr><td>{{ lang.o_nip }}:</td><td>{{ entity.shipping_nip }}</td></tr>{% endif %}
+                <tr><td>{{ lang.o_name }}:</td><td>{{ entity.shipping_first_name }} {{ entity.shipping_last_name }}</td></tr>
+                <tr><td>{{ lang.o_address1 }}:</td><td>{{ entity.shipping_address1 }}</td></tr>
+                {% if entity.shipping_address2 %}<tr><td>{{ lang.o_address2 }}:</td><td>{{ entity.shipping_address2 }}</td></tr>{% endif %}
+                {% if entity.shipping_address3 %}<tr><td>{{ lang.o_address3 }}:</td><td>{{ entity.shipping_address3 }}</td></tr>{% endif %}
+                <tr><td>{{ lang.o_post_code }}:</td><td>{{ entity.shipping_post_code }}</td></tr>
+                <tr><td>{{ lang.o_city }}:</td><td>{{ entity.shipping_city }}</td></tr>
+                <tr><td>{{ lang.o_country }}:</td><td>{{ entity.shipping_country_name }}</td></tr>
+                <tr><td>{{ lang.o_email }}:</td><td>{{ entity.email }}</td></tr>
+                <tr><td>{{ lang.o_phone }}:</td><td>{{ entity.shipping_phone }}</td></tr>                
+            </tbody>
+        </table>          
+    </div>
+            
+    {% if entity.first_name %}
+    <div class="col-md-3">
+        <table id="example3" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+            <tbody>         
+                <tr><td colspan="2" class="text-center">{{ lang.basket_billing_address }}</td></tr>
+                {% if entity.company_name %}<tr><td>{{ lang.o_company_name }}:</td><td>{{ entity.company_name }}</td></tr>{% endif %}
+                {% if entity.nip %}<tr><td>{{ lang.o_nip }}:</td><td>{{ entity.nip }}</td></tr>{% endif %}
+                <tr><td>{{ lang.o_name }}:</td><td>{{ entity.first_name }} {{ entity.last_name }}</td></tr>
+                <tr><td>{{ lang.o_address1 }}:</td><td>{{ entity.address1 }}</td></tr>
+                {% if entity.address2 %}<tr><td>{{ lang.o_address2 }}:</td><td>{{ entity.address2 }}</td></tr>{% endif %}
+                {% if entity.address3 %}<tr><td>{{ lang.o_address3 }}:</td><td>{{ entity.address3 }}</td></tr>{% endif %}
+                <tr><td>{{ lang.o_post_code }}:</td><td>{{ entity.post_code }}</td></tr>
+                <tr><td>{{ lang.o_city }}:</td><td>{{ entity.city }}</td></tr>
+                <tr><td>{{ lang.o_country }}:</td><td>{{ entity.country_name }}</td></tr>                
+                <tr><td>{{ lang.o_phone }}:</td><td>{{ entity.phone }}</td></tr>
+            </tbody>
+        </table>          
+    </div>
+    {% endif %}
+    
+    <div class="col-md-3">
+        <table id="example4" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+            <tbody>        
+                <tr><td>{{ lang.o_customer_id }}:</td>
+                <td>{% if entity.customer_id > 0 %}
+                    {{ entity.customer_id }}
+{#                    <a class="bold" href="javascript:void(0);" onclick="showOrderCustomer('{{ entity.customer_cid}');" title="{{ entity.customer_id}">{{ entity.customer_id}</a> &nbsp;&nbsp;#}
+                    <a class="bold" href="{{ constant("CMS_URL") }}/admin/customer.html?action=edit&id={{ entity.customer_id }}" title="{{ lang.customers_edit }}" target="_blank">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                    {% endif %}</td></tr>                
+                <tr><td>{{ lang.o_lang }}:</td><td>{% if entity.lang_id == 1 %}{{ lang.en }}{% else %}{{ lang.pl }}{% endif %}</td></tr>
+                {% if entity.time_payment != '0000-00-00 00:00:00' %}<tr><td>{{ lang.o_time_payment }}:</td><td>{{ entity.time_payment }}</td></tr>{% endif %}
+                {% if entity.time_complete != '0000-00-00 00:00:00' %}<tr><td>{{ lang.o_time_realization }}:</td><td class="red">{{ entity.time_complete }}</td></tr>{% endif %}
+                {% if entity.fraza %}<tr><td>{{ lang.o_phrase }}:</td><td class="red">{{ entity.fraza }}</td></tr>{% endif %}
+                {% if entity.discount %}<tr><td>{{ lang.order_discount }}:</td><td class="red">{{ entity.discount }}%</td></tr>{% endif %}  
+                <tr><td>Tracking:</td><td class="red">{{ entity.tracking }}</td></tr> 
+            </tbody>
+        </table>          
+    </div>
+</div>
+
+<a href="javascript:void(0);" class="btn green" onclick="getOrder('{{ entity.id }}');">{{ lang.btn_edit }}</a>
+
+{% for product in entity.products %}
+    {% if loop.first %}            
+    <table id="example5" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+        <tr class="tableListHeader">
+            <td>{{ lang.lp }}</td>
+            <td>{{ lang.p_name }}</td>
+            <td>{{ lang.feature }}</td>
+            <td>SKU</td>
+            <td width="100">{{ lang.p_net }}</td>
+            <td width="100">{{ lang.p_vat }} [%]</td>
+            <td width="100">{{ lang.p_gross }}</td>                  
+            <td width="120">{{ lang.p_amount }}</td>
+            <td width="100">{{ lang.p_sum }}</td>
+        </tr>
+    {% endif %}
+
+    <tr>
+        <td>{{ loop.index }}.</td>
+        <td>
+            {% if product.product_id > 0 %}
+                <a class="bold" href="javascript:void(0);" onclick="getOrderProduct('{{ product.product_id }}', '{{ product.variation_id }}');" title="{{ product.name }}">{{ product.name }}</a>
+            {% else %}
+                {{ product.name }}                     
+            {% endif %}
+        </td>
+        <td>{{ product.desc }}</td>
+        <td>{{ product.sku }}</td>
+        <td class="right">{{ product.price }}</td>
+        <td class="right">{{ product.tax_val }}</td>
+        <td class="right">{{ product.price_gross }}</td>               
+        <td class="right">{{ product.qty }}</td>
+        <td class="right bold">{{ product.sum }}</td>
+    </tr>
+
+    {% if loop.last %}
+    </table>
+    {% endif %}
+{% endfor %}
+
+{% if entity.comment %}
+    <div style="width:1000px;">
+        <span class="red">{{ doc.comments }}:</span><br />
+        <i>{{ entity.comment }}</i>
+    </div>
+{% endif %}
+
+{% if entity.comment_admin %}
+    <br />
+    <div style="width:1000px;">
+        <span class="red">{{ doc.comments2 }}:</span><br />
+        <i>{{ entity.comment_admin }}</i>
+    </div>
+{% endif %}
+
+<div>
+    <br /><hr /><br />
+    <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+{#        <h4>{{ doc.notice }}</h4>#}
+        <div class="form-group">
+            <label class="col-md-3 control-label"></label>
+            <div class="col-md-4">
+                <input type="checkbox" name="email" checked="checked" value="1">{{ lang.o_confirm_email }}
+            </div>                     
+        </div>                
+        <div class="form-group">
+            <label class="col-md-3 control-label">Status</label>
+            <div class="col-md-4">
+                {% for status in orderStatuses %}
+                    {% if loop.first %}
+                        <select name="status_id" class="form-control">
+                    {% endif %}
+                    <option value="{{ status.id }}" {% if status.id == entity.status_id %}selected="true"{% endif %} style="color: {{ status.color }};">{{ status.name }}</option>
+                    {% if loop.last %}</select>{% endif %}
+                {% endfor %}                        
+            </div>                     
+        </div> 
+        <div class="form-group">
+            <label class="col-md-3 control-label">{{ lang.admin_comment }}</label>
+            <div class="col-md-4">
+                <textarea name="comment_admin" class="form-control"></textarea>
+            </div>
+        </div>  
+
+        <input type="hidden" name="id" value="{{ entity.id }}" />
+        <input type="hidden" name="action" value="edit" />
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-md-offset-3 col-md-9">
+                    <button class="btn green" type="submit">{{ lang.btn_send }}</button>
+                </div>
+            </div>
+        </div>                
+    </form>
+</div>
+                                   
+{% if user.level in ['1','2'] %}
+    <h4>{{ lang.order_logs }}</h4>
+    <div class="table-scrollable">
+    {% for orderLog in orderLogs %}
+        {% if loop.first %}
+            <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+            <thead>
+                <tr>
+                    <th>{{ lang.lp }}</th>
+                    <th>{{ lang.action }}</th>
+                    <th>{{ lang.before }}</th>
+                    <th>{{ lang.after }}</th>
+                    <th>{{ lang.params }}</th>                             
+                    <th>{{ lang.date }}</th>                   
+                </tr>
+            </thead>              
+            <tbody>
+        {% endif %}                       
+                <tr >
+                    <td>{{ loop.index }}</td>
+                    <td>{{ attribute(lang, orderLog.action) }} 
+                    {% if orderLog.action == constant('Application\\Entity\\OrderLog::ACTION_ORDER_PAYMENT') %}
+                        {{ orderLog.params['payment_type'] }}
+                    {% endif %}
+                    </td>
+                    {% set before = '' %}
+                    {% set after = '' %}
+                    
+                    {% if orderLog.action == constant('Application\\Entity\\OrderLog::ACTION_ORDER_MANUAL_STATUS_CHANGE') 
+                    or orderLog.action == constant('Application\\Entity\\OrderLog::ACTION_ORDER_UPDATE_STATUS_BY_GA') 
+                    or orderLog.action == constant('Application\\Entity\\OrderLog::ACTION_ORDER_UPDATE_TRACKING_BY_GA')
+                    or orderLog.action == constant('Application\\Entity\\OrderLog::ACTION_ORDER_PAYMENT') %}
+                        {% set before = orderStatuses[orderLog.params['before']]['name'] %}
+                        {% set after = orderStatuses[orderLog.params['after']]['name'] %}
+                    
+                    {% elseif orderLog.action == constant('Application\\Entity\\OrderLog::ACTION_ORDER_CHOSEN_PAYMENT') %}
+                        {% set after = payments[orderLog.params['payment_id']]['name'] %}
+                    {% elseif orderLog.params['attribute'] == 'delivery_service' %}
+                        {% set before = orderLog.getTransport(orderLog.params['before'])['service_name'] ~ ' (' ~ orderLog.getTransport(orderLog.params['before'])['delivery_time'] ~ ')' %}
+                        {% set after = orderLog.getTransport(orderLog.params['after'])['service_name']  ~ ' (' ~ orderLog.getTransport(orderLog.params['after'])['delivery_time'] ~ ')' %} 
+                    {% else %}
+                        {% set before = orderLog.params['before'] %}
+                        {% set after = orderLog.params['after'] %}                        
+                    {% endif %}
+
+                    <td>{{ before }}</td>
+                    <td>{{ after }}</td>    
+                    <td>{{ orderLog.params|json_encode() }}</td>    
+                    <td>{{ orderLog.date is empty ? "" : orderLog.date|date('Y-m-d H:i') }}</td>
+                </tr>
+        {% if loop.last %}</tbody></table>{% endif %}
+    </div>    
+    {% else %}
+        Lack of Logs
+    {% endfor %}
+{% endif %}
+                    
+<div aria-hidden="true" aria-labelledby="myModalLabel3" role="dialog" tabindex="-1" class="modal" id="ajaxDiv" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+{% endblock %}

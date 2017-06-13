@@ -1,0 +1,8 @@
+{% for service in deliveryService %}
+    <div class="radio">
+      <label>
+        <input type="radio" name="delivery_service" id="delivery_service{{ service.option_id }}" value="{{ service.option_id }}" {% if entity.transport_option_id == service.option_id %}checked{% endif %}>
+        {{ service.service_name }} ({{ service.delivery_time }}) - {{ conf.currency_left }}{% if not deliveryPrice %}{{ deliveryPrice|number_format(2,'.') }}{% else %}{{ service.price_gross }}{% endif %}{{ conf.currency_right }}
+      </label>
+    </div>
+{% endfor %}

@@ -1,0 +1,65 @@
+{% extends "templates/base.twig" %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block content %}
+    <div class="row profile-page">
+
+        <div class="col-xs-12">
+            {% include 'templates/customer/top.twig' %}
+            {% for entity in entities %}
+                {% if loop.first %}
+                    <div class="table-responsive">
+                        <table class="table table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Lp.</th>
+                                    <th>{{ lang.order_number }}</th>
+                                    <th>{{ lang.order_date }}</th>
+                                    <th>{{ lang.order_sum }}</th>
+                                    <th>{{ lang.order_payment }}</th>
+                                    <th>{{ lang.order_transport }}</th>
+                                    <th>{{ lang.order_status }}</th>
+                                    <th>{{ lang.order_options }}</th>                                    
+                                </tr>
+                            </thead>   
+                            <tbody>
+                {% endif %}
+                
+                <tr>
+                    <td>{{ loop.index }}.</td>
+                    <td>{{ entity.id }}</td>
+                    <td>{{ entity.time_add|date("Y-m-d") }} <small>{{ entity.time_add|date("H:i:s") }}</small></td>
+                    <td class="text-danger">{{ conf.currency_left }}{{ entity.total }}{{ conf.currency_right }}</td>
+                    <td>{{ entity.payment }}</td>
+                    <td>{{ entity.transport_name }} - {{ conf.currency_left }}{{ entity.transport_price }}{{ conf.currency_right }}</td>
+                    {% if entity.status_id == 1 %}
+                        {% set order_label = '' %}
+                        {% elseif entity.status_id ==2 %}
+                    {% endif %}
+                    <td><span class="label" style="background-color:{{ entity.status_color }}">{{ entity.status }}</span></td>
+                    <td>
+                        <a href="{{ constant("URL") }}/{{ lang.module_customer }}/{{ lang.module_order }}/{{ entity.uid }}" class="btn" data-toggle="tooltip" data-placement="top" title="{{ lang.order_details }}"><i class="mdi mdi-magnify"></i></a>
+                        <button class="btn" data-toggle="tooltip" data-placement="top" title="{{ lang.order_print }}"
+                           onclick="window.open('{{ constant("URL") }}/{{ lang.module_customer }}/{{ lang.module_order }}/{{ entity.uid }}?print=1', '{{ entity.id }}', 'width=1000,height=1000,scrollbars=yes');">
+                            <i class="mdi mdi-printer"></i>
+                        </button>                      
+                    </td>
+                </tr>                
+                
+                {% if loop.last %}</tbody></table>{% endif %}
+                
+             {% else %}
+             <div class="center red info">{{ lang.lack_of_orders }}</div>                    
+            {% endfor %}
+            </div>
+            
+            {% include 'templates/customer/bottom.twig' %}
+        </div>    
+    
+    </div>
+    
+    
+{% endblock %}

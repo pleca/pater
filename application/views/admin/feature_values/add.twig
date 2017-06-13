@@ -1,0 +1,77 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <ul class="nav nav-tabs">  
+            {% for row in static('Cms','langs') %}
+            <li {% if row.code == constant('LOCALE') %}class="active"{% endif %}>
+                <a href="#tab_{{ row.code }}" data-toggle="tab" aria-expanded="true"> {{ attribute(lang, row.code) }} 
+                <img src="{{ constant('TPL_URL') }}/assets/global/img/flags/{{ row.code }}.png" alt="{{ row.name }}" title="{{ row.name }}" />
+                </a>                
+            </li>
+            {% endfor %}
+        </ul>        
+                
+        <form id="form" method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}" enctype="multipart/form-data">
+            <div class="tab-content">                            
+                {% for row in static('Cms','langs') %}                                          
+                    <div class="tab-pane fade {% if row.code == constant('LOCALE') %}active in{% endif %}" id="tab_{{ row.code }}">                
+                            <div class="form-body">  
+                            {% for tran in attribute(entities, row.code) if tran.name == parameter('name') %}
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ lang.name }}</label>
+                                    <div class="col-md-4">
+                                        <input name="{{ row.code }}[name]" type="text" class="form-control" value="{{ tran.name }}">
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="form-group">
+                                   <label class="col-md-3 control-label">{{ lang.name }}</label>
+                                   <div class="col-md-4">
+                                       <input name="{{ row.code }}[name]" type="text" class="form-control" value="">
+                                   </div>
+                                </div>                     
+                            {% endfor %}                                                                                                     
+                        </div>             
+                    </div>                                                                  
+                {% endfor%}
+                
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.feature }}</label>
+                    <div class="col-md-2">
+                    {% for row in features %}
+                        {% if loop.first %}
+                            <select name="feature_id" class="form-control">
+                                <option value="0">{{ lang.select }}</option>
+                        {% endif %}
+                            <option value="{{ row.id }}"> {{ row.name }}</option>
+                        {% if loop.last %}</select>{% endif %}           
+                    {% endfor %}                    
+                    </div>
+                </div>                
+            </div>
+    
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" name="action" value="add" />
+                        <button class="btn green" type="submit">{{ lang.btn_add }}</button>
+                        <a href="?" class="btn default">{{ lang.btn_cancel }}</a>
+                    </div>
+                </div>
+            </div>            
+    </form>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,553 @@
+{% extends "templates/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        var hasThreshold = '{{ shoppingThresholdInfo.hasThreshold }}';
+        $(document).ready(function () {
+            
+            if (hasThreshold) { 
+                $("#tooltip1").show();
+                drawTooltip();
+            } else {
+                $("#tooltip1").hide();
+            }
+
+            $(window).resize(function() {
+                drawTooltip();
+            });        
+
+            if ( $(".checkout-side-desktop").is(':visible') ){ 
+                moveTo( $(".checkout-side-desktop") , $(".checkout-side-mobile") );
+            }
+            else{
+                moveTo( $(".checkout-side-mobile") , $(".checkout-side-desktop") );
+            }
+        
+            $(window).on('resize', function(){
+                if ( $(".checkout-side-desktop").is(':visible') ){ 
+                    moveTo( $(".checkout-side-desktop") , $(".checkout-side-mobile") );
+                }
+                else{
+                    moveTo( $(".checkout-side-mobile") , $(".checkout-side-desktop") );
+                }
+            });
+            
+            $("#delivery_country").change(function () {
+                var id = $(this).val();
+                var method = 'getDeliveryServices';
+
+                $.post(CMS_URL + "/ajax/basket.php", {method: method, id: id})
+                        .done(function (data) {
+                            $("#delivery-service").html(data);
+                            getCost();                            
+                            getSummary();
+                            getDiscount();
+                        });
+
+                var option = $('#shipping-country option[data-id="' + id + '"]');
+                $("#shipping-country").children().removeAttr("selected");
+                option.prop("selected", "selected");
+            }).change();
+
+
+           $(document).on('click','.qty',function(event) {
+                event.preventDefault();
+
+                var tr = $(this).closest("tr");
+                var qty_input = $(this).parent().siblings('input');
+                var qty = parseInt(qty_input.val());
+                var action = $(this).attr('data-action');
+
+                var id = tr.attr('data-basket-id');
+                var method = 'getAvailableQty';
+
+                $.post(CMS_URL + "/ajax/basket.php", {method: method, id: id}, function (data) {
+                    var availableQty = parseInt(data);
+
+                    switch (action) {
+                        case 'add':
+                            qty = qty + 1;
+                            break;
+                        case 'remove':
+                            qty = qty - 1;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (qty < 1) {
+                        qty = 1;
+                    }
+                    
+                    var diff = availableQty - qty;
+
+                    if (diff >= 0) {
+                        qty_input.val(qty);
+
+                    } else if (qty_input.val() && isNaN(qty)) { //not empty
+                        qty_input.val(1);
+
+                    } else if (qty_input.val()) {
+                        qty_input.val(availableQty);
+                    }    
+                    
+                    var method = 'changeQty';                
+                    $.post(CMS_URL + "/ajax/basket.php", {method: method, id: id, qty: qty_input.val()}, function (data) {
+                        $("#delivery_country").change();
+                        getDiscount();
+                    });
+
+                    var method = 'drawTable';                    
+                    var tableName = 'threshold';
+                    
+                    $.post(CMS_URL + "/ajax/basket.php", {method: method, tableName: tableName}, function (data) {
+                        $("#basket-table-threshold").html(data);
+                    });
+                }); 
+
+            });
+
+            $('input[name="type"]').click(function (event) {
+                var customer_type = $(this).attr('id');
+
+                switch (customer_type) {
+                    case 'individual':
+                        $('.company-data').hide();
+                        break;
+                    case 'company':
+                        $('.company-data').show();
+                        break;
+                }
+            });
+
+            if ($('#company').is(":checked")) {
+                $('.company-data').show();                   
+            }
+
+            if ($('#shipping_company').is(":checked")) {
+                $('.shipping-company-data').show();
+            }
+
+            $('input[name="shipping_type"]').click(function (event) {
+                var customer_type = $(this).attr('id');
+
+                switch (customer_type) {
+                    case 'shipping_individual':
+                        $('.shipping-company-data').hide();
+                        break;
+                    case 'shipping_company':
+                        $('.shipping-company-data').show();
+                        break;
+                }
+            });
+
+            $('#create-account').click(function (event) {
+                if ($(this).is(":checked")) {
+                    $('.account-fields').show();
+                } else {
+                    $('.account-fields').hide();
+                }
+            });
+
+            if ($('#other-shipping').is(":checked")) {
+                $('.shipping-data').show();
+            }
+
+            $('#other-shipping').click(function (event) {
+                if ($(this).is(":checked")) {
+                    $('.shipping-data').show();
+                } else {
+                    $('.shipping-data').hide();
+                }
+            });
+
+            $(document).on('click','.basket-item-action .delete',function(event) {
+                event.preventDefault();
+
+                var tr = $(this).parent().parent();
+                var method = 'deleteProduct';
+                var id = tr.attr('data-basket-id');
+
+                $.post(CMS_URL + "/ajax/basket.php", {method: method, id: id}, function (data) {
+                    $("#delivery_country").change();
+                });
+
+                tr.remove();
+                getSummary();
+                getMiniBasketList();
+                getDiscount();
+
+                var method = 'drawTable';
+                var tableName = 'threshold';
+                
+                $.post(CMS_URL + "/ajax/basket.php", {method: method, tableName: tableName}, function (data) {
+                    $("#basket-table-threshold").html(data);
+                });            
+            });
+
+            $(document).on("click", 'input[name="delivery_service"]', function () {
+                getCost();
+                getDiscount();
+            });
+
+            $('.procced-confirmation-button').click(function (event) {
+                event.preventDefault();
+                $("input[name=action]").val('order');
+                $('#basket-form').submit();    
+            });
+
+            $(document).on("click", '.procced-confirmation-button', function (event) {
+                event.preventDefault();
+                $("input[name=action]").val('order');
+                $('#basket-form').submit();
+            });        
+
+            $('.procced-promotion-code').click(function (event) {
+                event.preventDefault();
+                $("input[name=action]").val('list');
+                $("input[name=used_promotion_code]").val(1);
+                $('#basket-form').submit();
+            });
+
+            function drawTooltip() {
+                var tooltip1 = $('#tooltip1');
+                var thTooltip = tooltip1.parent();            
+                var offset = thTooltip.offset();
+
+                tooltip1.offset({ top: offset.top - 50, left: offset.left - 50});    
+            }
+            
+            $("input[name=payment]").change(function () {
+                getCost();
+            });            
+
+            $(document).on('click','.product_qty',function(){ this.select(); });
+            
+            $(document).on('keyup', '.product_qty', function () {
+                //check availability if correct change
+                var tr = $(this).closest("tr");
+
+                var method = 'getAvailableQty';
+                var id = tr.attr('data-basket-id');
+
+                var qty = parseInt($(this).val());
+                var qty_input = $(this);
+                
+                $.post(CMS_URL + "/ajax/basket.php", {method: method, id: id}, function (data) {
+                    var availableQty = parseInt(data);
+                    var diff = availableQty - qty;
+  
+                    if (diff >= 0) {
+                        qty_input.val(qty);
+                        
+                    } else if (qty_input.val() && isNaN(qty)) { //not empty
+                        qty_input.val(1);
+
+                    } else if (qty_input.val()) {
+                        qty_input.val(availableQty);
+                    }                    
+                });                
+                                
+                var method = 'changeQty';                
+                $.post(CMS_URL + "/ajax/basket.php", {method: method, id: id, qty: qty_input.val()}, function (data) {
+                    $("#delivery_country").change();
+                    getDiscount();
+                });
+
+                getMiniBasketList();   
+                
+                var method = 'drawTable';
+                var tableName = 'threshold';
+                
+                setTimeout(function(){
+                    $.post(CMS_URL + "/ajax/basket.php", {method: method, tableName: tableName}, function (data) {
+                        $("#basket-table-threshold").html(data);
+                    });
+                }, 1000);
+            
+            });
+        });       
+    </script>
+{% endblock %}
+
+{% block content %}
+<div class="row basket">
+    <div class="col-xs-12">
+
+        <h1>{{ lang.shopping_cart }}
+            <a href="{{ constant("URL") }}" class="pull-right btn btn-info">{{ lang.continue_shopping }}</a>
+        </h1>
+        <p>{{ lang.check_shopping_cart }}</p>
+
+        {% include 'templates/other/notify-all.twig' %}
+        
+        <form id="basket-form" method="post" action="{{ server('PHP_SELF') }}">            
+            <div class="row">
+                <div class="col-md-8 col-xs-12">                    
+                    <div class="table-responsive">
+                        <table id="basket-table-threshold" class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>{{ lang.photo }}</th>
+                                    <th>{{ lang.name }}</th>
+                                    <th class="text-center">{{ lang.old_price }}</th>
+                                    <th class="text-center">                        
+                                        <div role="tooltip" class="tooltip fade top in" id="tooltip1" style="display: none;">
+                                            <div class="tooltip-arrow" style="left: 50%;"></div>
+                                            <div class="tooltip-inner">{{ pageTooltipYourPrice|raw }}</div>                                
+                                        </div>    
+                                        {{ lang.your_price }}
+                                    </th>                        
+                                    <th>{{ lang.quantity }}</th>
+                                    <th>{{ lang.total }}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% set first_mega_offer = 1 %}
+                                {% for entity in basket %}
+                                    {% if entity.mega_offer and first_mega_offer %}
+                                        <tr class="mega-offer-header">
+                                            <td colspan="2"><span class="mega-offer-label">{{ lang.mega_offer }}</span></td>
+                                            <td><span class="mega-price">{{ lang.mega_price }}</span></td>
+                                            <td colspan="4"><span class="mega-price">{{ lang.mega_price }}</span></td>
+                                        </tr>
+                                        {% set first_mega_offer = 0 %}
+                                    {% endif %}
+
+                                    <tr data-basket-id='{{ entity.id }}'>
+                                        <td class="basket-item-photo">
+                                            <img src="{% if entity.image %}{{ entity.image }}{% else %}{{ constant("CMS_URL") }}/files/no-picture.png{% endif %}">
+                                        </td>
+                                        <td class="basket-item-name">
+                                            <a href="{{ entity.url }}">{{ entity.name }}</a>
+                                            {% set features = entity.desc|split(',') %}
+
+                                            {% for feature in features %}
+                                                <span>{{ feature }}</span>
+                                            {% endfor %}
+                                        </td>                              
+                                        <td>{{ entity.price_gross }}</td>
+                                        <td class="text-center {% if entity.price_gross != entity.price_after_discount %}red{% endif %}" style="width:10%;">{{ entity.price_after_discount }}</td> 
+                                        <td class="basket-item-quatity">
+                                            <div class="input-group">
+                                                <div class="input-group-btn">
+                                                      <button class="btn qty" data-action='remove'><i class="mdi mdi-minus-circle-outline"></i></button>
+                                                </div>
+                                                <input name='product_qty' class="form-control product_qty" type="text" class="form-control" value="{{ entity.qty }}" data-available='{{ entity.available }}'>
+                                                <div class="input-group-btn">
+                                                      <button class="btn qty" data-action="add"><i class="mdi mdi-plus-circle-outline"></i></button>
+                                                  </div>
+                                            </div>
+                                        </td>
+                                        <td class='product-total'>{{ entity.sum }}</td>
+                                        <td class="basket-item-action">
+                                            <button class="btn delete" data-toggle="tooltip" data-placement="left" title="{{ lang.basket_delete }}"><i class="mdi mdi-close"></i></button>
+                                        </td>
+                                    </tr>                                
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="checkout-side-mobile visible-sm visible-xs"></div>
+
+                    <div class="basket-side">
+                        <h2>4. {{ lang.basket_remarks }}</h2>
+                        <div class="form-group">
+                            <textarea class="form-control" name="comment">{% if parameter("comment", 'post') %}{{ parameter("comment", 'post') }}{% endif %}</textarea>
+                        </div>
+
+                        <h2>5. {{ lang.basket_shipping_address }}</h2>
+                        <div class="form-group">                            
+                            <div class="form-helper">
+                                <label class="radio-inline">
+                                  <input type="radio" name="shipping_type" id="shipping_individual" value="1" {% if addressBilling.shipping_type == 1 or not addressBilling %}checked{% endif %}> {{ lang.c_individual }}
+                                </label>
+                                <label class="radio-inline">
+                                  <input type="radio" name="shipping_type" id="shipping_company" value="2" {% if addressBilling.shipping_type == 2 %}checked{% endif %}> {{ lang.c_company }}
+                                </label>
+                                
+                                <div class="required-field pull-right">
+                                    <label></label><small>{{ lang.c_star }}</small>
+                                </div>                                
+                            </div>
+
+                            <div class="row row-extratiny payer-form">
+                                <div class="shipping-company-data" style="display:none;">
+                                    <div class="col-sm-6 required">
+                                        <input type="text" name="shipping_company_name" class="form-control" value="{{ addressBilling.shipping_company_name }}" placeholder="{{ lang.c_company }}">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="shipping_nip" class="form-control" value="{{ addressBilling.shipping_nip }}" placeholder="{{ lang.c_vat_id }}">
+                                    </div>                                    
+                                </div>
+                                <div class="col-sm-6 required">
+                                    <input type="text" name="shipping_first_name" class="form-control" placeholder="{{ lang.c_first_name }}" value="{{ addressBilling.shipping_first_name }}">
+                                </div>                                    
+                                <div class="col-sm-6 required">
+                                    <input type="text" name="shipping_last_name" class="form-control" placeholder="{{ lang.c_last_name }}" value="{{ addressBilling.shipping_last_name }}">
+                                </div>                    
+                                <div class="col-sm-6 required">
+                                    <input type="email" name="email" class="form-control" value="{{ addressBilling.email }}" placeholder="{{ lang.c_email }}">
+                                </div>                                
+                                <div class="col-sm-6 required">
+                                    <input type="text" name="shipping_phone" class="form-control" value="{{ addressBilling.shipping_phone }}" placeholder="{{ lang.c_phone }}">
+                                </div>                                    
+                                <div class="col-sm-6">
+                                    <select id="shipping-country" class="form-control" name="shipping_country" disabled>
+                                    {% for row in country %}
+                                        <option data-id="{{ row.id }}" value="{{ row.id }}" {% if addressBilling.shipping_country == row.id %}selected{% endif %}>{{ row.name }}</option>                                  
+                                    {% endfor %}  
+                                    </select>
+                                </div>                                    
+                                <div class="col-sm-6 required">
+                                    <input type="text" class="form-control" name="shipping_address1" placeholder="{{ lang.c_address1 }}" value="{{ addressBilling.shipping_address1 }}">
+                                </div>                                        
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="shipping_address2" placeholder="{{ lang.c_address2 }}" value="{{ addressBilling.shipping_address2 }}">
+                                </div>                                        
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="shipping_address3" placeholder="{{ lang.c_address3 }}" value="{{ addressBilling.shipping_address3 }}">
+                                </div>       
+                                <div class="col-sm-2 required">
+                                    <input class="form-control post-code" name="shipping_post_code" type="text" value="{{ addressBilling.shipping_post_code }}" placeholder="{{ lang.c_postcode }}">
+                                </div>                                        
+                                <div class="col-sm-4 required">
+                                    <input class="form-control town-city" name="shipping_city" type="text" value="{{ addressBilling.shipping_city }}" placeholder="{{ lang.c_city }}">
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="checkbox pull-right">
+                                        <label>
+                                            <input type="checkbox" name="other_shipping" id="other-shipping" value="1" {% if addressBilling.other_shipping == 1 %}checked{% endif %}> {{ lang.use_diffrent_address_for_billing }}?
+                                        </label>
+                                    </div>
+                                </div>                                
+                            </div>
+                                        
+                                        
+                            <div class="row row-extratiny billing-address" style="display:none;"">
+                                <h2 class="billing-address-title">6. {{ lang.basket_billing_address }}</h2>
+
+                                <div class="form-helper">
+                                    <label class="radio-inline">
+                                      <input type="radio" id="individual" name="type" value="1" {% if addressBilling.type == 1 or not addressBilling %}checked{% endif %}> {{ lang.c_individual }}
+                                    </label>
+                                    <label class="radio-inline">
+                                      <input type="radio" name="type" id="company" value="2" {% if addressBilling.type == 2 %}checked{% endif %}> {{ lang.c_company }}
+                                    </label>
+
+                                    <div class="required-field pull-right">
+                                        <label></label><small>{{ lang.c_star }}</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="company-data" style="display:none;">
+                                    <div class="col-sm-6 required">
+                                        <input type="text" name="company_name" class="form-control" value="{{ addressBilling.company_name }}" placeholder="{{ lang.c_company }}">
+                                    </div>                                    
+                                    <div class="col-sm-6">
+                                        <input type="text" name="nip" class="form-control" value="{{ addressBilling.nip }}" placeholder="{{ lang.c_vat_id }}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 required">
+                                    <input type="text" name="first_name" class="form-control" placeholder="{{ lang.c_first_name }}" value="{{ addressBilling.first_name }}">
+                                </div>                                    
+                                <div class="col-sm-6 required">
+                                    <input type="text" name="last_name" class="form-control" placeholder="{{ lang.c_last_name }}" value="{{ addressBilling.last_name }}">
+                                </div>                                                                     
+                                <div class="col-sm-6 required">
+                                    <input type="text" name="phone" class="form-control" value="{{ addressBilling.phone }}" placeholder="{{ lang.c_phone }}">
+                                </div>   
+                                <div class="col-sm-6">
+                                    <select id="country" class="form-control" name="country">
+                                    {% for row in country %}
+                                        <option data-id="{{ row.id }}" value="{{ row.id }}" {% if addressBilling.country == row.id %}selected{% endif %}>{{ row.name }}</option>                                  
+                                    {% endfor %}  
+                                    </select>
+                                </div>
+                                <div class="col-sm-6 required">
+                                    <input type="text" class="form-control" name="address1" placeholder="{{ lang.c_address1 }}" value="{{ addressBilling.address1 }}">
+                                </div>                                        
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="address2" placeholder="{{ lang.c_address2 }}" value="{{ addressBilling.address2 }}">
+                                </div>                                        
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="address3" placeholder="{{ lang.c_address3 }}" value="{{ addressBilling.address3 }}">
+                                </div>                                        
+                                <div class="col-sm-2 required">
+                                    <input class="form-control post-code" name="post_code" type="text" value="{{ addressBilling.post_code }}" placeholder="{{ lang.c_postcode }}">
+                                </div>                                        
+                                <div class="col-sm-4 required">
+                                    <input class="form-control town-city" name="city" type="text" value="{{ addressBilling.city }}" placeholder="{{ lang.c_city }}">
+                                </div>                                      
+                            </div>                                                                                                                        
+                        </div>
+                    </div>                            
+                </div>
+                <div class="col-md-4 col-xs-12">
+                    <div class="checkout-side-desktop hidden-sm hidden-xs">
+                        <div class="checkout-side">
+                            <h2>1. {{ lang.delivery_country }}</h2>
+                            <div class="form-group">
+                                <select class="form-control" id="delivery_country" name="delivery_country">
+                                    {% for country in deliveryCountry %}
+                                        <option value="{{ country.id }}" {% if country.default == 1 %}selected{% endif %}>{{ country.name }}</option>                                  
+                                    {% endfor %}
+                                </select>
+
+                                <div id="delivery-service">
+                                    {% include 'templates/basket/delivery-services.twig' %}
+                                </div>                  
+                            </div>
+
+                            <h2>2. {{ lang.order_payment }}</h2>
+                            <div class="form-group">
+                                {% for row in payment %}
+                                    <div class="radio">
+                                      <label>
+                                        <input type="radio" name="payment" id="payment{{ row.id }}" value="{{ row.id }}" {% if row.default == 1 %}checked{% endif %}>
+                                        {% if row.id == 1 %}
+                                            {% set className = 'fa fa-cc-paypal' %}
+                                        {% elseif row.id == 2 %}
+                                            {% set className = 'fa fa-credit-card' %}
+                                        {% else%}
+                                            {% set className = 'fa fa-money' %}
+                                        {% endif %}
+                                        <i class="{{ className }}" aria-hidden="true"></i> {{ row.name }}
+                                      </label>
+                                    </div>                                
+                                {% endfor %}                            
+                            </div>
+
+                            <h2>3. {{ lang.cost }}</h2>
+                            <div class="checkout-cost-info">
+                                {% include 'templates/basket/cost.twig' %}                            
+
+                                <div class="input-group">
+                                  <input type="text" class="form-control" placeholder="{{ lang.order_code }}" name="promotion_code" value="{% if session[constant("CUSTOMER_CODE")]['promotion_code'] %}{{ session[constant("CUSTOMER_CODE")]['promotion_code'] }}{% endif %}">
+                                  <input type="hidden" name="used_promotion_code" value="0" />
+                                  <span class="input-group-btn">
+                                    <button class="btn btn-info procced-promotion-code" type="button">{{ lang.order_code2 }}</button>
+                                  </span>
+                                </div>
+
+                                <div id="discount">
+                                    {% include 'templates/basket/discount.twig' %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary procced-confirmation-button"><i class="mdi mdi-thumb-up"></i> {{ lang.proceed_with_confirmation }}</button>
+                    <!-- musiałem rozbić na kilka formularzy a tego submita dać osobno, więc JSem musisz pod niego podpiąć serializację wszystkich formularzy  -->
+
+                    {% include 'templates/basket/login.twig' %}
+                </div>
+            </div>
+            <input type="hidden" name="action" value="" />
+        </form>    
+    </div>
+</div>    
+{% endblock %}

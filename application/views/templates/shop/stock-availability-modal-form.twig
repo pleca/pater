@@ -1,0 +1,39 @@
+<style>
+    .btn-close {
+        padding: 0 1.5rem;
+    }
+</style>
+
+<div id="subscription-confirm" class="modal hide fade in" aria-hidden="true">
+    <div class="modal-header">
+        <label id="responsestatus2"></label>
+    </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="stock-availability-form" role="dialog" tabindex="-1" class="modal fade" id="stock-availability-form" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{{ lang.stock_availability_inform }}</h4>                
+            </div>
+            
+            <form id="stock-available-form" action="/notifications/subscribe/" method="post">
+            <div class="modal-body">
+                <p id="responsestatus"></p>
+                <p> {{ lang.confirm }} </p>  
+                <div class="form-group">
+                    <label class="form-control-label">Email: </label>
+                    <input type="email" value="" name="email" class="form-control" required>
+                </div>                                   
+            </div>
+            <div class="modal-footer">
+                <button aria-hidden="true" data-dismiss="modal" class="btn btn-close"> {{ lang.close }}</button>
+                <input type="submit" class="btn blue btn-ok" value="{{ lang.c_send }}">
+            </div>
+            </form> 
+        </div>
+    </div>
+</div>  

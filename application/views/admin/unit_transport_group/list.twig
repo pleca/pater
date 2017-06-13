@@ -1,0 +1,196 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+          function showDiv(id)
+          {
+             $('#' + id).show();
+          }
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+{% if url_back %} 
+    <a class="btn btn-default" href="{{ url_back }}"><i class="fa fa-arrow-left"></i> {{ lang.btn_back }}</a><br /><br /> 
+{% endif %}
+   
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Simple Table</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="table-toolbar">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="btn-group">
+                    {% if not item.id %}
+                       <a href="javascript:void(0);" onclick="showDiv('divAdd');">
+                        <button id="sample_editable_1_new" class="btn sbold green"> {{ lang.add_new }}
+                            <i class="fa fa-plus"></i>
+                        </button>                           
+                       </a>
+                     {% endif %}                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if not item.id %}
+           <div id="divAdd" style="display:none;">
+              <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.name }}</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="name" value="{{ item.name }}" />
+                    </div>                     
+                </div>                  
+                    
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.transport_units }} <br /><small>({{ lang.length }} x {{ lang.width }} x {{ lang.height }})</small></label>
+                    <div class="col-md-4">
+                        <select multiple name="units[]" class="form-control">
+                            {% for unitTransportUnit in unitTransportUnits %}
+                                <option value="{{ unitTransportUnit.id }}" {% if item.id == unitTransportUnit.id %}selected="true"{% endif %}>{{ unitTransportUnit.length }}x{{ unitTransportUnit.width }}x{{ unitTransportUnit.height }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label"></label>
+                    <div class="col-md-4">
+                        <div class="checkbox">
+                            <label>                        
+                                <input type="checkbox" name="is_advertaising_material" id ="is-advertaising-material" value="1" {% if item.is_advertaising_material == 1 %}checked="true"{% endif %} />{{ lang.is_advertaising_material }}
+                            </label>
+                        </div>
+                    </div>                     
+                </div>                            
+                <div class="form-group">
+                    <label class="col-md-3 control-label"></label>
+                    <div class="col-md-4">
+                        <div class="checkbox">
+                            <label>                        
+                                <input type="checkbox" name="is_excluded_from_free_delivery" id ="is_excluded_from_free_delivery" value="1" {% if item.is_excluded_from_free_delivery == 1 %}checked="true"{% endif %} />{{ lang.group }} {{ lang.is_excluded_from_free_delivery }}
+                            </label>
+                        </div>
+                    </div>                     
+                </div>                             
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9">
+                            <input type="hidden" name="action" value="add" />
+                            <button class="btn green" type="submit">{{ lang.btn_add }}</button>
+                            <a href="{{ url_back }}" class="btn default">{{ lang.btn_cancel }}</a>
+                        </div>
+                    </div>
+                </div>
+              </form>
+           </div>
+        {% endif %}
+   
+        <div class="table-scrollable">
+            {% for entity in entities %}
+                {% if loop.first %}
+                    <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+                    <thead>
+                        <tr>
+                            <th>{{ lang.lp }}</th>
+                            <th>{{ lang.name }}</th>
+                            <th>{{ lang.transport_units }}</th>
+                            <th class="text-center">{{ lang.edit }}</th>
+                            <th class="text-center">{{ lang.delete }}</th>                       
+                        </tr>
+                    </thead>              
+                    <tbody>
+                {% endif %}           
+
+                {% if item.id == entity.id %}
+                     <tr>
+                        <td></td>
+                        <td colspan="8" style="padding: 5px;">
+                           <form class="form-horizontal" method="post" action="{{ server('PHP_SELF') }}">
+                                <div class="form-group">
+                                   <label class="col-md-3 control-label">{{ lang.name }}</label>
+                                   <div class="col-md-4">
+                                       <input class="form-control" type="text" name="name" value="{{ item.name }}" />
+                                   </div>                     
+                                </div>                  
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ lang.transport_units }} <br /><small>({{ lang.length }} x {{ lang.width }} x {{ lang.height }})</small></label>
+                                    <div class="col-md-4">
+                                        <select multiple name="units[]" class="form-control">
+                                             {% for unitTransportUnit in unitTransportUnits %}
+                                                 <option value="{{ unitTransportUnit.id }}" {% if unitTransportUnit.id in selectedUnits %}selected="true"{% endif %}>{{ unitTransportUnit.length }}x{{ unitTransportUnit.width }}x{{ unitTransportUnit.height }}</option>
+                                             {% endfor %}
+                                        </select>
+                                    </div>                     
+                                </div>   
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label"></label>
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label>                        
+                                                <input type="checkbox" name="is_advertaising_material" id="is-advertaising-material" value="1" {% if item.is_advertaising_material == 1 %}checked="true"{% endif %} />{{ lang.is_advertaising_material }}
+                                            </label>
+                                        </div>
+                                    </div>                     
+                                </div>                                         
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label"></label>
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label>                        
+                                                <input type="checkbox" name="is_excluded_from_free_delivery" id ="is_excluded_from_free_delivery" value="1" {% if item.is_excluded_from_free_delivery == 1 %}checked="true"{% endif %} />{{ lang.group }} {{ lang.is_excluded_from_free_delivery }}
+                                            </label>
+                                        </div>
+                                    </div>                     
+                                </div>                                         
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <input type="hidden" name="action" value="save" />
+                                            <input type="hidden" name="id" value="{{ item.id }}" />
+                                            <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                           </form>
+                        </td>
+                     </tr>
+                  {% else %}
+                      <tr class="{% if parameter("id") == entity.id %}active{% endif %}">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ entity.name }}</td>
+                        <td>
+                            {% for groupsUnit in groupsUnits if groupsUnit.transport_group_id == entity.id %}
+                                <small>{{ groupsUnit.length }}x{{ groupsUnit.width }}x{{ groupsUnit.height }}</small>                                
+                            {% endfor %}                           
+                        </td>
+                        <td class="text-center">
+                           <a href="?id={{ entity.id }}&amp;action=edit" title="{{ lang.edit }}">
+                               <i class="fa fa-edit"></i>
+                           </a>
+                        </td>
+                        <td class="text-center">
+                            <a href="#" data-href="?id={{ entity.id }}&amp;action=delete" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-remove"></i></a>
+                        </td>
+                     </tr>
+                  {% endif %}            
+
+
+                {% if loop.last %}</tbody></table>{% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+        
+{% include 'admin/other/confirm.twig' %} 
+
+{% endblock %}

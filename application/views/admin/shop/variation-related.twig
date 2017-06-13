@@ -1,0 +1,81 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <style>
+        select[multiple]{
+          height: 100%;
+        }
+    </style> 
+{% endblock %}
+   
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        
+        <div class="btn-group">
+            <a class="btn btn-default" href="?"><i class="fa fa-arrow-left"></i> {{ lang.back }}</a>
+            <a class="btn btn-default" href="?action=edit&amp;id={{ product.id }}"><i class="fa fa-home"></i> Dane podstawowe</a>
+            <a class="btn btn-default" href="?action=expanded&amp;id={{ product.id }}"><i class="fa fa-globe"></i> Dane rozszerzone</a>
+            <a class="btn btn-default active" href="?action=variation&amp;id={{ product.id }}"><i class="fa fa-sitemap"></i> Wariacje</a>
+            <a class="btn btn-default" href="?action=image&amp;id={{ product.id }}"><i class="fa fa-photo"></i> Zdjęcia</a>
+        </div>
+        
+        <div class="text-center"><br />
+                <a class="" href="?action=variation_edit&amp;product_id={{ product.id }}&amp;variation_id={{ entity.id2 }}" title="{{ lang.btn_general }}">{{ lang.btn_general }}</a> |
+                <a class="" href="?action=variation_photo&amp;product_id={{ product.id }}&amp;variation_id={{ entity.id2 }}" title="{{ lang.btn_photo }}">{{ lang.btn_photo }}</a> |
+                <a class="bold" href="?action=variation_related&amp;product_id={{ product.id }}&amp;variation_id={{ entity.id2 }}" title="{{ lang.related_variations }}">{{ lang.related_variations }}</a>
+        </div>
+    
+        <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+            <div class="form-body">  
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Produkty powiązane</label>
+                    <div class="col-md-6">
+                        <select size="20" name="variationRelated[]" class="form-control" multiple>
+                        {% for product in products if product.variations %}
+                            {% for variation in product.variations %}
+                                <option value="{{ variation.id2 }}" {% if variation.id2 in related %}selected="true"{% endif %}>{{ product.name }}
+                                {% if variation.feature1_value_id %}
+                                    [{{ features[product.feature1_id].name }} : {{ featureValues[variation.feature1_value_id].name }}]
+                                {% endif %}    
+                                
+                                {% if variation.feature2_value_id %}
+                                    [{{ features[product.feature2_id].name }} : {{ featureValues[variation.feature2_value_id].name }}]
+                                {% endif %} 
+                                
+                                {% if variation.feature3_value_id %}
+                                    [{{ features[product.feature3_id].name }} : {{ featureValues[variation.feature3_value_id].name }}]
+                                {% endif %}
+                                </option>                                                          
+                            {% endfor %}
+                        {% endfor %}       
+                        </select>  
+                    </div>                     
+                </div>                                            
+            </div>                     
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" name="action" value="variation_related_edit" />
+                        <input type="hidden" name="product_id" value="{{ product.id }}" />
+                        <input type="hidden" name="variation_id" value="{{ entity.id2 }}" />
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                        <a href="?action=variation&id={{ product.id }}" class="btn default">{{ lang.btn_cancel }}</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

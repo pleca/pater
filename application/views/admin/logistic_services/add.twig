@@ -1,0 +1,147 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function setAction(action) {
+           $('input[type=hidden]#action').val(action);
+        }
+
+        $(document).ready(function () {
+            $(".datepicker").datepicker({ format: 'yyyy.mm.dd' });
+        });          
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">                      
+        <form id="form" method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}" enctype="multipart/form-data">         
+            <div class="form-group">
+                <label class="col-md-3 control-label">Nazwa firmy</label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="company_name" value="{{ entity.company_name }}" />                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label">Adres firmy</label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="company_address_1" value="{{ entity.company_address_1 }}" />                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label"></label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="company_address_2" value="{{ entity.company_address_2 }}" />                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label"></label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="company_address_3" value="{{ entity.company_address_3 }}" />                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label">Nazwa odbiorcy</label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="customer_name" value="{{ entity.customer_name }}" />                                                                   
+                </div>                     
+            </div>                 
+            <div class="form-group">
+                <label class="col-md-3 control-label">Adres odbiorcy</label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="customer_address_1" value="{{ entity.customer_address_1 }}" />                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label"></label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="customer_address_2" value="{{ entity.customer_address_2 }}" />                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label"></label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="customer_address_3" value="{{ entity.customer_address_3 }}" />                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label">Nazwa produktu</label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="product_name" value="{{ entity.product_name }}" />                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label">GTIN</label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="gtin" value="{{ entity.gtin }}" />                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label">Numer zamówienia</label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="order_number" value="{{ entity.order_number }}" />                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label">Termin przydatnosci</label>
+                <div class="col-md-4">
+                    <input id="datepicker" class="form-control datepicker" type="text" name="best_before" value="{{ entity.best_before }}" />                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label">Waga</label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="weight" value="{{ entity.weight }}" />                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label">Ilość sztuk</label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="count_item" value="{{ entity.count_item }}" />                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label">Ilość palet</label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="count_euro" value="{{ entity.count_euro }}" />                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label">Wysokość palety</label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="palette_height" value="{{ entity.palette_height }}" />                                                                   
+                </div>                     
+            </div>     
+            <div class="form-group">
+                <label class="col-md-3 control-label">SSCC</label>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" name="sscc" value="{{ entity.sscc }}" />                                                                   
+                </div>                     
+            </div>       
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" id="action" name="action" value="" />
+                        <input class="btn green" type="submit" onclick="setAction('add');" value="{{ lang.btn_save }}">
+                        <a href="?" class="btn default" onclick="setAction('');">{{ lang.btn_cancel }}</a>
+                    </div>
+                </div>
+            </div>            
+    </form>
+</div>
+</div>
+                        
+{% include 'admin/other/confirm.twig' %} 
+
+{% endblock %}

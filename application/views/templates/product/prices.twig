@@ -1,0 +1,41 @@
+<span itemprop="priceCurrency" content="{{ conf.currency }}"></span>
+
+{% if static('Cms','modules')['price_groups'] and constant('LOGGED') %}
+    {% set price_group = session[constant("CUSTOMER_CODE")]['price_group'] %}
+
+    {% if price_group == 1 %} 
+        {% set price_group = "" %}
+    {% endif %}
+{% else %}
+    {% set price_group = "" %}
+{% endif %}    
+
+{% if constant("LOGGED") and customer.only_netto_prices == 1 %}
+    {% set price_name = 'price' ~ price_group %}
+{% else %}
+    {% set price_name = 'price' ~ price_group ~ '_gross' %}
+{% endif %}    
+
+{% if entity.promotion == 1 and entity.price_promotion_gross > 0 %}
+    <span itemprop="price" content="{{ entity.price_promotion_gross }}"><strong class="price-gross">
+            {% if static('Cms','modules')['shopping_thresholds'] %} {{ lang.price }}{% endif %}
+            {{ conf.currency_left }}{{ entity.price_promotion_gross }}{{ conf.currency_right }}
+        </strong></span>  
+{% elseif attribute(entity, price_name) > 0 %}
+    <span itemprop="price" content="{{ attribute(entity, price_name)|number_format(2) }}"><strong class="price-gross">
+            {% if static('Cms','modules')['shopping_thresholds'] %} {{ lang.price }}{% endif %}
+            {{ conf.currency_left }}{{ attribute(entity, price_name)|number_format(2) }}{{ conf.currency_right }}
+        </strong></span>
+{% endif %}                           
+
+{% if static('Cms','modules')['price_groups'] and not constant('LOGGED') %}
+    <a href="{{ constant('URL') }}/customer/login">{{ lang.menu_signin }}</a>
+{% endif %}
+
+{% if entity.price_rrp > 0 %}
+    <span>{{ lang.rrp }} {{ conf.currency_left }}{{ entity.price_rrp }}{{ conf.currency_right }}</span>
+{% endif %}
+
+{% if entity.lastShoppingThreshold and not entity.mega_offer %}
+    <span class="special" data-toggle="tooltip" data-html="true" title='{{ pageTooltipDiscount }}'>+{{ entity.lastShoppingThreshold.value }} | {{ conf.currency_left }}{{ entity.lastShoppingThreshold.priceAfterDiscount }}{{conf.currency_right }}</span>
+{% endif %}

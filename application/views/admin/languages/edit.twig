@@ -1,0 +1,83 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#default").change(function() {
+                if ($(this).is(':checked')) {
+                    $("#active").prop('checked',true);
+                    $('#active_front').hide();
+                } else {
+                    $("#active").prop("checked", false);                    
+                    $('#active_front').show();
+                }
+                
+                $.uniform.update('#active');
+            });
+        });
+
+
+    </script>
+{% endblock %}        
+        
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <form id="form" method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+            <div class="form-body">       
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.default }}</label>
+                    <div class="col-md-4">
+                        <div class="checkbox">
+                            <label>                        
+                                <input type="checkbox" name="default" id ="default" value="1" {% if entity.default == 1 or entity.default == '' %}checked="true"{% endif %} />{{ lang.default }}
+                            </label>
+                        </div>
+                    </div>                     
+                </div>   
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.active }}</label>
+                    <div class="col-md-4">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="active" id ="active" value="1" {% if entity.active == 1 or entity.active == '' %}checked="true"{% endif %} />{{ lang.active }}
+                            </label>
+                        </div>
+                    </div>                     
+                </div>                             
+                <div class="form-group" id="active_front" {% if entity.default %}style="display:none;"{% endif %}>
+                    <label class="col-md-3 control-label">{{ lang.active_front }}</label>
+                    <div class="col-md-4">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="active_front" id ="active" value="1" {% if entity.active_front == 1 or entity.active_front == '' %}checked="true"{% endif %} />{{ lang.active_front }}
+                            </label>
+                        </div>
+                    </div>                     
+                </div>                             
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                    <input type="hidden" name="action" value="save" />
+                    <input type="hidden" name="id" value="{{ entity.id }}" />                    
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                        <a href="?" class="btn default">{{ lang.btn_cancel }}</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,246 @@
+{% extends "admin/base.twig" %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(function () {
+            
+            $('#stock_source').change(function() {
+
+                if ($(this).val() == 'url') {
+                    $('#url_i').removeClass('hidden');
+                    $('#url_i').focus();
+                } else {
+                    $('#url_i').addClass('hidden');
+                }
+            });
+        
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+<!-- BEGIN PAGE BAR -->
+{#<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="index.html">Home</a>
+            <i class="fa fa-circle"></i>
+        </li>
+        <li>
+            <a href="#">Blank Page</a>
+            <i class="fa fa-circle"></i>
+        </li>
+        <li>
+            <span>Page Layouts</span>
+        </li>
+    </ul>
+    <div class="page-toolbar">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown"> Actions
+                <i class="fa fa-angle-down"></i>
+            </button>
+            <ul class="dropdown-menu pull-right" role="menu">
+                <li>
+                    <a href="#">
+                        <i class="icon-bell"></i> Action</a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-shield"></i> Another action</a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-user"></i> Something else here</a>
+                </li>
+                <li class="divider"> </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-bag"></i> Separated link</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>#}
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE TITLE-->
+<h3 class="page-title"> {{ pageTitle }}
+    <small>{{ pageTitle }}</small>
+</h3>
+<!-- END PAGE TITLE-->
+<!-- END PAGE HEADER-->
+
+{#{include file="other/breadcrumb.tpl"} #}
+
+<div class="row">
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-aqua">
+            <div class="inner">
+                <h3>{{ ordersNumber }}</h3>
+                <p>{{ lang.ml_shop_orders }}</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-dollar"></i>
+            </div>
+            <a href="{{ constant('CMS_URL') }}/admin/shop-orders.html" class="small-box-footer">{{ lang.more_info }} <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-green">
+            <div class="inner">
+                <h3>{{ customersNumber }}</h3>
+                <p>{{ lang.ml_customers }}</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-users"></i>
+            </div>
+            <a href="{{ constant('CMS_URL') }}/admin/customer.html" class="small-box-footer">{{ lang.more_info }} <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>    
+        
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-yellow">
+            <div class="inner">
+                <h3>{{ productNumber }}</h3>
+                <p>{{ lang.ml_shop_products }}</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-gift"></i>
+            </div>
+            <a href="{{ constant('CMS_URL') }}/admin/shop-products.html" class="small-box-footer">{{ lang.more_info }} <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>    
+        
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-red">
+            <div class="inner">
+                <h3>{{ productReviewsNumber }}</h3>
+                <p>{{ lang.ml_product_reviews }}</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-gift"></i>
+            </div>
+            <a href="{{ constant('CMS_URL') }}/admin/product-reviews.html" class="small-box-footer">{{ lang.more_info }} <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+</div>
+
+
+
+
+{#{% if User::property('level') == 1 %}#}
+{#    <br /><br />    
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-social-dribbble font-green"></i>
+                <span class="caption-subject font-green bold uppercase">Lista skryptów</span>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="table-scrollable">    
+                <table id="example" class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer">
+                <thead>
+                    <tr>
+                        <th>Skrypt</th>
+                        <th>Opis</th>
+                        <th class="text-center">Akcja</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="width:20%">produkty zmień http na https w opisach</td>
+                        <td>Skrypt wyszukuje w opisach produktow linki http i zmienia je na https. 
+                            Przydatne w sytuacji, gdy strona początkowo funkcjonowała pod http a poźniej przeszła na https przez co część linków
+                            odwołuje się po http. Powoduje to problem z ssl(przekreślona kłódka), ponieważ nie cała zawartość strony odwołuje się do zasobów w sposób bezpieczony(np. obrazków).
+                        </td>
+                        <td><a href="{{ constant('CMS_URL') }}/admin/run.html?action=httpsUpdateProductDesc">Uruchom</a></td>
+                    </tr>
+                    <tr>
+                        <td style="width:20%">Export produktów</td>
+                        <td>Export produktów do pliku csv.
+                        </td>
+                        <td><a href="{{ constant('CMS_URL') }}/admin/run.html?action=exportProducts">Uruchom</a></td>
+                    </tr>
+                    <tr>
+                        <form method="post" class="form-horizontal" action="{{ constant('CMS_URL') }}/admin/run.html" enctype="multipart/form-data">
+                        <td style="width:20%" class="text-center">Import produktów</td>
+                        <td>Skrypt importuje produkty z pliku csv. <br />     
+                            
+                            Plik csv z produktami: <input name="products" type="file" accept=".csv" /><br />
+                            Ustawienia importu:<br />
+                            
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">dla nowych produktów ustaw status:</label>
+                                <div class="col-md-3">
+                                {% for status in statuses %}
+                                    {% if loop.first %}<select name="status" class="form-control"><option value=""> taki jak w pliku</option>{% endif %}
+                                       <option value="{{ status.name }}">{{ status.name }}</option>
+                                    {% if loop.last %}</select>{% endif %}                                    
+                                {% endfor %}
+                                </div>                     
+                            </div>
+                            <br /><br />
+                            Przed uruchomieniem skryptu zaleca się zrobić kopie zapasowe poniższych tabel.
+                            <ul>
+                                <li>product_category</li>
+                                <li>product_manufacturer</li>
+                                <li>product</li>                                
+                                <li>product_variation</li>
+                                <li>product_image</li>
+                            </ul>                            
+                        </td>
+                        <td>
+                            <input type="hidden" name="action" value="importProducts" />
+                            <button class="btn green" type="submit">Uruchom</button>
+                        </td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <form method="post" class="form-horizontal" action="{{ constant('CMS_URL') }}/admin/run.html" enctype="multipart/form-data">      
+                        <td style="width:20%" class="text-center">Zmiana stanów magazynowych</td>
+                        <td id="stock_update">
+                            Skrypt aktualizuje stany magazynowe produktów. <br />     
+                        
+                        <div class="form-group form-inline">
+                            <label class="col-md-3 control-label">Źródło:</label>                            
+                            <div class="col-md-9">  
+                                <select id="stock_source" name="source" class="form-control">
+                                    <option value="" enabled>--wybierz--</option>
+                                    <option value="url">z url</option>
+                                    <option value="csv" disabled>z pliku csv</option>
+                                    <option disabled>option 3</option>
+                                    <option disabled>option 4</option>
+                                    <option disabled>option 5</option>
+                                </select>
+                                <input class="form-control hidden" id="url_i" type="url" name="url">
+                            </div>
+                        </div>                            
+                        </td>
+                        <td>
+                            <input type="hidden" name="action" value="updateStock" />
+                            <button class="btn green" type="submit">Uruchom</button>
+                        </td>
+                        </form>
+                    </tr>                    
+                </tbody>
+                </table>
+            </div>
+        </div>
+                    
+                   
+    </div>#}
+
+
+
+                      
+{#{% endif %}#}
+{% endblock %}

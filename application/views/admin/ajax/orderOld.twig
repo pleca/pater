@@ -1,0 +1,423 @@
+{#{% extends "admin/base.twig" %}#}
+
+{% block head %}
+{#    {{ parent() }}#}
+    <script type="text/javascript">
+    // <![CDATA[    
+
+       var tax = new Array();
+       {% for entity in taxes %}
+       tax[{{ entity.id }}] = {{ entity.value }};
+       {% endfor %}
+
+        $(function () {
+            updatePrices();
+        });     
+
+        function updatePrices() {
+             var tax_value = tax[$('select[name=tax_id]').val()];
+             var price_purchase = Math.round($('input[name=price_purchase]').val() * 10000) / 10000;
+             var price = Math.round($('input[name=price]').val() * 10000) / 10000;
+             var price_promotion = Math.round($('input[name=price_promotion]').val() * 10000) / 10000;
+
+             var price_purchase_gross = Math.round((price_purchase + price_purchase * tax_value / 100) * 100) / 100;
+             var price_gross = Math.round((price + price * tax_value / 100) * 100) / 100;
+             var price_promotion_gross = Math.round((price_promotion + price_promotion * tax_value / 100) * 100) / 100;
+             var price_purchase_tax = price_purchase_gross - price_purchase;
+             var price_tax = price_gross - price;
+             var price_promotion_tax = price_promotion_gross - price_promotion;
+
+             price_purchase_gross = price_purchase_gross.toFixed(2);
+             price_gross = price_gross.toFixed(2);
+             price_promotion_gross = price_promotion_gross.toFixed(2);
+             price_purchase_tax = price_purchase_tax.toFixed(2);
+             price_tax = price_tax.toFixed(2);
+             price_promotion_tax = price_promotion_tax.toFixed(2);
+
+             $('input[name=price_purchase_gross]').val(price_purchase_gross);
+             $('input[name=price_gross]').val(price_gross);
+             $('input[name=price_promotion_gross]').val(price_promotion_gross);
+             $('input[name=price_purchase_tax]').val(price_purchase_tax);
+             $('input[name=price_tax]').val(price_tax);
+             $('input[name=price_promotion_tax]').val(price_promotion_tax);
+          }
+    // ]]>
+    </script>    
+{% endblock %}
+
+{% block content %}
+<div class="right"><a href="javascript:void(0);" onclick="hideDiv('ajaxDiv');" title="{{ lang.close }}"><img src="{{ constant("TPL_URL") }}/img/admin/icoClose.png" alt="{{ lang.close }}" /></a></div>
+<div style="max-width:1000px;overflow:hidden;">
+   {% if module == 'edit' %}
+      <form method="post" action="{{ constant("CMS_URL") }}/admin/shop-orders.html">
+         <table class="tableEdit" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+               <td class="w150">{{ lang.o_edit_no }}:</td>
+               <td><strong>{{ entity.id }}</strong></td>
+            </tr>
+            <tr>
+               <td>{{ lang.o_company_name }}:</td>
+               <td><input class="inpText w300" type="text" name="company_name" value="{{ entity.company_name }}" /></td>
+            </tr>
+            <tr>
+               <td>{{ lang.o_nip }}:</td>
+               <td><input class="inpText w300" type="text" name="nip" value="{{ entity.nip }}" /></td>
+            </tr>
+            <tr>
+               <td>{{ lang.o_first_name }}:</td>
+               <td><input class="inpText w300" type="text" name="first_name" value="{{ entity.first_name }}" /></td>
+            </tr>
+            <tr>
+               <td>{{ lang.o_last_name }}:</td>
+               <td><input class="inpText w300" type="text" name="last_name" value="{{ entity.last_name }}" /></td>
+            </tr>
+            <tr>
+               <td>{{ lang.o_address1 }}:</td>
+               <td><input class="inpText w300" type="text" name="address1" value="{{ entity.address1 }}" /></td>
+            </tr>
+            <tr>
+               <td>{{ lang.o_address2 }}:</td>
+               <td><input class="inpText w300" type="text" name="address2" value="{{ entity.address2 }}" /></td>
+            </tr>
+            <tr>
+               <td>{{ lang.o_address3 }}:</td>
+               <td><input class="inpText w300" type="text" name="address3" value="{{ entity.address3 }}" /></td>
+            </tr>
+            <tr>
+               <td>{{ lang.o_post_code }}:</td>
+               <td><input class="inpText w300" type="text" name="post_code" value="{{ entity.post_code }}" /></td>
+            </tr>
+            <tr>
+               <td>{{ lang.o_city }}:</td>
+               <td><input class="inpText w300" type="text" name="city" value="{{ entity.city }}" /></td>
+            </tr>
+            <tr>
+               <td>{{ lang.o_country }}:</td>
+               <td>
+                  <select name="country">
+                     {% for row in country %}
+                        <option value="{{ row.code }}" {% if entity.country == row.code %}selected="true"{% endif %}>{{ row.name }}</option>
+                     {% endfor %}
+                  </select>
+               </td>
+            </tr>
+            <tr>
+               <td>{{ lang.o_email }}:</td>
+               <td><input class="inpText w300" type="text" name="email" value="{{ entity.email }}" /></td>
+            </tr>
+            <tr>
+               <td>{{ lang.o_phone }}:</td>
+               <td><input class="inpText w300" type="text" name="phone" value="{{ entity.phone }}" /></td>
+            </tr>
+            <tr>
+               <td colspan="2" class="center">
+                  <input type="hidden" name="action" value="order_edit_save" />
+                  <input type="hidden" name="cid" value="{{ entity.cid }}" />
+                  <input type="image" src="{{ constant("CMS_URL") }}/public/img/admin/{{ language }}/btnSaveItem.png" />
+               </td>
+            </tr>
+         </table>
+      </form>
+   {% endif %}
+    {% if module == 'history' %}
+        {% for entity in entities %}
+            {% if loop.first %}
+               <strong>{{ lang.o_history }}:</strong><br />
+               <table class="tableEdit" border="0" cellspacing="0" cellpadding="0">
+            {% endif %}
+                <tr>
+                   <td>{{ entity.login }}</td><td>{{ entity.msg }}</td><td>{{ entity.time }}</td>
+                </tr>
+                {% if loop.last %}</table>{% endif %}
+        {% endfor %}
+    {% endif %}
+    
+      {% if module == 'history-edit' %}
+      <strong>{{ lang.o_history_edit }}:</strong><br />
+      {{ entity.info|nl2br }}
+   {% endif %}
+   {% if module == 'duplicate' %}
+      <strong>{{ lang.o_duplicate }}:</strong><br />
+      {{ lang.o_title }}: <strong>{{ entity.id }}</strong><br />
+      <form method="post" action="{{ constant("CMS_URL") }}/admin/shop-orders.html">
+         <table class="tableEdit" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+               <td>{{ lang.o_duplicate2 }}:</td>
+               <td><input class="inpText w100" type="text" name="groupon" value="" maxlength="10" /></td>
+            </tr>
+            <tr>
+               <td colspan="2"class="center">
+                  <input type="hidden" name="action" value="order_duplicate" />
+                  <input type="hidden" name="cid" value="{{ entity.cid }}" />
+                  <input type="image" src="{{ constant("CMS_URL") }}/public/img/admin/{{ language }}/btnAdd.png" />
+               </td>
+            </tr>
+         </table>
+      </form>
+   {% endif %}
+   {% if module == 'customer' %}
+      <h2 class="section">{{ lang.customers_data }}</h2>
+      <table class="tableEdit" border="0" cellspacing="0" cellpadding="0">
+         <tr>
+            <td class="w150">{{ lang.first_name }}:</td>
+            <td>{{ entity.first_name }}</td>
+            <td rowspan="4" class="w200 right">
+               {% if entity.photo.medium %}<img src="{{ entity.photo.medium }}" alt="{{ entity.login }}" />
+               {% else %}<img src="{{ constant("CMS_URL") }}/files/no-profile2.jpg" alt="{{ entity.login }}" />{% endif %}
+            </td>
+         </tr>
+         <tr>
+            <td>{{ lang.last_name }}:</td>
+            <td>{{ entity.last_name }}</td>
+         </tr>
+         <tr>
+            <td>{{ lang.email }}:</td>
+            <td><strong>{{ entity.email }}</strong></td>
+         </tr>
+         <tr>
+            <td>{{ lang.login }}:</td>
+            <td><strong>{{ entity.login }}</strong></td>
+         </tr>
+      </table>
+      <table class="tableEdit" border="0" cellspacing="0" cellpadding="0">
+         <tr>
+            <td class="w150"></td>
+            <td>{% if entity.type != 2 %}{{ lang.customers_person }}{% else %}{{ lang.customers_company }}{% endif %}</td>
+         </tr>
+         <tr id="type_tr_1" {% if entity.type != 2 %}style="display:none;"{% endif %}>
+            <td>{{ lang.customers_company_name }}:</td>
+            <td>{{ entity.company_name }}</td>
+         </tr>
+         <tr id="type_tr_2" {% if entity.type != 2 %}style="display:none;"{% endif %}>
+            <td>{{ lang.customers_nip }}:</td>
+            <td>{{ entity.nip }}</td>
+         </tr>
+         <tr>
+            <td>{{ lang.customers_country }}:</td>
+            <td>
+                {% for row in country %}
+                    {% if entity.country == row.code %}{{ row.name }}{% endif %}
+                {% endfor %}
+         </td>
+      </tr>      
+      <tr>
+         <td>{{ lang.customers_address1 }}:</td>
+         <td>{{ entity.address1 }}</td>
+      </tr>
+      <tr>
+         <td>{{ lang.customers_address2 }}:</td>
+         <td>{{ entity.address2 }}</td>
+      </tr>
+      <tr>
+         <td>{{ lang.customers_address3 }}:</td>
+         <td>{{ entity.address3 }}</td>
+      </tr>
+      <tr>
+         <td>{{ lang.customers_post_code }}:</td>
+         <td>{{ entity.post_code }}</td>
+      </tr>
+      <tr>
+         <td>{{ lang.customers_city }}:</td>
+         <td>{{ entity.city }}</td>
+      </tr>
+      <tr>
+         <td>{{ lang.phone }}:</td>
+         <td>{{ entity.phone }}</td>
+      </tr>
+      <tr>
+         <td>{{ lang.customers_card }}:</td>
+         <td>{{ entity.no_card }}</td>
+      </tr>
+      <tr>
+         <td>{{ lang.customers_points }}:</td>
+         <td>{{ entity.punkty }}</td>
+      </tr>
+      <tr>
+         <td>{{ lang.customers_discount }}:</td>
+         <td>{{ entity.discount }} %</td>
+      </tr>
+      <tr>
+         <td>{{ lang.date_add }}:</td>
+         <td>{{ entity.date_add }}</td>
+      </tr>
+   </table>
+{% endif %}
+{% if module == 'product' %}
+   <div class="prodBox">
+      <div class="prodTitle">
+         <h1>{{ entity.name }}</h1>
+      </div>
+      <div class="prodFoto">
+         {% for row in entity.photos %}
+             <div id="productFotoId{{ row.id }}" {% if loop.first %}style="display: table;"{% endif %} class="productFotoId" {% if not loop.first %}style="display:none;"{% endif %}>
+            {% if row.photo.middle %}
+               <a href="{{ row.photo.normal }}" title="{{ entity.name }}" class="fancybox" rel="fancybox">
+                  <img src="../{{ row.photo.middle }}" alt="{{ entity.name }}" />
+               </a>
+            {% else %}
+               <img src="../{{ constant("CMS_URL") }}/files/no-picture2.png" alt="{{ entity.name }}" />
+            {% endif %}
+            </div>
+         {% else %}
+            <img src="../{{ constant("CMS_URL") }}/files/no-picture2.png" alt="{{ entity.name }}" />
+         {% endfor %}
+      </div>
+      <div class="prodDetails">
+         <div class="prodPrice">
+            <table class="tableEdit" border="0" cellspacing="0" cellpadding="0">
+               <tr>
+                  <td>Stawka podatku:</td>
+                  <td>{{ entity.tax }} %</td>                  
+                    {% for tax in taxes %}
+                        {% if loop.first %}<select name="tax_id" style="display:none;">{% endif %}
+                            <option value="{{ tax.id }}" {% if variation.tax_id == tax.id %}selected="true"{% endif %}>{{ tax.value }}</option>
+                        {% if loop.last %}</select>{% endif %}
+                    {% endfor %}                
+               </tr> 
+               <tr>
+                  <td>Cena RRP:</td>
+                  <td><input class="inpText w100" type="text" name="price_rrp" value="{{ entity.price_rrp }}" /></td>
+               </tr>
+               <tr>
+                  <td>Cena zakupu:</td>
+                  <td>
+                     netto: <input class="inpText w100" type="text" name="price_purchase" value="{{ entity.price_purchase }}" />
+                     brutto: <input class="inpText w100" type="text" name="price_purchase_gross" value="{{ entity.price_purchase_gross }}" />
+                     wartość podatku: <input class="inpText w100" type="text" name="price_purchase_tax" value="{{ entity.price_purchase_vat }}" />
+                  </td>
+               </tr>
+               <tr>
+                  <td>Cena sprzedaży:</td>
+                  <td>
+                     netto: <input class="inpText w100" type="text" name="price" value="{{ entity.price }}" />
+                     brutto: <input class="inpText w100" type="text" name="price_gross" value="{{ entity.price_gross }}" />
+                     wartość podatku: <input class="inpText w100" type="text" name="price_tax" value="{{ entity.price_vat }}" />
+                  </td>
+               </tr>
+                <tr>
+                   <td>Waluta:</td>
+                   <td>{{ conf.currency }}</td>
+                </tr>               
+         <tr>
+            <td class="vertical">Promocja:</td>
+            <td>
+               <input type="checkbox" id="promotion" name="promotion" value="1" {% if variation.promotion == 1 %}checked="true"{% endif %} /> <label for="promotion">produkt w promocji</label>
+            </td>
+         </tr>
+         <tr>
+            <td class="div_promotion" {% if variation.promotion !=1 %}style="display:none"{% endif %}>Cena promocyjna:</td>
+            <td class="div_promotion" {% if variation.promotion !=1 %}style="display:none"{% endif %}">
+               netto: <input class="inpText w100" type="text" name="price_promotion" value="{{ variation.price_promotion }}" />
+               brutto: <input class="inpText w100" type="text" name="price_promotion_gross" value="" disabled="true" />
+               wartość podatku: <input class="inpText w100" type="text" name="price_promotion_tax" value="" disabled="true" />
+               data zakończenia: <input class="inpText w100" type="text" name="date_promotion" value="{{ variation.date_promotion }}" />
+            </td>
+         </tr>
+         <tr>
+            <td class="vertical">Bestseller:</td>
+            <td>
+               <input type="checkbox" id="bestseller" name="bestseller" value="1" {% if variation.bestseller == 1 %}checked="true"{% endif %} /> <label for="bestseller">produkt bestseller</label>
+            </td>
+         </tr>
+         <tr>
+            <td class="vertical">Polecany:</td>
+            <td>
+               <input type="checkbox" id="recommended" name="recommended" value="1" {% if variation.recommended == 1 %}checked="true"{% endif %} /> <label for="recommended">produkt polecany</label>
+            </td>
+         </tr>
+         <tr>
+            <td class="vertical">Unikatowy kod produktu:</td>
+            <td><input class="inpText w300" type="text" name="sku" value="{{ variation.sku }}" /></td>
+         </tr>
+         {% if entity.feature1_name %}
+         <tr>
+            <td class="vertical">Feature: {{ entity.feature1_name }}:</td>
+            <td><input class="inpText w200" type="text" name="feature1_value" value="{{ variation.feature1_value }}" /></td>
+         </tr>
+         {% endif %}
+         {% if entity.feature2_name %}
+         <tr>
+            <td class="vertical">Feature: {{ entity.feature2_name }}:</td>
+            <td><input class="inpText w200" type="text" name="feature2_value" value="{{ variation.feature2_value }}" /></td>
+         </tr>
+         {% endif %}
+         {% if entity.feature3_name %}
+         <tr>
+            <td class="vertical">Feature: {{ entity.feature3_name }}:</td>
+            <td><input class="inpText w200" type="text" name="feature3_value" value="{{ variation.feature3_value }}" /></td>
+         </tr>
+         {% endif %}               
+               
+            </table>
+         </div>      
+
+         <div class="prodBulet">
+            {% for entity in entity.bullet2 %}
+                {% if loop.first %}<ul>{% endif %}
+                  {% if entity %}<li>{% if loop.last %}{{ lang.shop_servings }} {% endif %}{{ entity }}</li>{% endif %}
+                {% if loop.last %}</ul>{% endif %}
+            {% endfor %}
+         </div>
+
+         {% if entity.taste %}
+            <div class="prodAttrL">
+               {% if entity.unit2 == 4 %}{{ lang.shop_unit_4 }}:{% endif %}
+               {% if entity.unit2 == 5 %}{{ lang.shop_unit_5 }}:{% endif %}
+               {% if entity.unit2 == 6 %}{{ lang.shop_unit_6 }}:{% endif %}
+               {% if entity.unit2 == 9 %}{{ lang.shop_unit_9 }}:{% endif %}
+               {% if entity.unit2 == 0 %}&nbsp;{% endif %}
+
+               {% if aPowiazane %}
+                  {% for row in aPowiazane %}
+                     {% if loop.first %}
+                        <form method="get" action="">
+                           <p style="margin:0;">
+                              <select class="inpSelect2 w150" name="product_taste" onchange="self.location.href = this.value">
+                              {% endif %}
+                              <option value="{{ row.url }}" {% if entity.id == row.id %}selected="selected"{% endif %}>{{ row.taste }}</option>
+                              {% if loop.last %}
+                              </select>
+                           </p>
+                        </form>
+                     {% endif %}
+                  {% endfor %}
+               {% else %}
+                  {{ entity.taste }}
+               {% endif %}
+            </div>
+         {% endif %}
+         {% if entity.size %}         
+            {% if aPowiazane2 %}
+               <div class="prodAttrL">{{ lang.product_weight }}</div><div class="prodAttrR">
+                  {% for row in aPowiazane2 %}
+                     {% if loop.first %}
+                        <form method="get">
+                           <select class="inpSelect2 w150" name="product_weight" onchange="self.location.href = this.value">
+                           {% endif %}
+                           <option value="{{ row.url }}" {% if entity.id == row.id %}selected="true"{% endif %}>{{ row.size }} {% if entity.unit == 1 %}{{ lang.shop_unit_1 }}{% endif %}{% if entity.unit == 2 %}{{ lang.shop_unit_2 }}{% endif %}{% if entity.unit == 3 %}{{ lang.shop_unit_3 }}{% endif %}
+                        {% if entity.unit == 4 %}{{ lang.shop_unit_4 }}{% endif %}{% if entity.unit == 5 %}{{ lang.shop_unit_5}}{% endif %}
+               {% if entity.unit == 7 %}{{ lang.shop_unit_7 }}{% endif %}{% if entity.unit == 8 %}{{ lang.shop_unit_8 }}{% endif %}{% if entity.unit == 9 %}{{ lang.shop_unit_9 }}{% endif %}</option>
+               {% if loop.last %}
+            </select>
+         </form>
+      {% endif %}
+   {% endfor %}
+</div>
+{% else %}
+   <div class="prodAttrL">Rozmiar: 
+{{ entity.size }} {% if entity.unit == 1 %}{{ lang.shop_unit_1 }}{% endif %}{% if entity.unit == 2 %}{{ lang.shop_unit_2 }}{% endif %}{% if entity.unit == 3 %}{{ lang.shop_unit_3 }}{% endif %}
+{% if entity.unit == 4 %}{{ lang.shop_unit_4 }}{% endif %}{% if entity.unit == 5 %}{{ lang.shop_unit_5 }}{% endif %}{% if entity.unit == 6 %}{{ lang.shop_unit_6 }}{% endif %}
+{% if entity.unit == 7 %}{{ lang.shop_unit_7 }}{% endif %}{% if entity.unit == 8 %}{{ lang.shop_unit_8 }}{% endif %}{% if entity.unit == 9 %}{{ lang.shop_unit_9 }}{% endif %}
+</div>
+{% endif %}         
+{% endif %}
+{% if entity.producer %}<div class="prodAttrL">Producent: {{ entity.producer.name }}</div>{% endif %}      
+<div class="prodAttrL">Dostępność: {{ entity.qty }}</div>
+<div class="prodAttrL">Waga do transportu: {{ entity.weight }} g</div>
+
+</div>
+</div>
+<div class="right"><a href="{{ constant("CMS_URL") }}/admin/shop-products.html?action=variation_edit&variation_id={{ variation_id }}" target="_blank" title="Edycja produktu" target="_blank">Edycja produktu</a></div>
+{% endif %}
+</div>
+{% endblock %}

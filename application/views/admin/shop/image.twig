@@ -1,0 +1,101 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ constant('CMS_URL') }}/public/js/jquery.MultiFile.js"></script>
+    <script type="text/javascript">
+// <![CDATA[        
+        $(document).ready(function () {
+            $('#photos').MultiFile({
+               list: '#photos-list',
+               STRING: {remove: 'Usuń'},
+               max: 5
+            });
+        });      
+// ]]>        
+    </script>
+    
+    <style>
+    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+        border-top: none;
+    }    
+    </style>    
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        
+        <div class="btn-group">
+            <a class="btn btn-default" href="?"><i class="fa fa-arrow-left"></i> {{ lang.back }}</a>
+            <a class="btn btn-default" href="?action=edit&amp;id={{ entity.id }}"><i class="fa fa-home"></i> Dane podstawowe</a>
+            <a class="btn btn-default" href="?action=expanded&amp;id={{ entity.id }}"><i class="fa fa-globe"></i> Dane rozszerzone</a>
+            <a class="btn btn-default" href="?action=variation&amp;id={{ entity.id }}"><i class="fa fa-sitemap"></i> Wariacje</a>
+            <a class="btn btn-default active" href="?action=image&amp;id={{ entity.id }}"><i class="fa fa-photo"></i> Zdjęcia</a>
+        </div>
+                         
+        <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}" enctype="multipart/form-data">
+            <div class="form-body">  
+                <div class="form-group">
+                        <label class="col-md-3 control-label"></label>
+                        <div class="col-md-9">    
+                        {% for photo in photos %}
+                            {% if loop.first %}
+                                <table class="table"><tr>
+                            {% endif %}
+                            {% if loop.index != 1 and loop.index % 8 == 0 %}</tr><tr>{% endif %}
+                                    <td class="text-center {% if parameter("photo_id") == entity.id %}active{% endif %}">
+                                       {% if photo.photo %}<a href="{{ photo.photo.normal }}" title="{{ entity.name }}" class="fancybox" rel="fancybox">
+                                             <img src="{{ photo.photo.small }}" alt="{{ entity.name }}" /></a>
+                                       {% else %}<strong>Brak zdjęcia!</strong>{% endif %}
+                                       <br />
+                                       {% if not loop.first %}
+                                          <a href="?id={{ entity.id }}&amp;photo_id={{ photo.id }}&amp;action=upPhoto" title="{{ lang.move_up }}">
+                                              <i class="fa fa-arrow-up"></i>
+                                          </a>
+                                       {% endif %}
+                                       {% if not loop.last %}
+                                          <a href="?id={{ entity.id }}&amp;photo_id={{ photo.id }}&amp;action=downPhoto" title="{{ lang.move_down }}">
+                                              <i class="fa fa-arrow-down"></i>
+                                          </a>
+                                       {% endif %}
+                                       <a href="#" data-href="?id={{ entity.id }}&amp;photo_id={{ photo.id }}&amp;action=deletePhoto" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-remove"></i></a>
+                                    </td>
+                           {% if loop.last %}</tr></table>{% endif %}
+                        {% endfor %}
+                      </div>                     
+                </div>
+                <div class="form-group">
+                      <label class="col-md-3 control-label">Zdjęcia produktu:<br /><small>[Zalecany rozmiar: 1024x768 px]</small></label>
+                      <div class="col-md-9">
+                            <input type="file" multiple="multiple" class="with-preview" id="photos" name="photos[]" size="100" />
+                            <div id="photos-list" style="margin: 20px;"></div>
+                      </div>                     
+                </div>
+            </div>                     
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" id="action" name="action" value="image" />
+                        <input type="hidden" name="id" value="{{ entity.id }}" />                       
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% include 'admin/other/confirm.twig' %}
+
+{% endblock %}

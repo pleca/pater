@@ -1,0 +1,25 @@
+<script type="text/javascript">
+   $(function () {
+       $('#sign-in-button').click(function(event) {
+            $("input[name=action]").val('login');
+            $('#basket-form').submit();
+        });
+   });
+</script>
+
+{% if not logged %} 
+    <div class="login-side">
+        <h2>{{ lang.c_login2 }}</h2>
+        <p>{{ lang.c_log2 }}</p>
+        <div class="form-group">
+            <input type="text" class="form-control" name="login" placeholder="{{ lang.c_login2 }}">
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" name="pass" placeholder="{{ lang.c_password }}">
+        </div>
+        <div class="form-group text-right">
+            <button type="button" id="sign-in-button" class="btn btn-default">{{ lang.c_signin }}</button>
+            <a class="btn btn-info" href="{{ constant("URL") }}/customer/register">{{ lang.menu_register }}</a>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,107 @@
+{% extends "templates/base.twig" %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(function () {
+            $("select[name=sort]").change(function () {
+                $('#filter_order').submit();  
+            });
+            
+            $(document).on('click','input[name=page]',function(){ this.select(); });
+             
+            $(document).keypress(function(e) {
+                if(e.which == 13) {
+                    
+                    var page = $('input[name=page]').val();
+                    var sort = $('input[name=sort]').val();
+                    var pages = $('input[name=pages]').val();
+                    
+                    if (page) {
+                        if (page > pages) {
+                            page = pages;
+                        }
+                        
+                        window.location.replace('?page=' + page + sort);
+                    }
+                }
+            });  
+        });
+    </script>
+{% endblock %}
+
+{% block content_top %}
+    {% if conf.breadcrumbs_display %}
+        {{ breadcrumbs(' &raquo; ', lang.home)|raw }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="row row-tiny">
+        <div class="col-sm-4 col-md-3">            
+            {% include 'templates/other/sidebar-left.twig' %}            
+        </div>
+        <div class="col-sm-8 col-md-9">    
+            <h2 class="title">{{ title }}</h2>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <form id="filter_order" class="form-inline list-sort-form" action="{{ server('PHP_SELF') }}"> 
+                        <div class="form-group">
+                            <label class="control-label">{{ lang.sort_by }}:</label>
+                            <select name="sort" class="form-control">
+                                <option value="name_asc" {% if parameter('sort') == 'name_asc' %} selected{% endif %}>{{ lang.product_name }} A-Z</option>
+                                <option value="name_desc" {% if parameter('sort') == 'name_desc' %} selected{% endif %}>{{ lang.product_name }} Z-A</option>
+                                <option value="price_asc" {% if parameter('sort') == 'price_asc' %} selected{% endif %}>{{ lang.price_asc }}</option>
+                                <option value="price_desc" {% if parameter('sort') == 'price_desc' %} selected{% endif %}>{{ lang.price_desc }}</option>                                
+                                <option value="date_desc" {% if parameter('sort') == 'date_desc' %} selected{% endif %}>{{ lang.newest }}</option>
+                                <option value="date_asc" {% if parameter('sort') == 'date_asc' %} selected{% endif %}>{{ lang.oldest }}</option>                                
+                            </select>
+                            
+                            <input type="hidden" name="price_from" class="form-control" value="{{ parameter('price_from') }}">
+                            <input type="hidden" name="price_to" class="form-control" value="{{ parameter('price_to') }}">
+                            <input type="hidden" name="keyword" class="form-control" value="{{ parameter('keyword') }}">        
+                            <select name="producers[]" class="hidden form-control" id="producers" multiple>
+                                {% for producer in aProducers %}
+                                    <option value="{{ producer.id }}" {% if producer.id in parameter('producers') %} selected{% endif %}>{{ producer.name }}</option>
+                                {% endfor %}
+                            </select>                        
+                        </div>
+                    </form>
+                </div>
+            </div>
+                           
+            <ul class="products-list row">               
+            {% for entity in entities %}
+                <li class="col-md-3 col-sm-4 col-xs-6">
+                    <div class="product-wrapper">
+                        {% if entity.mega_offer == 1 %}
+                        <div class="product-special-ribbon">
+                            <div class="special-ribbon-wrapper"><span>{{ lang. mega_offer }}</span></div>
+                        </div>
+                        {% endif %}
+                        {% if entity.status_id == 1 %}<div class="product-new-ribbon"><span>{{ lang.label_new }}</span></div>{% endif %}
+                        <div class="product-element">
+                            <a href="{{ entity.url }}" class="product-img"><img src="{{ entity.photo.small }}"></a>
+                            <a href="{{ entity.url }}" class="product-name"><span>{{ entity.name }}</span></a>
+                            <div class="product-price-data">
+                                {% include 'templates/product/prices.twig' %}
+                            </div>
+                            <a href="{{ entity.url }}" class="btn btn-default">{{ 'product_details'|trans }}</a>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+            
+            {% include 'templates/other/pagination.twig' %}
+        </div>
+    </div> 
+
+    
+{#    {% include 'templates/other/pages.twig' %}#}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% if static('Cms','frontendLanguages')|length > 1 %}
+    <div class="dropdown language-dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            {% set locale = static('Cms','session').get('locale') %}            
+            <span class="flag-icon flag-icon-{% if locale == 'en' %}gb{% else %}{{ locale }}{% endif %}"></span>
+            <span class="caret"></span>
+        </button>        
+        <ul class="dropdown-menu">
+            {% for row in static('Cms','frontendLanguages') %}
+                <li {% if row.code == locale %}class="active"{% endif %}><a href="{{ constant('SERVER_URL') }}/switch-language/{{ row.code }}"><span class="flag-icon flag-icon-{{ row.code }}"></span> {{ attribute(lang, row.code) }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

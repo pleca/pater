@@ -1,0 +1,87 @@
+{% extends "admin/base.twig" %}
+
+{% block content %}
+<h3 class="page-title">{{ pageTitle }}
+</h3>
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-equalizer font-red-sunglo"></i>
+            <span class="caption-subject font-red-sunglo bold uppercase">Form Sample</span>
+            <span class="caption-helper">form actions without bg color</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="btn-group">
+            <a class="btn btn-default" href="?"><i class="fa fa-arrow-left"></i> {{ lang.back }}</a>
+            <a class="btn btn-default" href="?action=edit&amp;id={{ entity.id }}"><i class="fa fa-home"></i> Dane podstawowe</a>
+            <a class="btn btn-default active" href="?action=expanded&amp;id={{ entity.id }}"><i class="fa fa-globe"></i> Dane rozszerzone</a>
+            <a class="btn btn-default" href="?action=variation&amp;id={{ entity.id }}"><i class="fa fa-sitemap"></i> Wariacje</a>
+            <a class="btn btn-default" href="?action=image&amp;id={{ entity.id }}"><i class="fa fa-photo"></i> Zdjęcia</a>
+        </div>
+   
+        <form method="post" class="form-horizontal" action="{{ server('PHP_SELF') }}">
+            <div class="form-body">   
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.feature_name }} 1</label>
+                    <div class="col-md-4">
+                        {% for row in features %}
+                           {% if loop.first %}<select name="feature1_id" class="form-control"><option value="">{{ lang.select }}</option>{% endif %}
+                              <option value="{{ row.id }}" {% if row.id == entity.feature1_id %}selected="true"{% endif %}>{{ row.name }}</option>
+                           {% if loop.last %}</select>{% endif %}
+                       {% endfor %}                            
+                    </div>                     
+                </div>            
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.feature_name }} 2</label>
+                    <div class="col-md-4">
+                        {% for row in features %}
+                           {% if loop.first %}<select name="feature2_id" class="form-control"><option value="">{{ lang.select }}</option>{% endif %}
+                              <option value="{{ row.id }}" {% if row.id == entity.feature2_id %}selected="true"{% endif %}>{{ row.name }}</option>
+                           {% if loop.last %}</select>{% endif %}
+                       {% endfor %}                            
+                    </div>                     
+                </div>            
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ lang.feature_name }} 3</label>
+                    <div class="col-md-4">
+                        {% for row in features %}
+                           {% if loop.first %}<select name="feature3_id" class="form-control"><option value="">{{ lang.select }}</option>{% endif %}
+                              <option value="{{ row.id }}" {% if row.id == entity.feature3_id %}selected="true"{% endif %}>{{ row.name }}</option>
+                           {% if loop.last %}</select>{% endif %}
+                       {% endfor %}                            
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Tag 1</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="tag1" value="{{ entity.tag1 }}" />
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Tag 2</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="tag2" value="{{ entity.tag2 }}" />
+                    </div>                     
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Tag 3</label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="tag3" value="{{ entity.tag3 }}" />
+                    </div>                     
+                </div>
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="hidden" name="action" value="expanded" />
+                        <input type="hidden" name="id" value="{{ entity.id }}" />
+                        <button class="btn green" type="submit">{{ lang.btn_save }}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

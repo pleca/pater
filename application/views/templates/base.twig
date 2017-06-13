@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="{{ language.code }}">
+    <head>
+        {% block head %}
+        <meta charset="utf-8">
+        <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="keywords" content="{{ pageKeywords }}" />
+        <meta name="description" content="{{ pageDescription }}" />
+        <meta name="theme-color" content="{{ colors.theme_color_active }}">
+{#        {{ conf.google_site_verification|raw }}#}
+        <title>{{ pageTitle }}</title>
+
+        <link rel="alternate" type="application/rss+xml" title="Kanał RSS - {{ conf.company_name }}" href="{{ constant("URL") }}/rss.html" />
+        <link rel="shortcut icon" href="{{ constant("CMS_URL") }}/files/graphics/favicon.ico" /> 
+        <!-- CSS -->
+        <link rel="stylesheet" href="{{ constant("TPL_URL") }}/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{ constant("TPL_URL") }}/css/font-awesome.min.css">
+        <link rel="stylesheet" href="{{ constant("TPL_URL") }}/css/materialdesignicons.min.css">
+        <link rel="stylesheet" href="{{ constant("TPL_URL") }}/css/flag-icon.min.css">
+        <link rel="stylesheet" href="{{ constant("TPL_URL") }}/css/ilightbox.css">
+        <link rel="stylesheet" href="{{ constant("TPL_URL") }}/css/owl.carousel.css">
+        {% if template.slug == 'template_2' %}
+            <link rel="stylesheet" href="{{ constant("TPL_URL") }}/css/template/{{ template.slug }}/select2.min.css">
+        {% endif %}
+        <link rel="stylesheet" href="{{ constant("TPL_URL") }}/css/template/{{ template.slug }}/extras.css">
+        <link rel="stylesheet" href="{{ constant("TPL_URL") }}/css/template/{{ template.slug }}/style.css">
+        <link rel="stylesheet" href="{{ constant("TPL_URL") }}/css/template/{{ template.slug }}/colors.css">  
+        
+        <link rel="stylesheet" href="{{ constant("TPL_URL") }}/css/base/frontend.css">        
+        
+        <!-- JS -->
+        <script src="{{ constant("TPL_URL") }}/js/jquery-2.1.4.min.js"></script>
+        <script src="{{ constant("TPL_URL") }}/js/bootstrap.min.js"></script>
+        <script src="{{ constant("TPL_URL") }}/js/jquery.requestAnimationFrame.js"></script>
+        <script src="{{ constant("TPL_URL") }}/js/jquery.mousewheel.js"></script>
+        <script src="{{ constant("TPL_URL") }}/js/ilightbox.packed.js"></script>
+        <script src="{{ constant("TPL_URL") }}/js/jquery.cycle2.min.js"></script>
+        {% if template.slug == 'template_2' %}
+            <script src="{{ constant("TPL_URL") }}/js/template/{{ template.slug }}/select2.min.js"></script>
+        {% endif %}
+        <script src="{{ constant("TPL_URL") }}/js/js.cookie.js"></script>
+        <script src="{{ constant("TPL_URL") }}/js/template/{{ template.slug }}/main.js"></script>
+        
+        <script>
+           var CMS_URL = "{{ constant("CMS_URL") }}";
+        </script>                
+        
+        {{ conf.javascript_section_head|raw }}
+        <script src="{{ constant("TPL_URL") }}/js/base/frontend.js"></script>
+
+        {% endblock %}
+    </head>
+    
+<body>
+
+    <!-- HEADER -->
+    <header>
+
+        <!-- MAIN TOP -->
+        <div class="main-top container">
+            <div class="row">
+                <div class="col-xs-4 col-sm-2 col-md-2 col-lg-3">
+                    <div class="vcenter">
+                        <div class="text-center">
+                            <a class="logo" href="{{ constant("URL") }}"><img src="{{ constant("CMS_URL") }}/files/graphics/logo.png" alt="{{ seo.logo_alt }}"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-8 col-sm-4 col-md-5 col-lg-3">
+                    {% if conf.company_details_display %}
+                    <div class="vcenter">
+                        <address>
+                            {% if conf.company_phone %}<span><i class="mdi mdi-phone"></i> <a href="tel:{{ conf.company_phone }}">{{ conf.company_phone }}</a></span>{% endif %}
+                            {% if conf.email_office %}<span><i class="mdi mdi-email-outline"></i> <a href="mailto:{{ conf.email_office }}">{{ conf.email_office }}</a></span>{% endif %}
+                            {% if conf.fb_url %}<span><i class="mdi mdi-facebook"></i> <a href="{{ conf.fb_url }}">{{ conf.company_name }}</a></span>{% endif %}
+                        </address>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-sm-6 col-md-5 col-lg-6 actions-elements">
+                    <div class="vcenter text-right">
+                        {% include 'templates/search/form.twig' %}
+
+                        <div class="user-actions {% if static('Cms','modules')['help'] %}hidden{% endif %}">
+                            {% include 'templates/other/language-frontend.twig' %}
+
+                            <div class="dropdown">
+                              <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="mdi mdi-account-circle"></i>
+                                {% if logged == 1 %} 
+                                    {% set username = customer.first_name ~ ' ' ~ customer.last_name %}
+                                    {{ username | truncate(16) }} {% else %}{{ lang.menu_account }}
+                                {% endif %}
+                                <span class="caret"></span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-right">
+                                {% if logged == 1 %}
+                                    <li><a href="{{ constant("URL") }}/customer/profile"> {{ lang.menu_account }}</a></li>
+                                    <li><a href="{{ constant("URL") }}/customer/order"> {{ lang.menu_orders }}</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="{{ constant("URL") }}/customer/logout"><i class="mdi mdi-power"></i> {{ lang.menu_signout }}</a></li>
+                                {% else %}
+                                    <li><a href="{{ constant("URL") }}/customer/login"><i class="mdi mdi-chevron-right"></i> {{ lang.menu_signin }}</a></li>
+                                    <li><a href="{{ constant("URL") }}/customer/register"><i class="mdi mdi-chevron-right"></i> {{ lang.menu_register }}</a></li>                                
+                                {% endif %}
+                              </ul>
+                            </div>
+
+                            <div class="dropdown cart-dropdown">
+                              <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="mdi mdi-cart-outline"></i> 
+                                <span id="basket-price">
+                                {% if constant("LOGGED") and customer.only_netto_prices == 1 %}
+                                    {{ conf.currency_left }}{{ summary.total_netto }}{{ conf.currency_right }}
+                                {% else %}
+                                    {{ conf.currency_left }}{{ summary.total }}{{ conf.currency_right }}
+                                {% endif %}
+                                </span>
+                                <span class="caret"></span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-right basket-list">
+                                  {% include 'templates/basket/mini-basket-list.twig' %}                                                                
+                              </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- END MAIN TOP -->
+
+        <!-- NAV -->
+        {% include 'templates/other/menu-top.twig' %}
+        <!-- END NAV -->
+
+    </header>
+    <!-- END HEADER -->
+
+
+    <!-- SLIDER -->
+    {% block slider %}{% endblock %}
+    <!-- END SLIDER -->
+
+
+    <!-- PAGE CONTENT -->
+    <section class="content" role="main">
+        <div class="container">            
+            {% block content_top %}{% endblock %}
+            {% include 'templates/other/notify-all.twig' %}
+            {% block content %}{% endblock %}
+        </div>        
+    </section>
+    <!-- END PAGE CONTENT -->
+
+    <footer>
+
+        <!-- NAV -->
+        <div class="first-footer-row" id="footer-nav">
+            <div class="container">                               
+                <div class="row">
+                    {% include 'templates/other/menu-bottom.twig' %} 
+                </div>
+                
+                <div class="row">
+                {% include 'templates/other/seo-accordion.twig' %}
+                </div>
+                
+                <div class="row">
+                    {% include 'templates/other/logotypes.twig' %} 
+                </div>
+            </div>
+        </div>
+        <!-- END NAV --> 
+        
+        <!-- NEWSLETTER -->
+        <div class="second-footer-row">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-7 col-md-6">
+
+                        <i class="mdi mdi-email-open-outline deco-icon"></i>
+
+                        <div class="vcenter">
+                            <form class="search-form {% if static('Cms','modules')['help'] %}hidden{% endif %}" action="{{ constant("URL") }}/newsletter/add.html" method="post">
+                                <h3>Sign up for newsletter</h3>
+                                <div class="input-group">
+                                    <input type="emal" name="newsletter[email]" class="form-control" placeholder="{{ lang.enter_your_email_for_newsletter }}">
+                                    <input type="hidden" value="1" id="newsletter_privacy" name="newsletter[privacy]">
+                                    <input type="hidden" value="" id="newsletter_new_user" name="newsletter[new_user]">                                    
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-default"> {{ lang.newsletter_sign_button }} </button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-5 col-md-6">
+                        <div class="vcenter">
+                            <div>
+                                <div class="social-icons">
+                                    {% if conf.fb_url %}<a href="{{ conf.fb_url }}"><i class="mdi mdi-facebook-box"></i></a>{% endif %}
+                                    {% if conf.yt_url %}<a href="{{ conf.yt_url }}"><i class="mdi mdi-youtube-play"></i></a>{% endif %}
+                                    {% if conf.twitter_url %}<a href="{{ conf.twitter_url }}"><i class="mdi mdi-twitter"></i></a>{% endif %}
+                                    {% if conf.pinterest_url %}<a href="{{ conf.pinterest_url }}"><i class="mdi mdi-pinterest"></i></a>{% endif %}
+                                    {% if conf.instagram_url %}<a href="{{ conf.instagram_url }}"><i class="mdi mdi-instagram"></i></a>{% endif %}
+                                </div>
+                                <p>{{ lang.copyright|raw }}</p>
+                                <p>Site Designed by <a href="http://www.idea4me.pl" title="Site Designed by" target="_blank">Idea4Me.pl</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END NEWSLETTER -->
+
+    </footer>
+
+    <div class="cookies-info">
+        <div class="container">
+            <div class="cookies-info-wrapper">
+                <i data-cookie-agree class="mdi mdi-close-circle"></i>
+                <span>{{ lang.cookie_msg1|raw }} {{ lang.cookie_msg2|raw }}</span>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    });    
+</script>                
+{{ conf.javascript_section_body|raw }}
+</body>
+</html>             
