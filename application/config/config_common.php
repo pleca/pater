@@ -14,6 +14,7 @@ define('SYS_DIR', CMS_DIR . '/system');
 define('TPL_URL', CMS_URL . '/public');
 define('VIEW_DIR', CMS_DIR . '/application/views');
 define('ENTITY_DIR', CMS_DIR . '/application/entity');
+define('EXP_DIR', CMS_DIR . '/application/export');
 
 define('NO_ACCESS', 1); // dostep do plikow PHP
 define('UNIX', 0); // wlancza funkcje dzialajace wylacznie na systmie UNIX
