@@ -16,12 +16,6 @@ $prod = new Product();
 $params = ['locale' => Cms::$defaultLocale];
 
 
-//CSV to Array
-$importer = new \Application\Classes\ImportExportCsv\CsvImporter(EXP_DIR . '/products.csv');                    //nie widzi bez całej ścieżki, mimo że jest require.
-$data = $importer->get();
-
-
-
 $products = $prod->getAll($params, ['name', 'tag1', 'tag2', 'tag3']);
 //$products1 = array (
 //    array('aaa', 'bbb', 'ccc', 'dddd'),
@@ -37,7 +31,9 @@ showList($params);
 
 
 
-
+//CSV to Array
+$importer = new \Application\Classes\ImportExportCsv\CsvImporter(EXP_DIR . '/products.csv');                    //nie widzi bez całej ścieżki, mimo że jest require.
+$data = $importer->get();
 
 
 function showList($params = [])
