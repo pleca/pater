@@ -56,6 +56,8 @@ class CsvImporter
 
         $data = array();
 
+        $data = $this->myHead($data);
+
         if ($max_lines > 0)
             $line_count = 0;
         else
@@ -74,6 +76,14 @@ class CsvImporter
             if ($max_lines > 0)
                 $line_count++;
         }
+        return $data;
+    }
+
+    function myHead(array $data)
+    {
+
+
+
         return $data;
     }
 

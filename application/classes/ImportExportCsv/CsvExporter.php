@@ -48,14 +48,15 @@ class CsvExporter
        
         $pr = [];
 
-        $pr[0]['1'] = 'jedyn';
-        $pr[0]['2'] = 'dwa';
-        $pr[0]['3'] = 'czy';
-        $pr[0]['4'] = 'tery';
-        $pr[0]['5'] = 'ęć';
-        $pr[0]['6'] = 'szejść';
-
         $i=1;
+
+        foreach ($this->data[0] as $key => $val){
+            if (strcmp("variations", $key) !== 0) {
+                $pr[0][$key] = $key;
+            }
+        }
+
+        $mam=0;
 
         foreach ($this->data as $product) {
             foreach ($product as $key => $val) {

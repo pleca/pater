@@ -11,30 +11,36 @@ if ($_SESSION[USER_CODE]['privilege']['shop'] != 1)
 
 require_once(MODEL_DIR . '/Product.php');
 require_once(CLASS_DIR . '/ImportExportCsv/CsvImporter.php');
+require_once(CLASS_DIR . '/ImportExportCsv/CsvExporter.php');
 
 $prod = new Product();
 $params = ['locale' => Cms::$defaultLocale];
 
 
+
 $products = $prod->getAll($params, ['name', 'tag1', 'tag2', 'tag3']);
-//$products1 = array (
-//    array('aaa', 'bbb', 'ccc', 'dddd'),
-//    array('123', '456', '789'),
-//    array('"aaa"', '"bbb"')
-//);
+//$products = $prod->getAll($params);
 
-$exporter = new \Application\Classes\ImportExportCsv\CsvExporter($products, EXP_DIR.'/products.csv');
-
-$csv = $exporter->get();
-$params['csv'] = $csv;
-showList($params);
-
+//DB to array to CSV
+//$exporter = new \Application\Classes\ImportExportCsv\CsvExporter($products, EXP_DIR.'/products.csv');
+//$csv = $exporter->get();
+//$params['csv'] = $csv;
 
 
 //CSV to Array
 $importer = new \Application\Classes\ImportExportCsv\CsvImporter(EXP_DIR . '/products.csv');                    //nie widzi bez całej ścieżki, mimo że jest require.
 $data = $importer->get();
 
+$jojne=0;
+
+//Array to DB
+//w pętli robię insert do DB
+
+
+$prod->
+
+
+showList($params);
 
 function showList($params = [])
 {
