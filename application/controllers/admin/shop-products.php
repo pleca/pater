@@ -234,6 +234,7 @@ elseif(isset($_GET['action']) AND $_GET['action'] == 'variation') {
 	showVariationRelated();
 	
 } else {
+    //1.
 	showList();
 }
 
@@ -311,6 +312,7 @@ function showImage($id, $params = []) {
 function showDuplicate($id, $params = []) {
 }
 
+//2.
 function showList($params = []) {
 	global $oProductsAdmin, $category, $oProducersAdmin;
 

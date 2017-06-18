@@ -37,6 +37,8 @@ class SSP {
 
     static function data_output ( $columns, $data, $isJoin = false )
     {
+        //8.
+        // tu zamienia id na nazwy, np category_id => 1 na Suplementy
         $out = array();
 
         for ( $i=0, $ien=count($data) ; $i<$ien ; $i++ ) {
@@ -47,6 +49,8 @@ class SSP {
 
                 // Is there a formatter?
                 if ( isset( $column['formatter'] ) ) {
+                    //9.
+                    //wywołuję closure zdefiniowany w product.php::getList()
                     $row[ $column['dt'] ] = ($isJoin) ? $column['formatter']( $data[$i][ $column['field'] ], $data[$i] ) : $column['formatter']( $data[$i][ $column['db'] ], $data[$i] );
                 }
                 else {
@@ -258,6 +262,13 @@ class SSP {
 			 $limit";
         }
 //        dump($query);die;
+
+        //7.
+        //tu jest query główne!
+        //ale są id a nie nazwy dla kategorii, producenta, statusu, itd więc gdzieś jeszcze dalej coś się musi dziać.
+        //np category_id=10,
+        //$query z debugera poniżej
+        // SELECT DISTINCT SQL_CALC_FOUND_ROWS `p`.`id` as lp, `p`.`id`, `pt`.`name`, (SELECT GROUP_CONCAT(DISTINCT sku SEPARATOR "|") FROM `product_variation` v WHERE `v`.`product_id`=`p`.`id`) as sku, (SELECT GROUP_CONCAT(DISTINCT ean SEPARATOR "|") FROM `product_variation` v WHERE `v`.`product_id`=`p`.`id`) as ean, `p`.`category_id`, `p`.`producer_id`, `p`.`status_id`, (SELECT max(promotion) FROM `product_variation` v WHERE `v`.`product_id`=`p`.`id`) as promotion, (SELECT max(bestseller) FROM `product_variation` v WHERE `v`.`product_id`=`p`.`id`) as bestseller, (SELECT max(recommended) FROM `product_variation` v WHERE `v`.`product_id`=`p`.`id`) as recommended, (SELECT max(main_page) FROM `product_variation` v WHERE `v`.`product_id`=`p`.`id`) as main_page, `p`.`date_add`, `p`.`date_mod`, `p`.`id` as `actions`, (SELECT `slug` FROM `categories_translation` WHERE `translatable_id`=`c`.`parent_id` LIMIT 1) as `parent_url`, `ct`.`slug` as `category_url`, `pt`.`slug` as `name_url`, `p`.`type` FROM `product` AS `p` LEFT JOIN `categories` AS `c` ON (`c`.`id` = `p`.`category_id`)LEFT JOIN `categories_translation` AS `ct` ON (`ct`.`translatable_id` = `p`.`category_id` AND `ct`.locale = 'en')LEFT JOIN `product_translation` AS `pt` ON (`pt`.`translatable_id` = `p`.`id` AND `pt`.locale = 'en') LEFT JOIN `product_variation` AS `v` ON (`v`.`product_id` = `p`.`id` ) ORDER BY `pt`.`name` ASC LIMIT 0, 10
         $data = SSP::sql_exec( $db, $bindings,$query);
 
         // Data set length after filtering

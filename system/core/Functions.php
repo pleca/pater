@@ -344,6 +344,8 @@ function arrayItemsStartedWithNumber($items, $property = 'name') {
     return $filteredItems;
 }
 
+//11.
+//zamiana id na nazwę
 function getFullCategoryName($categoryId, $categories) {
     $fullCategoryName = '';
 

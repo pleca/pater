@@ -5,6 +5,7 @@ $method = $_REQUEST['method'];
 $id = isset($_POST['id']) ? $_POST['id'] : 0;
 
 switch ($method) {
+        //4.
     case 'getList':
         getList();
         break;
@@ -51,6 +52,7 @@ function getProductVariations($productId)
     echo Cms::$twig->render('admin/ajax/variations.twig', $data);
 }
 
+//5.
 function getList()
 {
     error_reporting(E_ALL ^ E_NOTICE);
@@ -161,7 +163,11 @@ function getList()
 
                 return $content;
             }),
-//        array( 'db' => '`p`.`category_id`',   'dt' => 5, 'field' => 'category_id'),
+// 6.
+// poniżej jest closure. Tu go definiuję a póżniej wywołuję z argumentami.
+// Ten closure zamienia np category_id=>4 na Suplements używając core-systemowej funkcji getFullCategoryName()
+// ten closure jest wywoływany w application/libraries/ssp.customized.class.php::data_output() w lini 51: $column['formatter']( $data[$i][ $column['field']
+// czyli muszę tak samo użyć tej głupiej funkcji systemu core getFullCategoryName()
         array('db' => '`p`.`category_id`', 'dt' => 5, 'field' => 'category_id',
             'formatter' => function ($d, $row) use ($categories) {
                 if (!$d) {

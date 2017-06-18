@@ -52,16 +52,17 @@
 
                             element.parent().children('.variations').toggle();
                         });#}
-
             var table = $('#tableServerSide').DataTable({
                 "stateSave": true,
                 "pagingType": "bootstrap_extended",
                 "bSortCellsTop": true,
                 "processing": true,
                 "serverSide": true,
+                //poniżej to dalej DataTable ale zapis identyczny z Ajax jQuery
                 ajax: {
                     url: "../admin/ajax/product.php",
                     data: function (d) {
+                        //.3
                         d.method = 'getList';
                         d.date_add_from = Cookies.get('date_add_from');
                         d.date_add_to = Cookies.get('date_add_to');
@@ -90,6 +91,7 @@
                     {"searchable": false, "targets": 10},
                     {"searchable": false, "targets": 13}
                 ],
+                //initComplete - gdy wszystkie dane tabeli zostały załadowane
                 initComplete: function () {
                     this.api().columns().every(function (index) {
                         var column = this;
