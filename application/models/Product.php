@@ -127,14 +127,23 @@ class Product extends BaseModel {
 		if ($limit) {
 			$q .= " LIMIT " . $limit;
 		}
-		
-		
-//dump($q);
+
+
+        // 1. czyli narazie mam produkty bez wariacji (602)
+        // $entities
+        // [0]=>[id=>1,category_id=>8,...]
+        // [1]=>[id=>2,category_id=>12,...]
 		$entities = Cms::$db->getAll($q);
 		
 		$variation = new Variation();
 		$productVariations = [];
-		
+
+
+
+        // 2. tu ściągam wszystkie wariacje jedna po drugiej (2802)
+        // $variations
+        // [0]=>[id2=>1,product_id=>1,sku=>1234]
+        // [1]=>[id2=>2,product_id=>1,sku=>46454]
 		if (isset($params['id'])) {
 			$variations = $variation->getBy(['product_id' => $params['id']]);
 		} else {
@@ -142,11 +151,19 @@ class Product extends BaseModel {
 		}
 		
 		if ($variations) {
-			
+            // 3. tu tworzę tymczasową tablicę wariacji, każdą wariację wrzucam do
+            // klucza $variation['product_id']
+            // $productVariations (600)
+            //[1]=>[
+            // [0]=>[id2=>1,product_id=>1,sku=>1234]
+            // [1]=>[id2=>2,product_id=>1,sku=>46454]
+            //]
 			foreach ($variations as $variation) {
 				$productVariations[$variation['product_id']][] = $variation;
 			}
-			
+            // 4. tu wartści elementów powyższej tablicy z wariacjami wrzucam do
+            // tablicy produktów $entity pod kluczem 'variations'
+            // $entity
 			foreach ($entities as &$entity) {
 				if (isset($productVariations[$entity['id']])) {
 					$entity['variations'] = $productVariations[$entity['id']];
