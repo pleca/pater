@@ -6,31 +6,19 @@ namespace Application\Classes\ImportExportCsv;
 class CsvExporter
 {
     private $fp;
-    private $parse_header;
-    private $header;
     private $delimiter;
-    private $length;
-    private $chmod;
 
-    function __construct(array $data, $file_name, $parse_header = false, $delimiter = ";", $length = 8000, $chmod = true)
+    function __construct(array $data, $file_name, $delimiter = ";", $chmod = true)
     {
         $this->data = $data;
         $this->file_name = $file_name;
         $this->fp = fopen($file_name, "w");
-        $this->parse_header = $parse_header;
         $this->delimiter = $delimiter;
-        $this->length = $length;
-        $this->chmod = $chmod;
 
-        if ($this->parse_header) {
-            $this->header = fgetcsv($this->fp, $this->length, $this->delimiter);
-        }
-        
         //to easy remove created csv file in linux system
-        if ($this->chmod){
+        if ($chmod){
             chmod($this->file_name, 0777);
         }
-
     }
 
     function __destruct()
@@ -48,24 +36,9 @@ class CsvExporter
        
         $pr = [];
 
-        $i=1;
-
-        foreach ($this->data[0] as $key => $val){
-            if (strcmp("variations", $key) !== 0) {
-                $pr[0][$key] = $key;
-            }
-        }
-
-        $mam=0;
-
-        foreach ($this->data as $product) {
-            foreach ($product as $key => $val) {
-                if (strcmp('variations', $key) !== 0) {
-                    $pr[$i][$key] = $val;
-                }
-            }
-            $i++;
-        }
+        //set headers
+        $pr = $this->setHeaders($pr);
+        $pr = $this->setRows($pr);
 
         $this->data = $pr;
 
@@ -76,8 +49,30 @@ class CsvExporter
         return $this->fp;
     }
 
-    public function addHeaders()
+    private function setHeaders($pr)
     {
-        
+        foreach ($this->data[0] as $key => $val) {
+            if (strcmp("variations", $key) !== 0) {
+                $pr[0][$key] = $key;
+            }
+        }
+
+        return $pr;
+    }
+
+    private function setRows($pr)
+    {
+        $i = 1;
+
+        foreach ($this->data as $product) {
+            foreach ($product as $key => $val) {
+                if (strcmp('variations', $key) !== 0) {
+                    $pr[$i][$key] = $val;
+                }
+            }
+            $i++;
+        }
+
+        return $pr;
     }
 }
