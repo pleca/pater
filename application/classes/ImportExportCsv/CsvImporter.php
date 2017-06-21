@@ -40,7 +40,6 @@ class CsvImporter
         if ($this->parse_header) {
             $this->header = fgetcsv($this->fp, $this->length, $this->delimiter);
         }
-
     }
 
     function __destruct()
@@ -56,7 +55,7 @@ class CsvImporter
 
         $data = array();
 
-        $data = $this->myHead($data);
+//        $data = $this->myHead($data);
 
         if ($max_lines > 0)
             $line_count = 0;
@@ -81,9 +80,6 @@ class CsvImporter
 
     function myHead(array $data)
     {
-
-
-
         return $data;
     }
 

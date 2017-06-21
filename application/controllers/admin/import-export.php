@@ -14,8 +14,8 @@ require_once(MODEL_DIR . '/ProductsCsv.php');
 require_once(CLASS_DIR . '/ImportExportCsv/CsvImporter.php');
 require_once(CLASS_DIR . '/ImportExportCsv/CsvExporter.php');
 
-$pc = new ProductsCsv();
-$products = $pc->getProducts();
+//$pc = new ProductsCsv();
+//$products = $pc->getProducts();
 
 //todo: eksport z DB do CSV działa. Popraw nazwy kolumn "as"
 //DB to array to CSV
@@ -28,6 +28,7 @@ $products = $pc->getProducts();
 //CSV to Array
 $importer = new \Application\Classes\ImportExportCsv\CsvImporter(EXP_DIR . '/products.csv');                    //nie widzi bez całej ścieżki, mimo że jest require.
 $data = $importer->get();
+$mam=0;
 showList($params);
 
 function showList($params = [])
