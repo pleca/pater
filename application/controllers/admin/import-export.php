@@ -19,12 +19,12 @@ require_once(CLASS_DIR . '/ImportExportCsv/CsvExporter.php');
 
 //todo: eksport z DB do CSV działa. Popraw nazwy kolumn "as"
 //DB to array to CSV
-//$exporter = new \Application\Classes\ImportExportCsv\CsvExporter($products, EXP_DIR . '/products.csv', false);
-//$csv = $exporter->get();
-//$params['csv'] = $csv;
+$exporter = new \Application\Classes\ImportExportCsv\CsvExporter($products, EXP_DIR . '/products.csv', false);
+$csv = $exporter->get();
+$params['csv'] = $csv;
 //showList($params);
 
-//todo: import z CSV do DB...
+//todo: import z CSV do DB. Eksportuje do array, nie zapisuje w bazie
 //CSV to Array
 $importer = new \Application\Classes\ImportExportCsv\CsvImporter(EXP_DIR . '/products.csv');                    //nie widzi bez całej ścieżki, mimo że jest require.
 $data = $importer->get();

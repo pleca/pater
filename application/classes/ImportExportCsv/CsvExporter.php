@@ -37,7 +37,7 @@ class CsvExporter
         $pr = [];
 
         //set headers
-        $pr = $this->setHeaders($pr);
+        $pr = $this->setDbHeaders($pr);
         $pr = $this->setRows($pr);
 
         $this->data = $pr;
@@ -49,7 +49,7 @@ class CsvExporter
         return $this->fp;
     }
 
-    private function setHeaders($pr)
+    private function setDbHeaders($pr)
     {
         foreach ($this->data[0] as $key => $val) {
             if (strcmp("variations", $key) !== 0) {
@@ -59,6 +59,21 @@ class CsvExporter
 
         return $pr;
     }
+
+//    private function setHumanHeaders()
+//    {
+//        $headers = ['SKU', 'PRODUCT_NAME', 'CATEGORY', 'MANUFACTURER', 'STATUS',
+//            'PROMOTION', 'BESTSELLERS', 'RECOMMENDED', 'HOMEPAGE',
+////            'TYPE', 'DESC', 'DESC_SHORT', 'TAG1', 'TAG2',
+////            'TAG3', 'DATE_ADD', 'DATE_MOD', 'IMAGE1', 'IMAGE2',
+////            'IMAGE3', 'FEATURE1_NAME', 'FEATURE2_NAME', 'FEATURE3_NAME', 'PARENTAGE',
+////            'TAX', 'PRICE_PURCHASE', 'PRICE_RRP', 'PRICE', 'PRICE2',
+////            'PRICE3', 'PRICE_PROMOTION', 'PROMOTION', 'BESTSELLER', 'RECOMMENDED',
+////            'MAIN_PAGE', 'MEGA_OFFER', 'WEIGHT', 'QTY', 'DATE_PROMOTION',
+////            'FEATURE1_VALUE', 'FEATURE2_VALUE', 'FEATURE3_VALUE', 'EXPORTED_DOMAIN'];
+//
+//        return $headers;
+//    }
 
     private function setRows($pr)
     {
