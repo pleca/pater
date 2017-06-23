@@ -125,14 +125,40 @@ class RunController {
             'FEATURE1_VALUE', 'FEATURE2_VALUE', 'FEATURE3_VALUE', 'EXPORTED_DOMAIN'];
 
         $data[] = $headers2;
-                
+
+        //joj dla każdego produktu, gdzie są też wariacje zagnieżdżone w każdym produkcie...(czyli jak narazie mam te wariacje w podtablicy zagnieżdżonej, ciekawe jak sobie z tym radzi exporter csv, no bo putcsv nie chciał widzieć zagnieżdżeń
+        //joj narazie nic się nie dzieje z wariacjami, nie są wykorzystywane w getProductRow, ciągle jestem ciekaw jak one wyglądają w CSV
+        //joj bo narazie w kodzie jest tutaj sporo dymu by robić LEFT JOINy, i "nic więcej".
         foreach ($products as $product) {
+            //joj LEFT JOIN, (bo w produktach są id'ki: kategori, statusu, producentów)
+            //joj czyli zwracany jest produkt w jednej lini nazwy statusów, producentów, kategorii (bo były id'ki)
             $row = $this->getProductRow($product, $producers, $categories, $statuses);
+            //joj i wpisywany do kolejnego elementu tablicy $data[] (kolejnego wiersza csv)
             $data[] = $row;
-            
+
+            //joj WARIACJE...
+            //joj Czyli po każdym wierszu z produktem głównym dodawane są wiersze wariacji
+            //joj Czyli tablica $data, tak jak u mnie, nie ma zagnieżdżeń. Zagnieżdżone wariacje z tablicy $product nie są dawane do eksportu
             if (isset($product['variations'])) {
+                //joj dla każdej wariacji produktu...
                 foreach ($product['variations'] as $variation) {
-                    $row = $this->getVariationRow($variation, $taxes);    
+                    //joj Robi puste kolumny dla kolumn dotyczących produktu głównego
+                    //joj i wstawia do kolejnych kolumn dane wariacji. Nic specjalnego
+                    $row = $this->getVariationRow($variation, $taxes);
+
+                    //joj  !WNIOSKI!
+                    //joj NA KONIEC WARIACJA JEST WRZUCANA DO TABLICY $data[] gdzie już jest produkt główny. NIE MA TU ZAGNIEŻDŻEŃ
+                    //joj CZYLI zagnieżdżone wcześniej wariacje z tablicy product nie są wrzucane do CSV w ogóle, a są sztukowane
+                    //joj CZYLI nie jest wrzucane do CSV całe siano PRODUKTY ze wszystkimi zagnieżdżeniami
+                    //joj CZYLI jest tak jak u mnie. To wszystko to LEFT JOIN, ale z większą kontrolą co się dzieje pomiędzy kolumnami i w nich.
+
+                    //joj Pytanie czy ja mając u siebie tablicę z wynikiem zapytania mogę ją modyfikować tak łatwo jak on?????
+                    // - (bredzenie) bo problem się pojawi gdy wynik zapytania będzie zmienny, raz będzie kolumna bestseller a raz nie
+                    //   i mając zapytanie, mam komplet wyników. Gdy nie będę mógł przewidzieć wyniku zapytania i nie wiem jak wygląda jej wynik.
+                    // - tzn mam tablicę produktów-wariacji: [0][] [1][] [2][]
+                    //
+
+
                     $data[] = $row;
                 }
             }
@@ -143,12 +169,49 @@ class RunController {
         $excel->writer->saveFile('products-' . date('YmdHis'));      
         die;
     }
-    
-    protected function getProductRow($product, $producers, $categories, $statuses) {
+
+    protected function getProducts() {
+        require_once(MODEL_DIR . '/shopProductsAdmin.php');
+        $filtr = [];
+        $filtr['limit'] = 100000;
+        $filtr['start'] = 0;
+        $filtr['id'] = '';
+        $filtr['name'] = '';
+        $filtr['category_id'] = 0;
+        $filtr['producer_id'] = 0;
+
+        $oProductsAdmin = new ProductsAdmin();
+        $products = $oProductsAdmin->loadAdmin($filtr); //joj tu ładuje produkty, kolumny wspólne dla wszystkich wariacji (promotion, besteller itd) (bez sku itd)
+
+        $this->addVariationsToProducts($products);
+        $this->addImagesToProducts($products);
+
+        return $products;
+    }
+
+    protected function addVariationsToProducts(&$products) {
+        require_once(MODEL_DIR . '/Variation.php');
+
+        $variation = new Variation();
+        $variations = $variation->getAll();//joj tu sciaga wszystkie wariacje
+        foreach ($products as $key => $product) {//joj no kurwa, mega pętelka na bogato, dla każdego produktu leci wszystkie wariacje i sprawdza, jak to się mówi złożónośc algorytmu n2
+            foreach ($variations as $variation) {
+                if ($product['id'] == $variation['product_id']) { //joj ale wszystko jasne, wrzuca wariacje do klucza ['variations']['2836'] każdego produktu
+                    $products[$key]['variations'][$variation['id2']] = $variation;
+                }
+            }
+        }
+    }
+
+    //joj wywoływane w pętli dla każdego produktu
+    protected function getProductRow($product, $producers, $categories, $statuses) {//joj ok, wstawia do każdego wiersza CSV kolejne wartości kolumn, czyli zamienia zagnieżdżenia na wiersz. Aczkolwiek nie ma tu nic o wariacjach
         $row[0] = '';
         $row[1] = $product['name'];
+        //joj ważne! w 3 liniach wstawia na podstawie wcześniej ściągniętych danych (np wszystkich kategorii).
+        //joj Acha(!), to jest jakby LEFT JOIN, bo w produktach mam id'ki kategori, statusu itd
+        //joj Czyli po to on za każdym razem ściąga powiązane tabele, bo robi LEFT JOIN ale nie w sql tylko w PHP.
         $row[2] = isset($producers[$product['producer_id']]) ? $producers[$product['producer_id']]['name'] : '';
-        $row[3] = isset($categories[$product['category_id']]) ? $categories[$product['category_id']]['name'] : '';
+        $row[3] = isset($categories[$product['category_id']]) ? $categories[$product['category_id']]['name'] : '';//joj z listy kategorii wyciągam po id z danego produktu.
         $row[4] = isset($statuses[$product['status_id']]) ? $statuses[$product['status_id']]['name']: '';
         $row[5] = $product['type'];
         $row[6] = $product['desc'];
@@ -158,26 +221,33 @@ class RunController {
         $row[10] = $product['tag3'];
         $row[11] = $product['date_add'];
         $row[12] = $product['date_mod'];
-        
+
         for ($i = 0; $i <= 2; $i++) {
             $row[] = isset($product['images'][$i]) ? $product['images'][$i]['file'] : '';
         }
-        
+
         $row[16] = $product['feature1_name'];
         $row[17] = $product['feature2_name'];
-        $row[18] = $product['feature3_name'];        
+        $row[18] = $product['feature3_name'];
 
         $row[19] = 'Parent';
         for( $i = 20; $i < 38; $i++) {
             $row[$i] = '';
         }
-        
+
         $row[38] = SERVER_URL;
-        
-        return $row;            
-    }    
-        
+
+        return $row;
+    }
+
+    //joj wywyływane w pętli dla każdej wariacji produktu. $variation to każda jedna konkretna wariacja.
+    //joj Robi puste kolumny dla kolumn dotyczących produktu głównego
     protected function getVariationRow($variation, $taxes) {
+        //joj pierwszych 12 kolumna dane o produkcie ogólnym, czyli wariacje w tych krotkach są puste.
+        //joj od 13 wariacje
+        //joj 13-15 obrazki - dla każdej wariacji inne!
+        //joj 16-38 dane wariacji
+        //joj 19 parent/child
         $row[0] = $variation['sku'];
         $row[1] = '';
         $row[2] = '';
@@ -200,6 +270,7 @@ class RunController {
         $row[17] = $variation['feature2_value'];
         $row[18] = $variation['feature3_value'];         
 
+        //joj kolumna child/parent
         $row[19] = 'Child';
         $row[20] = $taxes[$variation['tax_id']]['value']; //get or create
         $row[21] = $variation['price_purchase']; 
@@ -221,9 +292,43 @@ class RunController {
         $row[37] = $variation['feature3_value']; 
         $row[38] = SERVER_URL;
         
-        return $row;            
+        return $row;
+
+        //joj Czyli u mnie, mając zapytanie SQL muszę tylko w pętli dla wariacji powstawiać puste krotki tam gdzie są wartości produktu ogólnego.
+        //joj Czyli on póki co ma to co ja, wiersz produktu głównego, wiersze wariacji i kolumna parent
     }    
 
+
+    //joj OK czas na import z CSV do DB
+    //joj Jakie problemy, przed analizą kodu są do ogarnięcia:           JOJ PONIŻEŻEJ MOJE GŁÓWKI NA TEMAT KWESTII IMPORTU.
+    //- import z csv do db czyli: z CSV do Tablicy i do DB. Zatem
+    // z csv dostaję tablicę więc tu nie ma problemu, problem jest z przesyłanie tablicy do bazy danych
+    //
+    // [Problem-1] Odróżnienie czy wiersz jest A) Nowy B) Zmodyfikowany C) Nietknięty
+    //  - no nie zrobisz tego magicznie, musisz sprawdzać każdą krotkę
+    //  - aczkolwiek może od razu rozróżnić na A)Nowy-nie ma wpisanego id   B)C)Stary ma ID
+    //
+    // [Problem-2a] Odróżnienie czy wiersz B) Zmodyfikowany C) Nietknięty
+    //  - nie ma magi, sprawdzasz każdą kolejną krotkę. Patrz Problem-2
+    //
+    // [Problem-2b] Modyfikacja istniejących.
+    //   1) w pętli dla każdego wiersza muszę rozpoznać czy mam do czynienia z parent czy child
+    //   2) muszę rozpoznać czy każda kolejna krotka danej wariacji(to samo dla produktu głównego) jest taka jak przed eksportem
+    //      - czyli pobieram z DB tablicę i porównuję krok po kroku z tym co zwraca CSV
+    //      - muszę zatem od razu porównać id (sku) wariacji starej i nowej i w kolejnym zagnieżdżeniu pętli poporównywać ich zawartości i UPDATE
+    // [Problem-2c] Zupełnie nowe, całe produkty.
+    //   1) jeśli nie ma wstawionego id to jest nowy
+    //      - wstawiam zatem ktok po kroku wartości INSERT do kolejnych tabel. Żaden problem
+    //      - INSERT generuje automatycznie nowe id inkrementuje
+    //
+    // [Problem-3] Rozróżnianie dużych liter
+    //      - by nie wstawiał duplikatów różniących się wielkością liter.
+    //
+    //
+    // Podsumowując:
+    // - nie widzę tu problemów
+    //
+    //
     public function importProductsAction() {
         require_once(MODEL_DIR . '/Status.php');
         require_once(MODEL_DIR . '/shopProducersAdmin.php');
@@ -232,44 +337,46 @@ class RunController {
         require_once(MODEL_DIR . '/Variation.php');        
         require_once(MODEL_DIR . '/../entity/Tax.php');
         require_once(CLASS_DIR . '/ImportExportCsv/CsvImporter.php');
-//		echo 'skrypt wylaczony poniewaz wymaga aktualizacji...';
-        $importer = new \Application\Classes\ImportExportCsv\CsvImporter(EXP_DIR . '/products.csv');                    //nie widzi bez całej ścieżki, mimo że jest require.
-        $array = $importer->get();
+
+		echo 'skrypt wylaczony poniewaz wymaga aktualizacji...';
+//        $importer = new \Application\Classes\ImportExportCsv\CsvImporter(EXP_DIR . '/products.csv');                    //nie widzi bez całej ścieżki, mimo że jest require.
+//        $array = $importer->get();
 //		die;
+
 		$data = array(
 			'pageTitle'	=> $GLOBALS['LANG']['panel_cms'],
 		);					
 		
-//        if (!isset($_FILES['products']) OR $_FILES['products']['error']) {
-//			Cms::getFlashBag()->add('error', $GLOBALS['LANG']['Błąd importu pliku.']);
-//			echo Cms::$twig->render('admin/main.twig', $data);
-//            return false;
-//        }
-//
-//        $row = 1;
-//        $array = [];
-//        if (($handle = fopen($_FILES['products']['tmp_name'], "r")) !== FALSE) {
-//            $delimiter = $this->guessDelimiter(file_get_contents($_FILES['products']['tmp_name']));
-//
-//            while (($data = fgetcsv($handle, 10000, $delimiter)) !== FALSE) {
-//                $num = count($data);
-//                $items = [];
-//                $i = 0;
-//
-//                for ($c=0; $c < $num; $c++) {
-//                    $items[$c] = strip_tags($data[$c]);
-//                }
-//
-//                $array[$row] = $items;
-//                $row++;
-//
-//            }
-//            fclose($handle);
-//        }
+        if (!isset($_FILES['products']) OR $_FILES['products']['error']) {
+			Cms::getFlashBag()->add('error', $GLOBALS['LANG']['Błąd importu pliku.']);
+			echo Cms::$twig->render('admin/main.twig', $data);
+            return false;
+        }
+
+        $row = 1;
+        $array = [];
+        if (($handle = fopen($_FILES['products']['tmp_name'], "r")) !== FALSE) {
+            $delimiter = $this->guessDelimiter(file_get_contents($_FILES['products']['tmp_name']));
+
+            while (($data = fgetcsv($handle, 10000, $delimiter)) !== FALSE) {
+                $num = count($data);
+                $items = [];
+                $i = 0;
+
+                for ($c=0; $c < $num; $c++) {
+                    $items[$c] = strip_tags($data[$c]);
+                }
+
+                $array[$row] = $items;
+                $row++;
+
+            }
+            fclose($handle);
+        }
         
-//        $status = new Status();
-//        $statuses = $status->getAll();
-//        $statuses = getArrayByKey($statuses, 'name');
+        $status = new Status();
+        $statuses = $status->getAll();
+        $statuses = getArrayByKey($statuses, 'name');
 
 
 
@@ -306,21 +413,21 @@ class RunController {
          *
          */
 
-//        $category = new Category();
-//        $categories = $category->getAll();
-//        $categories = getArrayByKey($categories, 'name');
-//
-//        $products = new Product();
-//        $products = $products->getAll();
-//        $products = getArrayByKey($products, 'name');
-//
-//        $variations = new Variation();
-//        $variations = $variations->getAll();
-//        $variations = getArrayByKey($variations, 'sku');
-//
-//        $tax = new TaxModel();
-//        $taxes = $tax->getAll();
-//        $taxes = getArrayByKey($taxes, 'value');
+        $category = new Category();
+        $categories = $category->getAll();
+        $categories = getArrayByKey($categories, 'name');
+
+        $products = new Product();
+        $products = $products->getAll();
+        $products = getArrayByKey($products, 'name');
+
+        $variations = new Variation();
+        $variations = $variations->getAll();
+        $variations = getArrayByKey($variations, 'sku');
+
+        $tax = new TaxModel();
+        $taxes = $tax->getAll();
+        $taxes = getArrayByKey($taxes, 'value');
 
         try {          
             Cms::$db->beginTransaction();      
@@ -328,29 +435,29 @@ class RunController {
             foreach ($array as $key => $row) {
                 if ($key > 2) {                        
                     switch ($row['19']) {            
-                        case 'Parent':
-//                            $status = $row[4];
-//                            if (!array_key_exists($status, $statuses)) {
-//                                $this->createStatus($status, $statuses);
-//                            }
+                        case 'Parent':// joj: produkt główny ?? a niżej wariacja?
+                            $status = $row[4];
+                            if (!array_key_exists($status, $statuses)) { // joj: czyli najpierw ściaga wszystko z bazy i dodaje tylko to czego nie ma!
+                                $this->createStatus($status, $statuses);
+                            }
 
                             $producer = $row[2];
                             if (!array_key_exists($producer, $producers)) {
                                 $this->createProducer($producer, $producers, $statuses, $status);
                             }
 
-//                            $category = $row[3];
-//                            if (!array_key_exists($category, $categories)) {
-//                                $this->createCategory($category, $categories, $statuses, $status);
-//                            }
-//
-//                            $product = $row[1];
-//
-//                            if (!array_key_exists($product, $products)) {
-//                                $this->createProduct($row, $statuses, $producers, $categories, $products);
-//                            }
-//
-//                            $lastProduct = $product;
+                            $category = $row[3];
+                            if (!array_key_exists($category, $categories)) {
+                                $this->createCategory($category, $categories, $statuses, $status);
+                            }
+
+                            $product = $row[1];
+
+                            if (!array_key_exists($product, $products)) {
+                                $this->createProduct($row, $statuses, $producers, $categories, $products);
+                            }
+
+                            $lastProduct = $product;
 
                             break;
                         case 'Child':
@@ -597,20 +704,6 @@ die;
         $this->createImages($row, $data);        
     }
 
-
-    protected function addVariationsToProducts(&$products) {
-        require_once(MODEL_DIR . '/Variation.php');        
-        
-        $variation = new Variation();
-        $variations = $variation->getAll();
-        foreach ($products as $key => $product) {
-            foreach ($variations as $variation) {
-                if ($product['id'] == $variation['product_id']) {
-                    $products[$key]['variations'][$variation['id2']] = $variation;
-                }
-            }
-        }        
-    }
     
     protected function addImagesToProducts(&$products) {
         require_once(MODEL_DIR . '/ProductImage.php'); 
@@ -631,26 +724,7 @@ die;
             }      
         }             
     }
-    
-    protected function getProducts() {
-        require_once(MODEL_DIR . '/shopProductsAdmin.php');
-        $filtr = [];
-        $filtr['limit'] = 100000;
-        $filtr['start'] = 0;
-        $filtr['id'] = '';
-        $filtr['name'] = '';
-        $filtr['category_id'] = 0;
-        $filtr['producer_id'] = 0;        
-        
-        $oProductsAdmin = new ProductsAdmin();
-        $products = $oProductsAdmin->loadAdmin($filtr);
-        
-        $this->addVariationsToProducts($products);
-        $this->addImagesToProducts($products);
-        
-        return $products;
-    }    
-    
+
     protected function getSkuList(array $products) {
         if (!$products) {
             return false;
@@ -1016,7 +1090,10 @@ die;
 			}
 		}
 	}
-	
+
+
+	//JOJ CHUJ WIE CO SIĘ DZIEJE OD TEGO MIEJSCA NA SAM DÓŁ. JAKAŚ MIGRACJA KLIENTÓW
+	//joj co to kurwa w ogóle ma za związek z CSV? do chuja pana
 	public function migrateCustomersAction() {
 		echo 'Customers migration....<br />';        
 		

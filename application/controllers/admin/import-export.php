@@ -14,8 +14,8 @@ require_once(MODEL_DIR . '/ProductsCsv.php');
 require_once(CLASS_DIR . '/ImportExportCsv/CsvImporter.php');
 require_once(CLASS_DIR . '/ImportExportCsv/CsvExporter.php');
 
-//$pc = new ProductsCsv();
-//$products = $pc->getProducts();
+$pc = new ProductsCsv();
+$products = $pc->getProducts();
 
 //todo: eksport z DB do CSV działa. Popraw nazwy kolumn "as"
 //DB to array to CSV
