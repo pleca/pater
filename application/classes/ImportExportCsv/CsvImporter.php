@@ -4,23 +4,9 @@ namespace Application\Classes\ImportExportCsv;
 
 
 /**
- * Class CsvImporter
- *
- * You can import huge files without running out of memory, you just have to use a limit on the get() method
- *
- * Sample usage for small files:
- * $importer = new CsvImporter("small.txt",true);
- * $data = $importer->get();
- * print_r($data);
- *
  * Sample usage for large files:-
  * $importer = new CsvImporter("large.txt",true);
  * while($data = $importer->get(2000))
- * {
- * print_r($data);
- * }
- *
- * @package Application\Classes\ImportExportCsv
  */
 class CsvImporter
 {
