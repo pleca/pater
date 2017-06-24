@@ -97,6 +97,7 @@ class RunController {
         $status = new Status();
         $statuses = $status->getAll(true); 
 
+        //joj 1. Pobieram produkty razem z zagnieżdżonymi wariacjami
         $products = $this->getProducts();
         
         $tax = new TaxModel();
@@ -126,27 +127,31 @@ class RunController {
 
         $data[] = $headers2;
 
+        //joj 8.
         //joj dla każdego produktu, gdzie są też wariacje zagnieżdżone w każdym produkcie...(czyli jak narazie mam te wariacje w podtablicy zagnieżdżonej, ciekawe jak sobie z tym radzi exporter csv, no bo putcsv nie chciał widzieć zagnieżdżeń
         //joj narazie nic się nie dzieje z wariacjami, nie są wykorzystywane w getProductRow, ciągle jestem ciekaw jak one wyglądają w CSV
         //joj bo narazie w kodzie jest tutaj sporo dymu by robić LEFT JOINy, i "nic więcej".
         foreach ($products as $product) {
+            //joj 9.
             //joj LEFT JOIN, (bo w produktach są id'ki: kategori, statusu, producentów)
             //joj czyli zwracany jest produkt w jednej lini nazwy statusów, producentów, kategorii (bo były id'ki)
             $row = $this->getProductRow($product, $producers, $categories, $statuses);
-            //joj i wpisywany do kolejnego elementu tablicy $data[] (kolejnego wiersza csv)
+            //joj 12. i wpisywany do kolejnego elementu tablicy $data[] (kolejnego wiersza csv)
             $data[] = $row;
 
+            //joj 13.
             //joj WARIACJE...
             //joj Czyli po każdym wierszu z produktem głównym dodawane są wiersze wariacji
             //joj Czyli tablica $data, tak jak u mnie, nie ma zagnieżdżeń. Zagnieżdżone wariacje z tablicy $product nie są dawane do eksportu
             if (isset($product['variations'])) {
-                //joj dla każdej wariacji produktu...
+                //joj 14. dla każdej wariacji produktu...
                 foreach ($product['variations'] as $variation) {
+                    //joj 15.
                     //joj Robi puste kolumny dla kolumn dotyczących produktu głównego
                     //joj i wstawia do kolejnych kolumn dane wariacji. Nic specjalnego
                     $row = $this->getVariationRow($variation, $taxes);
 
-                    //joj  !WNIOSKI!
+                    //joj 18. !WNIOSKI EKSPORT!
                     //joj NA KONIEC WARIACJA JEST WRZUCANA DO TABLICY $data[] gdzie już jest produkt główny. NIE MA TU ZAGNIEŻDŻEŃ
                     //joj CZYLI zagnieżdżone wcześniej wariacje z tablicy product nie są wrzucane do CSV w ogóle, a są sztukowane
                     //joj CZYLI nie jest wrzucane do CSV całe siano PRODUKTY ze wszystkimi zagnieżdżeniami
@@ -156,8 +161,6 @@ class RunController {
                     // - (bredzenie) bo problem się pojawi gdy wynik zapytania będzie zmienny, raz będzie kolumna bestseller a raz nie
                     //   i mając zapytanie, mam komplet wyników. Gdy nie będę mógł przewidzieć wyniku zapytania i nie wiem jak wygląda jej wynik.
                     // - tzn mam tablicę produktów-wariacji: [0][] [1][] [2][]
-                    //
-
 
                     $data[] = $row;
                 }
@@ -181,32 +184,36 @@ class RunController {
         $filtr['producer_id'] = 0;
 
         $oProductsAdmin = new ProductsAdmin();
-        $products = $oProductsAdmin->loadAdmin($filtr); //joj tu ładuje produkty, kolumny wspólne dla wszystkich wariacji (promotion, besteller itd) (bez sku itd)
+        //joj 2. tu ładuje produkty, kolumny wspólne dla wszystkich wariacji (promotion, besteller itd) (bez sku itd)
+        $products = $oProductsAdmin->loadAdmin($filtr);
 
+        //joj 3.
         $this->addVariationsToProducts($products);
         $this->addImagesToProducts($products);
 
         return $products;
     }
 
+    //joj 4.
     protected function addVariationsToProducts(&$products) {
         require_once(MODEL_DIR . '/Variation.php');
 
         $variation = new Variation();
-        $variations = $variation->getAll();//joj tu sciaga wszystkie wariacje
-        foreach ($products as $key => $product) {//joj no kurwa, mega pętelka na bogato, dla każdego produktu leci wszystkie wariacje i sprawdza, jak to się mówi złożónośc algorytmu n2
+        $variations = $variation->getAll();//joj 5. tu sciaga wszystkie wariacje
+        foreach ($products as $key => $product) {//joj 6. no kurwa, mega pętelka na bogato, dla każdego produktu leci wszystkie wariacje i sprawdza, jak to się mówi złożónośc algorytmu n2
             foreach ($variations as $variation) {
-                if ($product['id'] == $variation['product_id']) { //joj ale wszystko jasne, wrzuca wariacje do klucza ['variations']['2836'] każdego produktu
+                if ($product['id'] == $variation['product_id']) { //joj 7. ale wszystko jasne, wrzuca wariacje do klucza ['variations']['2836'] każdego produktu
                     $products[$key]['variations'][$variation['id2']] = $variation;
                 }
             }
         }
     }
 
-    //joj wywoływane w pętli dla każdego produktu
+    //joj 10. wywoływane w pętli dla każdego produktu
     protected function getProductRow($product, $producers, $categories, $statuses) {//joj ok, wstawia do każdego wiersza CSV kolejne wartości kolumn, czyli zamienia zagnieżdżenia na wiersz. Aczkolwiek nie ma tu nic o wariacjach
         $row[0] = '';
         $row[1] = $product['name'];
+        //joj 11.
         //joj ważne! w 3 liniach wstawia na podstawie wcześniej ściągniętych danych (np wszystkich kategorii).
         //joj Acha(!), to jest jakby LEFT JOIN, bo w produktach mam id'ki kategori, statusu itd
         //joj Czyli po to on za każdym razem ściąga powiązane tabele, bo robi LEFT JOIN ale nie w sql tylko w PHP.
@@ -240,9 +247,10 @@ class RunController {
         return $row;
     }
 
-    //joj wywyływane w pętli dla każdej wariacji produktu. $variation to każda jedna konkretna wariacja.
+    //joj 16. wywyływane w pętli dla każdej wariacji produktu. $variation to każda jedna konkretna wariacja.
     //joj Robi puste kolumny dla kolumn dotyczących produktu głównego
     protected function getVariationRow($variation, $taxes) {
+	    //joj 17.
         //joj pierwszych 12 kolumna dane o produkcie ogólnym, czyli wariacje w tych krotkach są puste.
         //joj od 13 wariacje
         //joj 13-15 obrazki - dla każdej wariacji inne!
@@ -296,12 +304,28 @@ class RunController {
 
         //joj Czyli u mnie, mając zapytanie SQL muszę tylko w pętli dla wariacji powstawiać puste krotki tam gdzie są wartości produktu ogólnego.
         //joj Czyli on póki co ma to co ja, wiersz produktu głównego, wiersze wariacji i kolumna parent
-    }    
+    }
 
 
+
+
+
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+    //joj 19.
     //joj OK czas na import z CSV do DB
-    //joj Jakie problemy, przed analizą kodu są do ogarnięcia:           JOJ PONIŻEŻEJ MOJE GŁÓWKI NA TEMAT KWESTII IMPORTU.
+    //joj Jakie problemy, przed analizą kodu są do ogarnięcia:
     //- import z csv do db czyli: z CSV do Tablicy i do DB. Zatem
+    //
+    //JOJ PONIŻEŻEJ MOJE GŁÓWKI NA TEMAT KWESTII IMPORTU.
     // z csv dostaję tablicę więc tu nie ma problemu, problem jest z przesyłanie tablicy do bazy danych
     //
     // [Problem-1] Odróżnienie czy wiersz jest A) Nowy B) Zmodyfikowany C) Nietknięty
@@ -355,6 +379,7 @@ class RunController {
 
         $row = 1;
         $array = [];
+        //joj 20. otwiera plik csv i zapisuje do tablicy $array
         if (($handle = fopen($_FILES['products']['tmp_name'], "r")) !== FALSE) {
             $delimiter = $this->guessDelimiter(file_get_contents($_FILES['products']['tmp_name']));
 
@@ -373,13 +398,14 @@ class RunController {
             }
             fclose($handle);
         }
-        
+
+        //joj 21. gromadzę dane z db
         $status = new Status();
         $statuses = $status->getAll();
         $statuses = getArrayByKey($statuses, 'name');
 
 
-
+        //joj 22. gromadzę dane z db
         $producersAdmin = new ProducersAdmin();
         $producers = $producersAdmin->loadAdmin();        
         $producers = getArrayByKey($producers, 'name');
@@ -413,31 +439,45 @@ class RunController {
          *
          */
 
+        //joj 23. gromadzę dane z db
         $category = new Category();
         $categories = $category->getAll();
         $categories = getArrayByKey($categories, 'name');
 
+        //joj 24. gromadzę dane z db
         $products = new Product();
         $products = $products->getAll();
         $products = getArrayByKey($products, 'name');
 
+        //joj 25. gromadzę dane z db
         $variations = new Variation();
         $variations = $variations->getAll();
         $variations = getArrayByKey($variations, 'sku');
 
+        //joj 26. gromadzę dane z db
         $tax = new TaxModel();
         $taxes = $tax->getAll();
         $taxes = getArrayByKey($taxes, 'value');
 
-        try {          
+
+        //JOJ 27. GŁÓWNY IMPORT
+        //joj Wszystko jasne...
+        try {
+            //joj na zasadzie transakcji, jeśli jakiś błąd to rollback
             Cms::$db->beginTransaction();      
             $lastProduct = null;
+            //joj dla każdego wiersza csv
             foreach ($array as $key => $row) {
-                if ($key > 2) {                        
+                //joj ($key > 2) czyli pomijam wiersze nagłówków
+                if ($key > 2) {
+                    //joj ($row['19']) czyli kolumna Parent/Child
                     switch ($row['19']) {            
                         case 'Parent':// joj: produkt główny ?? a niżej wariacja?
                             $status = $row[4];
-                            if (!array_key_exists($status, $statuses)) { // joj: czyli najpierw ściaga wszystko z bazy i dodaje tylko to czego nie ma!
+                            // joj Czyli najpierw ściaga wszystko z bazy i dodaje tylko to czego nie ma!
+                            // joj Ale wewnątrz tych funkcji create dzieje się brzydko
+                            // joj
+                            if (!array_key_exists($status, $statuses)) {
                                 $this->createStatus($status, $statuses);
                             }
 
@@ -497,6 +537,9 @@ die;
         require_once(MODEL_DIR . '/Status.php');
         $entity = new Status();
 
+        //joj ? Czyli on ustawia ręcznie ID? Co to order? On wstawia nowe kolumny przypadkiem?
+        //joj ! Nie order to nazwa kolumny w Status
+        //joj ? ale 'name' kolumny nie ma w Status
         $item['name'] = $name;
         $item['order'] = $entity->getMaxOrder()[0] + 1;
         $statusId = $entity->set($item);
@@ -547,7 +590,7 @@ die;
             $status = $statuses[$_POST['status']];
         } else {
             $status = $statuses[$status];
-        }        
+        }
         
         $item = [];
         $item['name'] = $name;
@@ -1090,6 +1133,14 @@ die;
 			}
 		}
 	}
+
+
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
 
 
 	//JOJ CHUJ WIE CO SIĘ DZIEJE OD TEGO MIEJSCA NA SAM DÓŁ. JAKAŚ MIGRACJA KLIENTÓW
