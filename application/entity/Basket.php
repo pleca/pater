@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Basket
 {
     /**
-     * @var integer
+     * @var integer wsws
      *
      * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
