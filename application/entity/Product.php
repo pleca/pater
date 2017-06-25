@@ -106,6 +106,214 @@ class Product
      */
     private $dateMod;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCategoryId()
+    {
+        return $this->categoryId;
+    }
+
+    /**
+     * @param int $categoryId
+     */
+    public function setCategoryId($categoryId)
+    {
+        $this->categoryId = $categoryId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProducerId()
+    {
+        return $this->producerId;
+    }
+
+    /**
+     * @param int $producerId
+     */
+    public function setProducerId($producerId)
+    {
+        $this->producerId = $producerId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatusId()
+    {
+        return $this->statusId;
+    }
+
+    /**
+     * @param int $statusId
+     */
+    public function setStatusId($statusId)
+    {
+        $this->statusId = $statusId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFeature1Id()
+    {
+        return $this->feature1Id;
+    }
+
+    /**
+     * @param int $feature1Id
+     */
+    public function setFeature1Id($feature1Id)
+    {
+        $this->feature1Id = $feature1Id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFeature2Id()
+    {
+        return $this->feature2Id;
+    }
+
+    /**
+     * @param int $feature2Id
+     */
+    public function setFeature2Id($feature2Id)
+    {
+        $this->feature2Id = $feature2Id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFeature3Id()
+    {
+        return $this->feature3Id;
+    }
+
+    /**
+     * @param int $feature3Id
+     */
+    public function setFeature3Id($feature3Id)
+    {
+        $this->feature3Id = $feature3Id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTag1()
+    {
+        return $this->tag1;
+    }
+
+    /**
+     * @param string $tag1
+     */
+    public function setTag1($tag1)
+    {
+        $this->tag1 = $tag1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTag2()
+    {
+        return $this->tag2;
+    }
+
+    /**
+     * @param string $tag2
+     */
+    public function setTag2($tag2)
+    {
+        $this->tag2 = $tag2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTag3()
+    {
+        return $this->tag3;
+    }
+
+    /**
+     * @param string $tag3
+     */
+    public function setTag3($tag3)
+    {
+        $this->tag3 = $tag3;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateAdd()
+    {
+        return $this->dateAdd;
+    }
+
+    /**
+     * @param \DateTime $dateAdd
+     */
+    public function setDateAdd($dateAdd)
+    {
+        $this->dateAdd = $dateAdd;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateMod()
+    {
+        return $this->dateMod;
+    }
+
+    /**
+     * @param \DateTime $dateMod
+     */
+    public function setDateMod($dateMod)
+    {
+        $this->dateMod = $dateMod;
+    }
+
 
 }
 

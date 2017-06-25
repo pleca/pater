@@ -134,6 +134,278 @@ class Order
      */
     private $tracking;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
+
+    /**
+     * @param int $customerId
+     */
+    public function setCustomerId($customerId)
+    {
+        $this->customerId = $customerId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLangId()
+    {
+        return $this->langId;
+    }
+
+    /**
+     * @param int $langId
+     */
+    public function setLangId($langId)
+    {
+        $this->langId = $langId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param string $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+
+    /**
+     * @param string $discount
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPhraseId()
+    {
+        return $this->phraseId;
+    }
+
+    /**
+     * @param int $phraseId
+     */
+    public function setPhraseId($phraseId)
+    {
+        $this->phraseId = $phraseId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPaymentId()
+    {
+        return $this->paymentId;
+    }
+
+    /**
+     * @param bool $paymentId
+     */
+    public function setPaymentId($paymentId)
+    {
+        $this->paymentId = $paymentId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param string $weight
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+    }
+
+    /**
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * @param string $comment
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCommentAdmin()
+    {
+        return $this->commentAdmin;
+    }
+
+    /**
+     * @param string $commentAdmin
+     */
+    public function setCommentAdmin($commentAdmin)
+    {
+        $this->commentAdmin = $commentAdmin;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatusId()
+    {
+        return $this->statusId;
+    }
+
+    /**
+     * @param bool $statusId
+     */
+    public function setStatusId($statusId)
+    {
+        $this->statusId = $statusId;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getTimeAdd()
+    {
+        return $this->timeAdd;
+    }
+
+    /**
+     * @param \DateTime $timeAdd
+     */
+    public function setTimeAdd($timeAdd)
+    {
+        $this->timeAdd = $timeAdd;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getTimePayment()
+    {
+        return $this->timePayment;
+    }
+
+    /**
+     * @param \DateTime $timePayment
+     */
+    public function setTimePayment($timePayment)
+    {
+        $this->timePayment = $timePayment;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getTimeComplete()
+    {
+        return $this->timeComplete;
+    }
+
+    /**
+     * @param \DateTime $timeComplete
+     */
+    public function setTimeComplete($timeComplete)
+    {
+        $this->timeComplete = $timeComplete;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaypalTransactionId()
+    {
+        return $this->paypalTransactionId;
+    }
+
+    /**
+     * @param string $paypalTransactionId
+     */
+    public function setPaypalTransactionId($paypalTransactionId)
+    {
+        $this->paypalTransactionId = $paypalTransactionId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaypalAmountFee()
+    {
+        return $this->paypalAmountFee;
+    }
+
+    /**
+     * @param string $paypalAmountFee
+     */
+    public function setPaypalAmountFee($paypalAmountFee)
+    {
+        $this->paypalAmountFee = $paypalAmountFee;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTracking()
+    {
+        return $this->tracking;
+    }
+
+    /**
+     * @param string $tracking
+     */
+    public function setTracking($tracking)
+    {
+        $this->tracking = $tracking;
+    }
+
 
 }
 

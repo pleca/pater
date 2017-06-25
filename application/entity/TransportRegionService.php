@@ -36,6 +36,54 @@ class TransportRegionService
      */
     private $serviceId;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRegionId()
+    {
+        return $this->regionId;
+    }
+
+    /**
+     * @param int $regionId
+     */
+    public function setRegionId($regionId)
+    {
+        $this->regionId = $regionId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getServiceId()
+    {
+        return $this->serviceId;
+    }
+
+    /**
+     * @param int $serviceId
+     */
+    public function setServiceId($serviceId)
+    {
+        $this->serviceId = $serviceId;
+    }
+
 
 }
 

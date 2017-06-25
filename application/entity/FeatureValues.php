@@ -28,6 +28,38 @@ class FeatureValues
      */
     private $featureId;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFeatureId()
+    {
+        return $this->featureId;
+    }
+
+    /**
+     * @param int $featureId
+     */
+    public function setFeatureId($featureId)
+    {
+        $this->featureId = $featureId;
+    }
+
 
 }
 

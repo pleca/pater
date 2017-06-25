@@ -218,6 +218,470 @@ class OrderAddress
      */
     private $shippingPhone;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrderId()
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * @param int $orderId
+     */
+    public function setOrderId($orderId)
+    {
+        $this->orderId = $orderId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * @param string $model
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param bool $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyName()
+    {
+        return $this->companyName;
+    }
+
+    /**
+     * @param string $companyName
+     */
+    public function setCompanyName($companyName)
+    {
+        $this->companyName = $companyName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNip()
+    {
+        return $this->nip;
+    }
+
+    /**
+     * @param string $nip
+     */
+    public function setNip($nip)
+    {
+        $this->nip = $nip;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param string $firstName
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param string $lastName
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddress1()
+    {
+        return $this->address1;
+    }
+
+    /**
+     * @param string $address1
+     */
+    public function setAddress1($address1)
+    {
+        $this->address1 = $address1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddress2()
+    {
+        return $this->address2;
+    }
+
+    /**
+     * @param string $address2
+     */
+    public function setAddress2($address2)
+    {
+        $this->address2 = $address2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddress3()
+    {
+        return $this->address3;
+    }
+
+    /**
+     * @param string $address3
+     */
+    public function setAddress3($address3)
+    {
+        $this->address3 = $address3;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPostCode()
+    {
+        return $this->postCode;
+    }
+
+    /**
+     * @param string $postCode
+     */
+    public function setPostCode($postCode)
+    {
+        $this->postCode = $postCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string $city
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProvince()
+    {
+        return $this->province;
+    }
+
+    /**
+     * @param string $province
+     */
+    public function setProvince($province)
+    {
+        $this->province = $province;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param bool $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string $phone
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShippingType()
+    {
+        return $this->shippingType;
+    }
+
+    /**
+     * @param bool $shippingType
+     */
+    public function setShippingType($shippingType)
+    {
+        $this->shippingType = $shippingType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShippingCompanyName()
+    {
+        return $this->shippingCompanyName;
+    }
+
+    /**
+     * @param string $shippingCompanyName
+     */
+    public function setShippingCompanyName($shippingCompanyName)
+    {
+        $this->shippingCompanyName = $shippingCompanyName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShippingNip()
+    {
+        return $this->shippingNip;
+    }
+
+    /**
+     * @param string $shippingNip
+     */
+    public function setShippingNip($shippingNip)
+    {
+        $this->shippingNip = $shippingNip;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShippingFirstName()
+    {
+        return $this->shippingFirstName;
+    }
+
+    /**
+     * @param string $shippingFirstName
+     */
+    public function setShippingFirstName($shippingFirstName)
+    {
+        $this->shippingFirstName = $shippingFirstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShippingLastName()
+    {
+        return $this->shippingLastName;
+    }
+
+    /**
+     * @param string $shippingLastName
+     */
+    public function setShippingLastName($shippingLastName)
+    {
+        $this->shippingLastName = $shippingLastName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShippingAddress1()
+    {
+        return $this->shippingAddress1;
+    }
+
+    /**
+     * @param string $shippingAddress1
+     */
+    public function setShippingAddress1($shippingAddress1)
+    {
+        $this->shippingAddress1 = $shippingAddress1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShippingAddress2()
+    {
+        return $this->shippingAddress2;
+    }
+
+    /**
+     * @param string $shippingAddress2
+     */
+    public function setShippingAddress2($shippingAddress2)
+    {
+        $this->shippingAddress2 = $shippingAddress2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShippingAddress3()
+    {
+        return $this->shippingAddress3;
+    }
+
+    /**
+     * @param string $shippingAddress3
+     */
+    public function setShippingAddress3($shippingAddress3)
+    {
+        $this->shippingAddress3 = $shippingAddress3;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShippingPostCode()
+    {
+        return $this->shippingPostCode;
+    }
+
+    /**
+     * @param string $shippingPostCode
+     */
+    public function setShippingPostCode($shippingPostCode)
+    {
+        $this->shippingPostCode = $shippingPostCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShippingCity()
+    {
+        return $this->shippingCity;
+    }
+
+    /**
+     * @param string $shippingCity
+     */
+    public function setShippingCity($shippingCity)
+    {
+        $this->shippingCity = $shippingCity;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShippingCountry()
+    {
+        return $this->shippingCountry;
+    }
+
+    /**
+     * @param bool $shippingCountry
+     */
+    public function setShippingCountry($shippingCountry)
+    {
+        $this->shippingCountry = $shippingCountry;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShippingPhone()
+    {
+        return $this->shippingPhone;
+    }
+
+    /**
+     * @param string $shippingPhone
+     */
+    public function setShippingPhone($shippingPhone)
+    {
+        $this->shippingPhone = $shippingPhone;
+    }
+
 
 }
 

@@ -218,6 +218,470 @@ class ProductVariation
      */
     private $feature3ValueId;
 
+    /**
+     * @return int
+     */
+    public function getId2()
+    {
+        return $this->id2;
+    }
+
+    /**
+     * @param int $id2
+     */
+    public function setId2($id2)
+    {
+        $this->id2 = $id2;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProductId()
+    {
+        return $this->productId;
+    }
+
+    /**
+     * @param int $productId
+     */
+    public function setProductId($productId)
+    {
+        $this->productId = $productId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTaxId()
+    {
+        return $this->taxId;
+    }
+
+    /**
+     * @param int $taxId
+     */
+    public function setTaxId($taxId)
+    {
+        $this->taxId = $taxId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSku()
+    {
+        return $this->sku;
+    }
+
+    /**
+     * @param string $sku
+     */
+    public function setSku($sku)
+    {
+        $this->sku = $sku;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEan()
+    {
+        return $this->ean;
+    }
+
+    /**
+     * @param string $ean
+     */
+    public function setEan($ean)
+    {
+        $this->ean = $ean;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPricePurchase()
+    {
+        return $this->pricePurchase;
+    }
+
+    /**
+     * @param string $pricePurchase
+     */
+    public function setPricePurchase($pricePurchase)
+    {
+        $this->pricePurchase = $pricePurchase;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPriceRrp()
+    {
+        return $this->priceRrp;
+    }
+
+    /**
+     * @param string $priceRrp
+     */
+    public function setPriceRrp($priceRrp)
+    {
+        $this->priceRrp = $priceRrp;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param string $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrice2()
+    {
+        return $this->price2;
+    }
+
+    /**
+     * @param string $price2
+     */
+    public function setPrice2($price2)
+    {
+        $this->price2 = $price2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrice3()
+    {
+        return $this->price3;
+    }
+
+    /**
+     * @param string $price3
+     */
+    public function setPrice3($price3)
+    {
+        $this->price3 = $price3;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPricePromotion()
+    {
+        return $this->pricePromotion;
+    }
+
+    /**
+     * @param string $pricePromotion
+     */
+    public function setPricePromotion($pricePromotion)
+    {
+        $this->pricePromotion = $pricePromotion;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPromotion()
+    {
+        return $this->promotion;
+    }
+
+    /**
+     * @param string $promotion
+     */
+    public function setPromotion($promotion)
+    {
+        $this->promotion = $promotion;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBestseller()
+    {
+        return $this->bestseller;
+    }
+
+    /**
+     * @param string $bestseller
+     */
+    public function setBestseller($bestseller)
+    {
+        $this->bestseller = $bestseller;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRecommended()
+    {
+        return $this->recommended;
+    }
+
+    /**
+     * @param string $recommended
+     */
+    public function setRecommended($recommended)
+    {
+        $this->recommended = $recommended;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMainPage()
+    {
+        return $this->mainPage;
+    }
+
+    /**
+     * @param bool $mainPage
+     */
+    public function setMainPage($mainPage)
+    {
+        $this->mainPage = $mainPage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMegaOffer()
+    {
+        return $this->megaOffer;
+    }
+
+    /**
+     * @param string $megaOffer
+     */
+    public function setMegaOffer($megaOffer)
+    {
+        $this->megaOffer = $megaOffer;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSpecialLinkContent()
+    {
+        return $this->specialLinkContent;
+    }
+
+    /**
+     * @param string $specialLinkContent
+     */
+    public function setSpecialLinkContent($specialLinkContent)
+    {
+        $this->specialLinkContent = $specialLinkContent;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSpecialLinkUrl()
+    {
+        return $this->specialLinkUrl;
+    }
+
+    /**
+     * @param string $specialLinkUrl
+     */
+    public function setSpecialLinkUrl($specialLinkUrl)
+    {
+        $this->specialLinkUrl = $specialLinkUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLength()
+    {
+        return $this->length;
+    }
+
+    /**
+     * @param string $length
+     */
+    public function setLength($length)
+    {
+        $this->length = $length;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWidth()
+    {
+        return $this->width;
+    }
+
+    /**
+     * @param string $width
+     */
+    public function setWidth($width)
+    {
+        $this->width = $width;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHeight()
+    {
+        return $this->height;
+    }
+
+    /**
+     * @param string $height
+     */
+    public function setHeight($height)
+    {
+        $this->height = $height;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTransportGroupId()
+    {
+        return $this->transportGroupId;
+    }
+
+    /**
+     * @param int $transportGroupId
+     */
+    public function setTransportGroupId($transportGroupId)
+    {
+        $this->transportGroupId = $transportGroupId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTransportUnitId()
+    {
+        return $this->transportUnitId;
+    }
+
+    /**
+     * @param int $transportUnitId
+     */
+    public function setTransportUnitId($transportUnitId)
+    {
+        $this->transportUnitId = $transportUnitId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param string $weight
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQty()
+    {
+        return $this->qty;
+    }
+
+    /**
+     * @param int $qty
+     */
+    public function setQty($qty)
+    {
+        $this->qty = $qty;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDatePromotion()
+    {
+        return $this->datePromotion;
+    }
+
+    /**
+     * @param \DateTime $datePromotion
+     */
+    public function setDatePromotion($datePromotion)
+    {
+        $this->datePromotion = $datePromotion;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFeature1ValueId()
+    {
+        return $this->feature1ValueId;
+    }
+
+    /**
+     * @param int $feature1ValueId
+     */
+    public function setFeature1ValueId($feature1ValueId)
+    {
+        $this->feature1ValueId = $feature1ValueId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFeature2ValueId()
+    {
+        return $this->feature2ValueId;
+    }
+
+    /**
+     * @param int $feature2ValueId
+     */
+    public function setFeature2ValueId($feature2ValueId)
+    {
+        $this->feature2ValueId = $feature2ValueId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFeature3ValueId()
+    {
+        return $this->feature3ValueId;
+    }
+
+    /**
+     * @param int $feature3ValueId
+     */
+    public function setFeature3ValueId($feature3ValueId)
+    {
+        $this->feature3ValueId = $feature3ValueId;
+    }
+
 
 }
 

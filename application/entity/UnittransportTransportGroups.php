@@ -42,6 +42,70 @@ class UnittransportTransportGroups
      */
     private $isExcludedFromFreeDelivery;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdvertaisingMaterial()
+    {
+        return $this->isAdvertaisingMaterial;
+    }
+
+    /**
+     * @param bool $isAdvertaisingMaterial
+     */
+    public function setIsAdvertaisingMaterial($isAdvertaisingMaterial)
+    {
+        $this->isAdvertaisingMaterial = $isAdvertaisingMaterial;
+    }
+
+    /**
+     * @return int
+     */
+    public function getisExcludedFromFreeDelivery()
+    {
+        return $this->isExcludedFromFreeDelivery;
+    }
+
+    /**
+     * @param int $isExcludedFromFreeDelivery
+     */
+    public function setIsExcludedFromFreeDelivery($isExcludedFromFreeDelivery)
+    {
+        $this->isExcludedFromFreeDelivery = $isExcludedFromFreeDelivery;
+    }
+
 
 }
 

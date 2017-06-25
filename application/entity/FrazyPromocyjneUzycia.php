@@ -50,6 +50,86 @@ class FrazyPromocyjneUzycia
      */
     private $data;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdFrazy()
+    {
+        return $this->idFrazy;
+    }
+
+    /**
+     * @param int $idFrazy
+     */
+    public function setIdFrazy($idFrazy)
+    {
+        $this->idFrazy = $idFrazy;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdZam()
+    {
+        return $this->idZam;
+    }
+
+    /**
+     * @param int $idZam
+     */
+    public function setIdZam($idZam)
+    {
+        $this->idZam = $idZam;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdUser()
+    {
+        return $this->idUser;
+    }
+
+    /**
+     * @param int $idUser
+     */
+    public function setIdUser($idUser)
+    {
+        $this->idUser = $idUser;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param \DateTime $data
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
+
 
 }
 

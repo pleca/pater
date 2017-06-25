@@ -57,6 +57,102 @@ class News
      */
     private $active;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGalleryId()
+    {
+        return $this->galleryId;
+    }
+
+    /**
+     * @param int $galleryId
+     */
+    public function setGalleryId($galleryId)
+    {
+        $this->galleryId = $galleryId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param string $file
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateAdd()
+    {
+        return $this->dateAdd;
+    }
+
+    /**
+     * @param \DateTime $dateAdd
+     */
+    public function setDateAdd($dateAdd)
+    {
+        $this->dateAdd = $dateAdd;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateMod()
+    {
+        return $this->dateMod;
+    }
+
+    /**
+     * @param \DateTime $dateMod
+     */
+    public function setDateMod($dateMod)
+    {
+        $this->dateMod = $dateMod;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
 
 }
 

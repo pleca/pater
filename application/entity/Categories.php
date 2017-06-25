@@ -57,6 +57,102 @@ class Categories
      */
     private $showExpanded;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->parentId;
+    }
+
+    /**
+     * @param int $parentId
+     */
+    public function setParentId($parentId)
+    {
+        $this->parentId = $parentId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatusId()
+    {
+        return $this->statusId;
+    }
+
+    /**
+     * @param int $statusId
+     */
+    public function setStatusId($statusId)
+    {
+        $this->statusId = $statusId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param int $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOldCategoryId()
+    {
+        return $this->oldCategoryId;
+    }
+
+    /**
+     * @param int $oldCategoryId
+     */
+    public function setOldCategoryId($oldCategoryId)
+    {
+        $this->oldCategoryId = $oldCategoryId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShowExpanded()
+    {
+        return $this->showExpanded;
+    }
+
+    /**
+     * @param bool $showExpanded
+     */
+    public function setShowExpanded($showExpanded)
+    {
+        $this->showExpanded = $showExpanded;
+    }
+
 
 }
 

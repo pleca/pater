@@ -92,6 +92,182 @@ class PagesTranslation
      */
     private $locale;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTranslatableId()
+    {
+        return $this->translatableId;
+    }
+
+    /**
+     * @param int $translatableId
+     */
+    public function setTranslatableId($translatableId)
+    {
+        $this->translatableId = $translatableId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param string $content
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSeoTitle()
+    {
+        return $this->seoTitle;
+    }
+
+    /**
+     * @param string $seoTitle
+     */
+    public function setSeoTitle($seoTitle)
+    {
+        $this->seoTitle = $seoTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentShort()
+    {
+        return $this->contentShort;
+    }
+
+    /**
+     * @param string $contentShort
+     */
+    public function setContentShort($contentShort)
+    {
+        $this->contentShort = $contentShort;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTag1()
+    {
+        return $this->tag1;
+    }
+
+    /**
+     * @param string $tag1
+     */
+    public function setTag1($tag1)
+    {
+        $this->tag1 = $tag1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTag2()
+    {
+        return $this->tag2;
+    }
+
+    /**
+     * @param string $tag2
+     */
+    public function setTag2($tag2)
+    {
+        $this->tag2 = $tag2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTag3()
+    {
+        return $this->tag3;
+    }
+
+    /**
+     * @param string $tag3
+     */
+    public function setTag3($tag3)
+    {
+        $this->tag3 = $tag3;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param string $locale
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+    }
+
 
 }
 

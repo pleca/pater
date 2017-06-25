@@ -64,6 +64,118 @@ class Pages
      */
     private $dateMod;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGalleryId()
+    {
+        return $this->galleryId;
+    }
+
+    /**
+     * @param int $galleryId
+     */
+    public function setGalleryId($galleryId)
+    {
+        $this->galleryId = $galleryId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMenu()
+    {
+        return $this->menu;
+    }
+
+    /**
+     * @param bool $menu
+     */
+    public function setMenu($menu)
+    {
+        $this->menu = $menu;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateAdd()
+    {
+        return $this->dateAdd;
+    }
+
+    /**
+     * @param \DateTime $dateAdd
+     */
+    public function setDateAdd($dateAdd)
+    {
+        $this->dateAdd = $dateAdd;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateMod()
+    {
+        return $this->dateMod;
+    }
+
+    /**
+     * @param \DateTime $dateMod
+     */
+    public function setDateMod($dateMod)
+    {
+        $this->dateMod = $dateMod;
+    }
+
 
 }
 

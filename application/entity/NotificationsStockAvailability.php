@@ -35,6 +35,54 @@ class NotificationsStockAvailability
      */
     private $variationId;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVariationId()
+    {
+        return $this->variationId;
+    }
+
+    /**
+     * @param int $variationId
+     */
+    public function setVariationId($variationId)
+    {
+        $this->variationId = $variationId;
+    }
+
 
 }
 

@@ -71,6 +71,134 @@ class FrazyPromocyjne
      */
     private $uzyto;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFraza()
+    {
+        return $this->fraza;
+    }
+
+    /**
+     * @param string $fraza
+     */
+    public function setFraza($fraza)
+    {
+        $this->fraza = $fraza;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWartosc()
+    {
+        return $this->wartosc;
+    }
+
+    /**
+     * @param int $wartosc
+     */
+    public function setWartosc($wartosc)
+    {
+        $this->wartosc = $wartosc;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDataOd()
+    {
+        return $this->dataOd;
+    }
+
+    /**
+     * @param \DateTime $dataOd
+     */
+    public function setDataOd($dataOd)
+    {
+        $this->dataOd = $dataOd;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDataDo()
+    {
+        return $this->dataDo;
+    }
+
+    /**
+     * @param \DateTime $dataDo
+     */
+    public function setDataDo($dataDo)
+    {
+        $this->dataDo = $dataDo;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxUzyc()
+    {
+        return $this->maxUzyc;
+    }
+
+    /**
+     * @param int $maxUzyc
+     */
+    public function setMaxUzyc($maxUzyc)
+    {
+        $this->maxUzyc = $maxUzyc;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isKlientUzyc()
+    {
+        return $this->klientUzyc;
+    }
+
+    /**
+     * @param bool $klientUzyc
+     */
+    public function setKlientUzyc($klientUzyc)
+    {
+        $this->klientUzyc = $klientUzyc;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUzyto()
+    {
+        return $this->uzyto;
+    }
+
+    /**
+     * @param int $uzyto
+     */
+    public function setUzyto($uzyto)
+    {
+        $this->uzyto = $uzyto;
+    }
+
 
 }
 

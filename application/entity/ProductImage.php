@@ -64,6 +64,118 @@ class ProductImage
      */
     private $order;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProductId()
+    {
+        return $this->productId;
+    }
+
+    /**
+     * @param int $productId
+     */
+    public function setProductId($productId)
+    {
+        $this->productId = $productId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVariationId()
+    {
+        return $this->variationId;
+    }
+
+    /**
+     * @param int $variationId
+     */
+    public function setVariationId($variationId)
+    {
+        $this->variationId = $variationId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGaImageId()
+    {
+        return $this->gaImageId;
+    }
+
+    /**
+     * @param int $gaImageId
+     */
+    public function setGaImageId($gaImageId)
+    {
+        $this->gaImageId = $gaImageId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param string $file
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateMod()
+    {
+        return $this->dateMod;
+    }
+
+    /**
+     * @param \DateTime $dateMod
+     */
+    public function setDateMod($dateMod)
+    {
+        $this->dateMod = $dateMod;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param int $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+    }
+
 
 }
 

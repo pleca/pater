@@ -43,6 +43,70 @@ class TransportRegionPostcode
      */
     private $statusId;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRegionId()
+    {
+        return $this->regionId;
+    }
+
+    /**
+     * @param int $regionId
+     */
+    public function setRegionId($regionId)
+    {
+        $this->regionId = $regionId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPost1()
+    {
+        return $this->post1;
+    }
+
+    /**
+     * @param string $post1
+     */
+    public function setPost1($post1)
+    {
+        $this->post1 = $post1;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatusId()
+    {
+        return $this->statusId;
+    }
+
+    /**
+     * @param bool $statusId
+     */
+    public function setStatusId($statusId)
+    {
+        $this->statusId = $statusId;
+    }
+
 
 }
 

@@ -40,5 +40,55 @@ class ProductStatus
     //dodaję deklarację bo wywala error Uncaught exception: Call to undefined method ProductStatus::getAll()
     //bo jest jakiś konflikt z klasą z models/
     public function getAll(){}
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param string $color
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param bool $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+    }
+
+
 }
 

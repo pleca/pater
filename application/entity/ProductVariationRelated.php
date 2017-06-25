@@ -35,6 +35,54 @@ class ProductVariationRelated
      */
     private $variationRelatedId;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVariationId()
+    {
+        return $this->variationId;
+    }
+
+    /**
+     * @param int $variationId
+     */
+    public function setVariationId($variationId)
+    {
+        $this->variationId = $variationId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVariationRelatedId()
+    {
+        return $this->variationRelatedId;
+    }
+
+    /**
+     * @param int $variationRelatedId
+     */
+    public function setVariationRelatedId($variationRelatedId)
+    {
+        $this->variationRelatedId = $variationRelatedId;
+    }
+
 
 }
 

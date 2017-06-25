@@ -78,6 +78,150 @@ class TransportServiceOption
      */
     private $statusId;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRegionId()
+    {
+        return $this->regionId;
+    }
+
+    /**
+     * @param int $regionId
+     */
+    public function setRegionId($regionId)
+    {
+        $this->regionId = $regionId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getServiceId()
+    {
+        return $this->serviceId;
+    }
+
+    /**
+     * @param int $serviceId
+     */
+    public function setServiceId($serviceId)
+    {
+        $this->serviceId = $serviceId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWeightFrom()
+    {
+        return $this->weightFrom;
+    }
+
+    /**
+     * @param string $weightFrom
+     */
+    public function setWeightFrom($weightFrom)
+    {
+        $this->weightFrom = $weightFrom;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWeightTo()
+    {
+        return $this->weightTo;
+    }
+
+    /**
+     * @param string $weightTo
+     */
+    public function setWeightTo($weightTo)
+    {
+        $this->weightTo = $weightTo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param string $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTaxId()
+    {
+        return $this->taxId;
+    }
+
+    /**
+     * @param int $taxId
+     */
+    public function setTaxId($taxId)
+    {
+        $this->taxId = $taxId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeliveryTime()
+    {
+        return $this->deliveryTime;
+    }
+
+    /**
+     * @param string $deliveryTime
+     */
+    public function setDeliveryTime($deliveryTime)
+    {
+        $this->deliveryTime = $deliveryTime;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatusId()
+    {
+        return $this->statusId;
+    }
+
+    /**
+     * @param bool $statusId
+     */
+    public function setStatusId($statusId)
+    {
+        $this->statusId = $statusId;
+    }
+
 
 }
 

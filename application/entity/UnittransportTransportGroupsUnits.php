@@ -29,6 +29,38 @@ class UnittransportTransportGroupsUnits
      */
     private $unitId;
 
+    /**
+     * @return int
+     */
+    public function getTransportGroupId()
+    {
+        return $this->transportGroupId;
+    }
+
+    /**
+     * @param int $transportGroupId
+     */
+    public function setTransportGroupId($transportGroupId)
+    {
+        $this->transportGroupId = $transportGroupId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUnitId()
+    {
+        return $this->unitId;
+    }
+
+    /**
+     * @param int $unitId
+     */
+    public function setUnitId($unitId)
+    {
+        $this->unitId = $unitId;
+    }
+
 
 }
 

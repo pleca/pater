@@ -57,6 +57,102 @@ class TransportRegion
      */
     private $statusId;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCourierId()
+    {
+        return $this->courierId;
+    }
+
+    /**
+     * @param int $courierId
+     */
+    public function setCourierId($courierId)
+    {
+        $this->courierId = $courierId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTypeId()
+    {
+        return $this->typeId;
+    }
+
+    /**
+     * @param int $typeId
+     */
+    public function setTypeId($typeId)
+    {
+        $this->typeId = $typeId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatusId()
+    {
+        return $this->statusId;
+    }
+
+    /**
+     * @param bool $statusId
+     */
+    public function setStatusId($statusId)
+    {
+        $this->statusId = $statusId;
+    }
+
 
 }
 

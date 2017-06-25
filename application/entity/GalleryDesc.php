@@ -85,6 +85,166 @@ class GalleryDesc
      */
     private $tag3;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->parentId;
+    }
+
+    /**
+     * @param int $parentId
+     */
+    public function setParentId($parentId)
+    {
+        $this->parentId = $parentId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLangId()
+    {
+        return $this->langId;
+    }
+
+    /**
+     * @param int $langId
+     */
+    public function setLangId($langId)
+    {
+        $this->langId = $langId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitleUrl()
+    {
+        return $this->titleUrl;
+    }
+
+    /**
+     * @param string $titleUrl
+     */
+    public function setTitleUrl($titleUrl)
+    {
+        $this->titleUrl = $titleUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDesc()
+    {
+        return $this->desc;
+    }
+
+    /**
+     * @param string $desc
+     */
+    public function setDesc($desc)
+    {
+        $this->desc = $desc;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescShort()
+    {
+        return $this->descShort;
+    }
+
+    /**
+     * @param string $descShort
+     */
+    public function setDescShort($descShort)
+    {
+        $this->descShort = $descShort;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTag1()
+    {
+        return $this->tag1;
+    }
+
+    /**
+     * @param string $tag1
+     */
+    public function setTag1($tag1)
+    {
+        $this->tag1 = $tag1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTag2()
+    {
+        return $this->tag2;
+    }
+
+    /**
+     * @param string $tag2
+     */
+    public function setTag2($tag2)
+    {
+        $this->tag2 = $tag2;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTag3()
+    {
+        return $this->tag3;
+    }
+
+    /**
+     * @param string $tag3
+     */
+    public function setTag3($tag3)
+    {
+        $this->tag3 = $tag3;
+    }
+
 
 }
 
