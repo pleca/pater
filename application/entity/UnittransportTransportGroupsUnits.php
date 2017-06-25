@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE unitTransport_transport_groups_units CHANGE transport_group_id transport_group_id INT AUTO_INCREMENT NOT NULL;
 
 namespace Application\Entity;
 

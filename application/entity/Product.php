@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE product CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE category_id category_id INT NOT NULL, CHANGE producer_id producer_id INT NOT NULL, CHANGE status_id status_id INT NOT NULL, CHANGE type type VARCHAR(255) NOT NULL;
 
 namespace Application\Entity;
 

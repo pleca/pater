@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE languages CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE active active TINYINT(1) NOT NULL;
 
 namespace Application\Entity;
 

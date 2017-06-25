@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE menu CHANGE parent_id parent_id INT NOT NULL, CHANGE `order` `order` TINYINT(1) NOT NULL;
 
 namespace Application\Entity;
 

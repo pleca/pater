@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE order_address CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE order_id order_id INT NOT NULL, CHANGE type type TINYINT(1) NOT NULL, CHANGE shipping_type shipping_type TINYINT(1) NOT NULL;
 
 namespace Application\Entity;
 

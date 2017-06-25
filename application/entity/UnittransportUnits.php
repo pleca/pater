@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE unitTransport_units CHANGE length length INT NOT NULL, CHANGE width width INT NOT NULL, CHANGE height height INT NOT NULL, CHANGE price price NUMERIC(5, 2) NOT NULL;
 
 namespace Application\Entity;
 

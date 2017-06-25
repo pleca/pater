@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE gallery_photos CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE parent_id parent_id INT NOT NULL;
 
 namespace Application\Entity;
 

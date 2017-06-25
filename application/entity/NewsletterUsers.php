@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE newsletter_users CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE lang_id lang_id TINYINT(1) NOT NULL;
 
 namespace Application\Entity;
 

@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE categories CHANGE show_expanded show_expanded TINYINT(1) NOT NULL;
 
 namespace Application\Entity;
 

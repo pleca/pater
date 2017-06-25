@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE product_translation CHANGE translatable_id translatable_id INT NOT NULL;
 
 namespace Application\Entity;
 

@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE slider CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE `order` `order` INT NOT NULL;
 
 namespace Application\Entity;
 

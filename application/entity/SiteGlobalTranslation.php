@@ -1,4 +1,6 @@
 <?php
+//ALTER TABLE site_globals_translation CHANGE locale locale enum('en','pl','es','de','fr');
+
 namespace Application\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;

@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE api_shop_log CHANGE date_add date_add DATETIME NOT NULL;
 
 namespace Application\Entity;
 

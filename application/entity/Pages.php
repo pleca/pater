@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE pages CHANGE gallery_id gallery_id INT NOT NULL;
 
 namespace Application\Entity;
 

@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE contact CHANGE id id INT AUTO_INCREMENT NOT NULL;
 
 namespace Application\Entity;
 

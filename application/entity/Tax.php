@@ -1,4 +1,6 @@
 <?php
+//ALTER TABLE taxes CHANGE position position SMALLINT NOT NULL;
+
 namespace Application\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;

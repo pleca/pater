@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE payment CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE `order` `order` TINYINT(1) NOT NULL, CHANGE active active TINYINT(1) NOT NULL;
 
 namespace Application\Entity;
 

@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE news CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE gallery_id gallery_id INT NOT NULL, CHANGE active active TINYINT(1) NOT NULL;
 
 namespace Application\Entity;
 

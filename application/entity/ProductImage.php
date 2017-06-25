@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE product_image CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE product_id product_id INT NOT NULL, CHANGE ga_image_id ga_image_id INT NOT NULL, CHANGE `order` `order` INT NOT NULL;
 
 namespace Application\Entity;
 

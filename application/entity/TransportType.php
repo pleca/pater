@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE transport_type CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE status_id status_id TINYINT(1) NOT NULL;
 
 namespace Application\Entity;
 

@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE transport_region_postcode CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE region_id region_id INT NOT NULL, CHANGE status_id status_id TINYINT(1) NOT NULL;
 
 namespace Application\Entity;
 

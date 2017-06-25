@@ -1,4 +1,6 @@
 <?php
+//ALTER TABLE colors CHANGE id id INT UNSIGNED AUTO_INCREMENT NOT NULL;
+
 namespace Application\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;

@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE order_transport CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE order_id order_id INT NOT NULL, CHANGE courier_id courier_id INT NOT NULL, CHANGE service_id service_id INT NOT NULL, CHANGE region_id region_id INT NOT NULL, CHANGE option_id option_id INT NOT NULL;
 
 namespace Application\Entity;
 

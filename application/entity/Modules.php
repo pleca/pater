@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE modules CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE type type TINYINT(1) NOT NULL;
 
 namespace Application\Entity;
 

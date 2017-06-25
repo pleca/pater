@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE `order` CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE customer_id customer_id INT NOT NULL, CHANGE lang_id lang_id INT NOT NULL, CHANGE price price NUMERIC(10, 4) NOT NULL, CHANGE discount discount NUMERIC(5, 0) NOT NULL, CHANGE phrase_id phrase_id INT NOT NULL, CHANGE payment_id payment_id TINYINT(1) NOT NULL, CHANGE status_id status_id TINYINT(1) NOT NULL, CHANGE time_payment time_payment DATETIME NOT NULL, CHANGE time_complete time_complete DATETIME NOT NULL;
 
 namespace Application\Entity;
 

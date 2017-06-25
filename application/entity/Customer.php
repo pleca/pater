@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE customer CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE type type TINYINT(1) NOT NULL, CHANGE country country TINYINT(1) NOT NULL, CHANGE discount discount NUMERIC(4, 2) NOT NULL, CHANGE price_group price_group TINYINT(1) NOT NULL, CHANGE sales_representative sales_representative INT NOT NULL;
 
 namespace Application\Entity;
 

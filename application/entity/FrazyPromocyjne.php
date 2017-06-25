@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE frazy_promocyjne CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE max_uzyc max_uzyc INT NOT NULL;
 
 namespace Application\Entity;
 

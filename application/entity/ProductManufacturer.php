@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE product_manufacturer CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE status_id status_id INT NOT NULL, CHANGE popular popular TINYINT(1) NOT NULL, CHANGE `order` `order` INT NOT NULL;
 
 namespace Application\Entity;
 

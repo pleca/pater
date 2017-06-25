@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE basket CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE customer_id customer_id INT NOT NULL, CHANGE product_id product_id INT NOT NULL, CHANGE variation_id variation_id INT NOT NULL, CHANGE qty qty INT NOT NULL;
 
 namespace Application\Entity;
 

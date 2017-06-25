@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE news_desc CHANGE id2 id2 INT AUTO_INCREMENT NOT NULL, CHANGE parent_id parent_id INT NOT NULL, CHANGE lang_id lang_id INT NOT NULL;
 
 namespace Application\Entity;
 

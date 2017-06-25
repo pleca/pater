@@ -1,4 +1,5 @@
 <?php
+//ALTER TABLE order_status CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE `order` `order` TINYINT(1) NOT NULL;
 
 namespace Application\Entity;
 
