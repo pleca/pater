@@ -35,6 +35,9 @@ class ProductStatus
      */
     private $order;
 
+
+    //dodaję deklarację bo wywala error Uncaught exception: Call to undefined method ProductStatus::getAll()
+    //bo jest jakiś konflikt z klasą z models/
     public function getAll(){}
 }
 
