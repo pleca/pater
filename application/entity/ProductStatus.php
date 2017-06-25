@@ -1,6 +1,6 @@
 <?php
 
-
+namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -35,6 +35,6 @@ class ProductStatus
      */
     private $order;
 
-
+    public function getAll(){}
 }
 
