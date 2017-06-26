@@ -209,6 +209,26 @@ class RunController {
         }
     }
 
+    protected function addImagesToProducts(&$products) {
+        require_once(MODEL_DIR . '/ProductImage.php');
+
+        $productImage = new ProductImage();
+        $productImages = $productImage->getAll();
+
+        foreach ($products as $key => $product) {
+            foreach ($productImages as $image) {
+                if ($product['id'] == $image['product_id']) {
+                    if ($image['variation_id']) {
+                        $products[$key]['variations'][$image['variation_id']]['images'][] = $image;
+                    } else {
+                        $products[$key]['images'][] = $image;
+                    }
+
+                }
+            }
+        }
+    }
+
     //joj 10. wywoływane w pętli dla każdego produktu
     protected function getProductRow($product, $producers, $categories, $statuses) {//joj ok, wstawia do każdego wiersza CSV kolejne wartości kolumn, czyli zamienia zagnieżdżenia na wiersz. Aczkolwiek nie ma tu nic o wariacjach
         $row[0] = '';
@@ -745,27 +765,6 @@ die;
         $data['variation_id'] = $id;
         //copy products images
         $this->createImages($row, $data);        
-    }
-
-    
-    protected function addImagesToProducts(&$products) {
-        require_once(MODEL_DIR . '/ProductImage.php'); 
-        
-        $productImage = new ProductImage();
-        $productImages = $productImage->getAll();
-
-        foreach ($products as $key => $product) {
-            foreach ($productImages as $image) {
-                if ($product['id'] == $image['product_id']) {
-                    if ($image['variation_id']) {
-                        $products[$key]['variations'][$image['variation_id']]['images'][] = $image;
-                    } else {
-                        $products[$key]['images'][] = $image;
-                    }
-                    
-                }
-            }      
-        }             
     }
 
     protected function getSkuList(array $products) {

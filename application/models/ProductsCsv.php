@@ -20,66 +20,73 @@ class ProductsCsv
     }
 
 
-    public function getProducts()
+    public function getVariations()
     {
-        $query = $this->getQuery();
+        $query = $this->getVariationsQuery();
         $array = Cms::$db->getAll($query);
 
         return $array;
     }
 
-    protected function getQuery()
+    public function getProducts()
     {
-        $q = "SELECT p.id as `Produkt ID`,v.id2 as `Variation ID`, c.id, ct.name as `subcategory`,";
-        $q .= " (SELECT `name` FROM `categories_translation` WHERE `translatable_id`=c.parent_id LIMIT 1) as `parent`,";
-        $q .= " pm.name, pst.name, v.promotion, v.bestseller, v.recommended, v.main_page, v.sku, v.ean, v.price,";
+        $query = $this->getProductsQuery();
+        $array = Cms::$db->getAll($query);
+
+        return $array;
+    }
+
+
+    //no niestety PORAŻKA, to zapytanie zwraca wariacje
+    protected function getVariationsQuery()
+    {
+        $q = "SELECT p.id as `product_id`, v.id2 as `variation_id`, pt.name as `product_name`, ";
+        $q .= " v.sku, v.ean, v.qty as `quantity`, v.price,";
+        $q .= " (SELECT `name` FROM `categories_translation` WHERE `translatable_id`=c.parent_id LIMIT 1) as `category`,";
+        $q .= " ct.name as `subcategory`,";
+        $q .= " pm.name as `manufactured_name`, pst.name as `status`, v.promotion, v.bestseller, v.recommended, v.main_page, ";
         $q .= " (SELECT `name` FROM `features_translation` WHERE `translatable_id`=p.feature1_id AND locale='" . $this->locale . "' LIMIT 1) as `feature1_name`,";
         $q .= " (SELECT `name` FROM `features_translation` WHERE `translatable_id`=p.feature2_id AND locale='" . $this->locale . "' LIMIT 1) as `feature2_name`,";
         $q .= " (SELECT `name` FROM `features_translation` WHERE `translatable_id`=p.feature3_id AND locale='" . $this->locale . "' LIMIT 1) as `feature3_name`,";
         $q .= " (SELECT `name` FROM `feature_values_translation` WHERE `translatable_id`=v.feature1_value_id AND locale='" . $this->locale . "' LIMIT 1) as `feature1_value`,";
         $q .= " (SELECT `name` FROM `feature_values_translation` WHERE `translatable_id`=v.feature2_value_id AND locale='" . $this->locale . "' LIMIT 1) as `feature2_value`,";
-        $q .= " (SELECT `name` FROM `feature_values_translation` WHERE `translatable_id`=v.feature3_value_id AND locale='" . $this->locale . "' LIMIT 1) as `feature3_value`,";
-        $q .= " v.qty";
+        $q .= " (SELECT `name` FROM `feature_values_translation` WHERE `translatable_id`=v.feature3_value_id AND locale='" . $this->locale . "' LIMIT 1) as `feature3_value`";
         $q .= " FROM `product` p";
         $q .= " LEFT JOIN `categories` c ON p.category_id=c.id";
+        $q .= " LEFT JOIN `product_translation` pt ON p.id=pt.translatable_id";
         $q .= " LEFT JOIN `categories_translation` ct ON ct.translatable_id=p.category_id";
         $q .= " LEFT JOIN `product_manufacturer` pm ON p.producer_id=pm.id";
         $q .= " LEFT JOIN `product_status_translation` pst ON p.status_id=pst.translatable_id";
         $q .= " LEFT JOIN `product_variation` v ON p.id=v.product_id";
-        $q .= " WHERE pst.locale='" . $this->locale . "'";
+        $q .= " WHERE pst.locale='" . $this->locale . "'order BY p.id";
 
         return $q;
     }
 
-//    public function updateProducts($products)
-//    {
-//        try {
-//            Cms::$db->beginTransaction();
-//
-//
-//            foreach ($products as $product) {
-//                $product = maddslashes($product);
-//                $desc = str_replace("http", "https", $product['desc']);
-//
-//                $q = "UPDATE " . $entity->table . " SET `desc`='" . $desc . "' ";
-//                $q .= "WHERE `id`='" . $product['id'] . "' ";
-//
-//                Cms::$db->update($q);
-//            }
-//
-//
-//            $q = "UPDATE " . $this->table . " SET `product_id`='" . $post['category_id'] . "', `producer_id`='" . $post['producer_id'] . "', ";
-//            $q .= "`status_id`='" . $post['status_id'] . "', `type`='" . $post['type'] . "', ";
-//            $q .= "`date_mod`=NOW() ";
-//            $q .= "WHERE `id`='" . $post['id'] . "' ";
-//        }catch ();
-//
-//
-//        if (!Cms::$db->update($q)) {
-//            return false;
-//        }
-//
-//        return true;
-//    }
+    protected function getProductsQuery()
+    {
+        $q = "SELECT p.id as `product_id`, pt.name as `product_name`, v.id2 as `variation_id`, ";
+        $q .= " v.sku, v.ean, v.qty as `quantity`, v.price,";
+        $q .= " (SELECT `name` FROM `categories_translation` WHERE `translatable_id`=c.parent_id LIMIT 1) as `category`,";
+        $q .= " ct.name as `subcategory`,";
+        $q .= " pm.name as `manufactured_name`, pst.name as `status`, v.promotion, v.bestseller, v.recommended, v.main_page, ";
+        $q .= " (SELECT `name` FROM `features_translation` WHERE `translatable_id`=p.feature1_id AND locale='" . $this->locale . "' LIMIT 1) as `feature1_name`,";
+        $q .= " (SELECT `name` FROM `features_translation` WHERE `translatable_id`=p.feature2_id AND locale='" . $this->locale . "' LIMIT 1) as `feature2_name`,";
+        $q .= " (SELECT `name` FROM `features_translation` WHERE `translatable_id`=p.feature3_id AND locale='" . $this->locale . "' LIMIT 1) as `feature3_name`,";
+        $q .= " (SELECT `name` FROM `feature_values_translation` WHERE `translatable_id`=v.feature1_value_id AND locale='" . $this->locale . "' LIMIT 1) as `feature1_value`,";
+        $q .= " (SELECT `name` FROM `feature_values_translation` WHERE `translatable_id`=v.feature2_value_id AND locale='" . $this->locale . "' LIMIT 1) as `feature2_value`,";
+        $q .= " (SELECT `name` FROM `feature_values_translation` WHERE `translatable_id`=v.feature3_value_id AND locale='" . $this->locale . "' LIMIT 1) as `feature3_value`";
+        $q .= " FROM `product` p";
+        $q .= " LEFT JOIN `categories` c ON p.category_id=c.id";
+        $q .= " LEFT JOIN `product_translation` pt ON p.id=pt.translatable_id";
+        $q .= " LEFT JOIN `categories_translation` ct ON ct.translatable_id=p.category_id";
+        $q .= " LEFT JOIN `product_manufacturer` pm ON p.producer_id=pm.id";
+        $q .= " LEFT JOIN `product_status_translation` pst ON p.status_id=pst.translatable_id";
+        $q .= " LEFT JOIN `product_variation` v ON p.id=v.product_id";
+        $q .= " WHERE pst.locale='" . $this->locale . "' GROUP BY p.id order BY p.id ";
+
+        return $q;
+
+    }
 
 }
