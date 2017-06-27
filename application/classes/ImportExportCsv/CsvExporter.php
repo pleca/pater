@@ -54,11 +54,10 @@ class CsvExporter
         $humanHeaders = $this->getHumanHeaders();
         $i = 0;
 
-        foreach ($this->data[1] as $key => $val) {
+        foreach ($this->data[0] as $key => $val) {
             $pr[0][$key] = 'todo: opis ';
             $pr[1][$humanHeaders[$i]] = $humanHeaders[$i];
-            $pr[2][$key] = $val;
-            $pr[3][$key] = '';
+            $pr[2][$key] = '';
             $i++;
         }
 
