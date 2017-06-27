@@ -16,30 +16,29 @@ require_once(CLASS_DIR . '/ImportExportCsv/CsvExporter.php');
 require_once(CLASS_DIR . '/ImportExportCsv/CsvExporterHelper.php');
 require_once(CLASS_DIR . '/ImportExportCsv/DBImport.php');
 
-$pc = new ProductsCsv();
-$variations = $pc->getVariations();
-$products = $pc->getProducts();
-
-$helper = new \Application\Classes\ImportExportCsv\CsvExporterHelper($products,$variations);
-$data = $helper->get();
-
-//todo: eksport z DB do CSV działa. Popraw nazwy kolumn "as"
-//DB to array to CSV
-$exporter = new \Application\Classes\ImportExportCsv\CsvExporter($data, EXP_DIR . '/products.csv', false);
-$csv = $exporter->get();
-$params['csv'] = $csv;
-//showList($params);
+//$pc = new ProductsCsv();
+//$variations = $pc->getVariations();
+//$products = $pc->getProducts();
+//
+//$helper = new \Application\Classes\ImportExportCsv\CsvExporterHelper($products,$variations);
+//$data = $helper->get();
+//
+////todo: eksport z DB do CSV działa jak ta lala!
+////DB to array to CSV
+//$exporter = new \Application\Classes\ImportExportCsv\CsvExporter($data, EXP_DIR . '/products.csv', false);
+//$csv = $exporter->get();
+//$params['csv'] = $csv;
 
 //todo: import z CSV do DB. z CSV do array, nie zapisuje w bazie
 //CSV to Array
 $importer = new \Application\Classes\ImportExportCsv\CsvImporter(EXP_DIR . '/products.csv');                    //nie widzi bez całej ścieżki, mimo że jest require.
 $data = $importer->get();
-$mam=0;
 //showList($params);
 
 //todo: import z CSV do DB. z array do bazy.
 //Array to DB
 $dbImporter = new \Application\Classes\ImportExportCsv\DBImport($data);
+$dbImporter->run();
 
 
 function showList($params = [])
