@@ -40,13 +40,11 @@ class DBImport
         $names = $pcsv->getProductsNames();
 $m=0;
 
-
-
         try {
             \Cms::$db->beginTransaction();
             foreach ($data as $key => $row) {
                 if ($key > 2) {
-                    switch ($row['11']){ //todo OK, tutaj $data gdy nie modyfikuję pliku ma postać tablicy [0], [1], ... . w każdej jest tablica 19 elementami będącymi kolumnami. A po edycji excel bedzie w jednej lini
+                    switch ($row['11']){
                         case 'Parent':
                             $product_name = $row[0];
                             $category = $row[1];
@@ -61,10 +59,10 @@ $m=0;
                             $feature3_value = $row[10];
 
                             $post['name'] = $product_name;
-                            $post['category_id'] = 666;
-                            $post['producer_id'] = 666;
-                            $post['status_id'] = 666;
-                            $post['type'] = 666;
+                            $post['category_id'] = 667;
+                            $post['producer_id'] = 667;
+                            $post['status_id'] = 667;
+                            $post['type'] = 667;
 
                             if(!in_array($product_name, $names)){
                                 $this->addProduct($post);
@@ -91,10 +89,11 @@ $m=0;
 
                 }
             }
+            \Cms::$db->commit();
         }
         catch (\Exception $e) {
-//            \Cms::$db->rollBack();
-//            echo $e->getMessage();
+            \Cms::$db->rollBack();
+            echo $e->getMessage();
         }
     }
 
@@ -117,11 +116,6 @@ $m=0;
         //zakomentowałem tam i...i dalej
         $entity = new ProductsAdmin();
         $nieposzło = $entity->addAdmin($post);
-        //todo zapytaj Krzyska dlaczego on nie dodaje do bazy w tabeli products
-        //nie widać tam Id=615 mimo ze w trakcie debugowania pokazuje ze dodał.
-// A zapytanie z debugera INSERT INTO product SET `category_id`='666', `producer_id`='666', `status_id`='666', `type`='666', `date_add`=NOW(), `date_mod`=NOW()
-// jest poprawne bo wpisane w phpmyadmin dodaje wiersznowy
-//mowa o zapytaniu które jest wygenerowane w liniach 191-193 application/models/shopProductsAdmin.php
         $poszło=0;
     }
 

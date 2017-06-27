@@ -19,7 +19,6 @@ require_once(CLASS_DIR . '/ImportExportCsv/DBImport.php');
 //$pc = new ProductsCsv();
 //$variations = $pc->getVariations();
 //$products = $pc->getProducts();
-//
 //$helper = new \Application\Classes\ImportExportCsv\CsvExporterHelper($products,$variations);
 //$data = $helper->get();
 //

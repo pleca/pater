@@ -179,14 +179,15 @@ class ProductsAdmin extends Products {
 	public function addAdmin($post) {
 		$post = maddslashes($post);
 
-        $a = $post[Cms::$defaultLocale]['name'];
-        $b = Cms::$defaultLocale;
-
+//TODO:KOMENTUJĘ BO NIE WIEM O CO CHODZI Z TYM. CZY JA MAM TRZYMAĆ DANE W $post ZAGNIEŻDZONE POD $post['en'][jakis_klucz] ?
 //		if (empty($post[Cms::$defaultLocale]['name'])) {
 //			return 'Nie wpisano nazwy produktu.';
 //		} elseif ($post['category_id'] < 1) {
 //			return 'Nie wybrano kategorii.';
 //		}
+//todo: debug. Usuń potem.
+        $a = $post[Cms::$defaultLocale]['name'];
+        $b = Cms::$defaultLocale;
 
 		$q = "INSERT INTO " . $this->table . " SET `category_id`='" . $post['category_id'] . "', `producer_id`='" . $post['producer_id'] . "', ";
 		$q.= "`status_id`='" . $post['status_id'] . "', `type`='" . $post['type'] . "', ";
@@ -214,7 +215,6 @@ class ProductsAdmin extends Products {
 				
 				$this->insert($this->table . '_translation', $item);				
 			}			
-		//todo : cholera, przy debugowaniu zwraca $id=615 ale w bazie nie widać nowego id 615
 			return $id;
 		} else {
 			return false;
