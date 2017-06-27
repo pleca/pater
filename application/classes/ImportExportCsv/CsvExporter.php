@@ -54,10 +54,10 @@ class CsvExporter
         $humanHeaders = $this->getHumanHeaders();
         $i = 0;
 
-        foreach ($this->data[0] as $key => $val) {
+        foreach ($this->data[1] as $key => $val) {
             $pr[0][$key] = 'todo: opis ';
             $pr[1][$humanHeaders[$i]] = $humanHeaders[$i];
-            $pr[2][$key] = $key;
+            $pr[2][$key] = $val;
             $pr[3][$key] = '';
             $i++;
         }
@@ -67,16 +67,9 @@ class CsvExporter
 
     private function getHumanHeaders()
     {
-        $headers = ['PRODUCT ID', 'VARIATION ID', 'PARENTAGE', 'PRODUCT_NAME', 'SKU', 'EAN', 'QUANTITY', 'PRICE',
-            'CATEGORY', 'SUBCATEGORY', 'MANUFACTURER', 'STATUS', 'PROMOTION', 'BESTSELLERS', 'RECOMMENDED', 'HOMEPAGE',
-
-            'TYPE', 'DESC', 'DESC_SHORT', 'TAG1', 'TAG2',
-            'TAG3', 'DATE_ADD', 'DATE_MOD', 'IMAGE1', 'IMAGE2',
-            'IMAGE3', 'FEATURE1_NAME', 'FEATURE2_NAME', 'FEATURE3_NAME',
-            'TAX', 'PRICE_PURCHASE', 'PRICE_RRP', 'PRICE', 'PRICE2',
-            'PRICE3', 'PRICE_PROMOTION', 'PROMOTION', 'BESTSELLER', 'RECOMMENDED',
-            'MAIN_PAGE', 'MEGA_OFFER', 'WEIGHT', 'QTY', 'DATE_PROMOTION',
-            'FEATURE1_VALUE', 'FEATURE2_VALUE', 'FEATURE3_VALUE', 'EXPORTED_DOMAIN'];
+            $headers = ['PRODUCT NAME','CATEGORY', 'SUBCATEGORY', 'MANUFACTURER', 'STATUS', 'FEATURE1_NAME',
+                'FEATURE2_NAME', 'FEATURE3_NAME', 'FEATURE1_VALUE', 'FEATURE2_VALUE', 'FEATURE3_VALUE',
+                'PARENTAGE', 'SKU', 'EAN', 'QUANTITY', 'PRICE', 'PROMOTION', 'BESTSELLERS', 'RECOMMENDED', 'HOMEPAGE'];
 
         return $headers;
     }
