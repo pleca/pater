@@ -36,8 +36,19 @@ class ProductsCsv
         return $array;
     }
 
+    public function getProductsNames()
+    {
+        $query = $this->getProductsNamesQuery();
+        $array = Cms::$db->getAll($query);
+        $newArray=[];
 
-    //no niestety PORAŻKA, to zapytanie zwraca wariacje
+        foreach ($array as $k => $v) {
+            $newArray[$v['product_name']] = $v['product_name'];
+        }
+
+        return $newArray;
+    }
+
     protected function getVariationsQuery()
     {
         $q = "SELECT p.id as `product_id`, v.id2 as `variation_id`, pt.name as `product_name`, ";
@@ -86,7 +97,17 @@ class ProductsCsv
         $q .= " WHERE pst.locale='" . $this->locale . "' GROUP BY p.id order BY p.id ";
 
         return $q;
+    }
 
+    protected function getProductsNamesQuery()
+    {
+        $q = "SELECT pt.name as `product_name`";
+        $q .= " FROM `product` p";
+        $q .= " LEFT JOIN `product_translation` pt ON p.id=pt.translatable_id";
+        $q .= " LEFT JOIN `product_status_translation` pst ON p.status_id=pst.translatable_id";
+        $q .= " WHERE pst.locale='" . $this->locale . "'order BY pt.name ";
+
+        return $q;
     }
 
 }
