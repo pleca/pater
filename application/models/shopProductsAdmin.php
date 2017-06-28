@@ -179,42 +179,38 @@ class ProductsAdmin extends Products {
 	public function addAdmin($post) {
 		$post = maddslashes($post);
 
-//TODO:KOMENTUJĘ BO NIE WIEM O CO CHODZI Z TYM. CZY JA MAM TRZYMAĆ DANE W $post ZAGNIEŻDZONE POD $post['en'][jakis_klucz] ?
-//		if (empty($post[Cms::$defaultLocale]['name'])) {
-//			return 'Nie wpisano nazwy produktu.';
-//		} elseif ($post['category_id'] < 1) {
-//			return 'Nie wybrano kategorii.';
-//		}
-//todo: debug. Usuń potem.
-        $a = $post[Cms::$defaultLocale]['name'];
-        $b = Cms::$defaultLocale;
+		if (empty($post[Cms::$defaultLocale]['name'])) {
+			return 'Nie wpisano nazwy produktu.';
+		} elseif ($post['category_id'] < 1) {
+			return 'Nie wybrano kategorii.';
+		}
 
 		$q = "INSERT INTO " . $this->table . " SET `category_id`='" . $post['category_id'] . "', `producer_id`='" . $post['producer_id'] . "', ";
 		$q.= "`status_id`='" . $post['status_id'] . "', `type`='" . $post['type'] . "', ";
 		$q.= "`date_add`=NOW(), `date_mod`=NOW() ";
 //dump($q);
 		if ($id = Cms::$db->insert($q)) {
-			$this->convertToTranslationData($post);	
+//			$this->convertToTranslationData($post);
 			
-			foreach ($post as $locale => $trans) {
-				if (!$trans['content_short']) {
-					$trans['content_short'] = substr(strip_tags($trans['content']), 0, 250);
-				}
-		
-                $name = clearName($trans['name']);
-                $slug = makeUrl($name);
-        
-				$item = array(
-					'translatable_id' => $id,					
-					'name' => $name,					
-					'slug' => $slug,					
-					'content_short' => $trans['content_short'],					
-					'content' => $trans['content'],					
-					'locale' => $locale,
-				);
-				
-				$this->insert($this->table . '_translation', $item);				
-			}			
+//			foreach ($post as $locale => $trans) {
+//				if (!$trans['content_short']) {
+//					$trans['content_short'] = substr(strip_tags($trans['content']), 0, 250);
+//				}
+//
+//                $name = clearName($trans['name']);
+//                $slug = makeUrl($name);
+//
+//				$item = array(
+//					'translatable_id' => $id,
+//					'name' => $name,
+//					'slug' => $slug,
+//					'content_short' => $trans['content_short'],
+//					'content' => $trans['content'],
+//					'locale' => $locale,
+//				);
+//
+//				$this->insert($this->table . '_translation', $item);
+//			}
 			return $id;
 		} else {
 			return false;
