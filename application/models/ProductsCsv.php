@@ -41,13 +41,63 @@ class ProductsCsv
         $query = $this->getProductsNamesQuery();
         $array = Cms::$db->getAll($query);
         $newArray=[];
-
         foreach ($array as $k => $v) {
             $newArray[$v['product_name']] = $v['product_name'];
         }
 
         return $newArray;
     }
+
+    public function getStatusesNamesWithIds()
+    {
+        $query = $this->getStatusesNamesQuery();
+        $array = Cms::$db->getAll($query);
+        $newArray=[];
+        foreach ($array as $k => $v) {
+            $newArray[$v['product_name']] = $v['product_name'];
+        }
+
+        return $newArray;
+    }
+
+    public function getProducersNames()
+    {
+        $query = $this->getProductsNamesQuery();
+        $array = Cms::$db->getAll($query);
+        $newArray=[];
+        foreach ($array as $k => $v) {
+            $newArray[$v['product_name']] = $v['product_name'];
+        }
+
+        return $newArray;
+    }
+
+    public function getCategoriesNames()
+    {
+        $query = $this->getProductsNamesQuery();
+        $array = Cms::$db->getAll($query);
+        $newArray=[];
+        foreach ($array as $k => $v) {
+            $newArray[$v['product_name']] = $v['product_name'];
+        }
+
+        return $newArray;
+    }
+
+    public function getTaxesNames()
+    {
+        $query = $this->getProductsNamesQuery();
+        $array = Cms::$db->getAll($query);
+        $newArray=[];
+        foreach ($array as $k => $v) {
+            $newArray[$v['product_name']] = $v['product_name'];
+        }
+
+        return $newArray;
+    }
+
+
+
 
     protected function getVariationsQuery()
     {
@@ -110,4 +160,15 @@ class ProductsCsv
         return $q;
     }
 
+    protected function getStatusesNamesQuery()
+    {
+        $q = "SELECT pt.name as `product_name`";
+        $q .= " FROM `product` p";
+        $q .= " LEFT JOIN `product_translation` pt ON p.id=pt.translatable_id";
+        $q .= " LEFT JOIN `product_status_translation` pst ON p.status_id=pst.translatable_id";
+        $q .= " WHERE pst.locale='" . $this->locale . "'order BY pt.name ";
+
+        return $q;
+
+    }
 }

@@ -1,8 +1,7 @@
 todo: opis ;todo: opis ;todo: opis ;todo: opis ;todo: opis ;todo: opis ;todo: opis ;todo: opis ;todo: opis ;todo: opis ;todo: opis ;todo: opis ;todo: opis ;todo: opis ;todo: opis ;todo: opis ;todo: opis ;todo: opis ;todo: opis ;
 PRODUCT NAME;CATEGORY;SUBCATEGORY;MANUFACTURER;STATUS;FEATURE1_NAME;FEATURE2_NAME;FEATURE3_NAME;FEATURE1_VALUE;FEATURE2_VALUE;FEATURE3_VALUE;PARENTAGE;SKU;EAN;QUANTITY;PRICE;PROMOTION;BESTSELLERS;RECOMMENDED;
 ;;;;;;;;;;;;;;;;;;;
-test2;;;;;;;;;;;Parent;;;;;;;;
-test3;;;;;;;;;;;Parent;;;;;;;;
+test;;;;;;;;;;;Parent;;;;;;;;
 AAKG Mega Hardcore Caps;Supplements;NO Boosters;Trec Nutrition;Active;Size;;;120caps;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;5901828345104;;8;14.9917;0;0;0;
 ;;;;;;;;;;;Child;5901828345074;;5;24.9917;0;0;0;
@@ -2228,7 +2227,7 @@ Winter Cap;Clothing;Headgear;Trec Wear;Active;Colour;;;Grey;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;101791;;3;8.3300;0;0;0;0
 ;;;;;;;;;;;Child;101789;;7;8.3300;0;0;0;0
 ;;;;;;;;;;;Child;101649;;8;8.3300;0;0;1;0
-Plastic Shaker;Sport Accessories;Bottles, Shakers;Trec Wear;Active;Size;;;700ml;;;Parent;;;;;;;;
+Plastic Shaker;Sport Accessories;Bottles; Shakers;Trec Wear;Active;Size;;;700ml;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;100014;;26;2.4900;0;0;0;0
 Keychain Trec Nutrition;Sport Accessories;Wristbands;Trec Wear;Active;Colour;;;Black;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;102053;;141;3.3250;0;0;0;0
@@ -2449,31 +2448,31 @@ Leather Belt;Sport Accessories;Belts;Trec Nutrition;Active;Size;;;L;;;Parent;;;;
 ;;;;;;;;;;;Child;1021;;5;19.1600;0;0;0;0
 ;;;;;;;;;;;Child;100012;;3;19.1600;0;0;0;0
 ;;;;;;;;;;;Child;1019;;3;19.1600;0;0;0;0
-Shaker Classic Pink;Sport Accessories;Bottles, Shakers;Trec Nutrition;Active;Size;;;0.6L;;;Parent;;;;;;;;
+Shaker Classic Pink;Sport Accessories;Bottles; Shakers;Trec Nutrition;Active;Size;;;0.6L;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;100864;;0;7.4900;0;0;0;0
-Shaker Classic Red;Sport Accessories;Bottles, Shakers;Trec Nutrition;Active;Size;;;0.6L;;;Parent;;;;;;;;
+Shaker Classic Red;Sport Accessories;Bottles; Shakers;Trec Nutrition;Active;Size;;;0.6L;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;100866;;0;8.3300;0;0;0;0
 ;;;;;;;;;;;Child;100865;;0;7.4900;0;0;0;0
-Shaker Classic Black;Sport Accessories;Bottles, Shakers;Trec Nutrition;Active;Size;;;0.8L;;;Parent;;;;;;;;
+Shaker Classic Black;Sport Accessories;Bottles; Shakers;Trec Nutrition;Active;Size;;;0.8L;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;100861;;0;8.3300;0;0;0;0
-Shaker Metal Trec;Sport Accessories;Bottles, Shakers;Trec Nutrition;Active;Size;;;0.7L;;;Parent;;;;;;;;
+Shaker Metal Trec;Sport Accessories;Bottles; Shakers;Trec Nutrition;Active;Size;;;0.7L;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;100008;;2;9.5800;0;0;0;0
-Shaker Sport Blue;Sport Accessories;Bottles, Shakers;Trec Nutrition;Active;Size;;;0.6L;;;Parent;;;;;;;;
+Shaker Sport Blue;Sport Accessories;Bottles; Shakers;Trec Nutrition;Active;Size;;;0.6L;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;100931;;0;12.4900;0;0;0;0
 ;;;;;;;;;;;Child;100929;;0;12.4900;0;0;0;0
-Shaker Sport Pink;Sport Accessories;Bottles, Shakers;Trec Nutrition;Active;Size;;;0.6L;;;Parent;;;;;;;;
+Shaker Sport Pink;Sport Accessories;Bottles; Shakers;Trec Nutrition;Active;Size;;;0.6L;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;100930;;7;12.4900;0;0;0;0
-Shaker Sport Red;Sport Accessories;Bottles, Shakers;Trec Nutrition;Active;Size;;;0.L;;;Parent;;;;;;;;
+Shaker Sport Red;Sport Accessories;Bottles; Shakers;Trec Nutrition;Active;Size;;;0.L;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;100932;;0;12.4900;0;0;0;0
-Shaker Trec Nutrition;Sport Accessories;Bottles, Shakers;Trec Nutrition;Active;Size;;;700ml;;;Parent;;;;;;;;
+Shaker Trec Nutrition;Sport Accessories;Bottles; Shakers;Trec Nutrition;Active;Size;;;700ml;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;100987;;0;3.3300;0;0;0;0
-Sport Bottle Isofaster;Sport Accessories;Bottles, Shakers;Trec Nutrition;Active;;;;;;;Parent;;;;;;;;
+Sport Bottle Isofaster;Sport Accessories;Bottles; Shakers;Trec Nutrition;Active;;;;;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;100101;;0;3.3300;0;0;0;0
-Sport Bottle Max Carb;Sport Accessories;Bottles, Shakers;Trec Nutrition;Active;;;;;;;Parent;;;;;;;;
+Sport Bottle Max Carb;Sport Accessories;Bottles; Shakers;Trec Nutrition;Active;;;;;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;100102;;143;4.0000;0;0;0;0
-Sport Bottle Redfaster;Sport Accessories;Bottles, Shakers;Trec Nutrition;Active;;;;;;;Parent;;;;;;;;
+Sport Bottle Redfaster;Sport Accessories;Bottles; Shakers;Trec Nutrition;Active;;;;;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;100103;;0;3.7500;0;0;0;0
-Sport Bottle Virargo;Sport Accessories;Bottles, Shakers;Trec Nutrition;Active;;;;;;;Parent;;;;;;;;
+Sport Bottle Virargo;Sport Accessories;Bottles; Shakers;Trec Nutrition;Active;;;;;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;100104;;76;3.7400;0;0;0;0
 Sport Dead Lift;Sport Accessories;Straps;Trec Nutrition;Active;;;;;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;100073;;30;5.8300;0;0;0;0
@@ -2836,54 +2835,54 @@ Trec Team Towel 002 #IMREADY Orange 50x70cm;Sport Accessories;Other;Trec Wear;Ac
 Trec Team Towel 003 #IMREADY Black 150x75cm;Sport Accessories;Other;Trec Wear;Active;Colour;;;Black;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;102786;;30;12.4917;0;0;0;0
 MAX VENT M Socks;Clothing;Socks;Viking Sport;New;Colour;Size;;3 pairs White;UK 4.5 - 7 / EU 38-40;;Parent;;;;;;;;
-;;;;;;;;;;;Child;3COL/M/29-30/CZE+CZAR+NIE;;0;10.4100;0;0;0;0
-;;;;;;;;;;;Child;3COL/M/27-28/POM;;995;10.4100;0;0;0;0
-;;;;;;;;;;;Child;3COL/M/27-28/BIA+CZAR+NIE;;998;10.4100;0;0;0;0
-;;;;;;;;;;;Child;3COL/M/25-26/ZOL+POM+CZE;;0;10.4100;0;0;0;0
-;;;;;;;;;;;Child;3COL/M/29-30/BIA+POM+ZOL;;997;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/27-28/BIA;;999;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/29-30/BIA+POM+ZOL;;997;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/25-26/CZA+BIA+CZE;;0;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/29-30/CZE+CZAR+NIE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/27-28/CZE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/27-28/ZOL;;996;10.4100;0;0;0;0
-;;;;;;;;;;;Child;3COL/M/29-30/ZOL+BIA+NIE;;0;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/25-26/ZOL+POM+CZE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/29-30/BIA+CZE+NIE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/25-26/BIA+CZE+NIE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/25-26/NIE;;0;10.4100;0;0;0;0
-;;;;;;;;;;;Child;3COL/M/27-28/CZE+CZAR+NIE;;0;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/29-30/ZOL+BIA+NIE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/29-30/NIE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/29-30/CZA+BIA+CZE;;0;10.4100;0;0;0;0
-;;;;;;;;;;;Child;3COL/M/29-30/ZOL+POM+NIE;;0;10.4100;0;0;0;0
-;;;;;;;;;;;Child;3COL/M/27-28/BIA+POM+ZOL;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/25-26/BIA;;0;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/27-28/BIA+POM+ZOL;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/25-26/CZA;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/29-30/CZA;;0;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/27-28/CZE+CZAR+NIE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/25-26/ZOL;;0;10.4100;0;0;0;0
-;;;;;;;;;;;Child;3COL/M/27-28/ZOL+BIA+NIE;;0;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/29-30/ZOL+POM+NIE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/27-28/BIA+CZE+NIE;;0;10.4100;0;0;0;0
-;;;;;;;;;;;Child;3COL/M/29-30/ZOL+POM+CZE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/25-26/BIA+CZAR+NIE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/27-28/CZA+POM+ZOL;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/25-26/CZE+CZAR+NIE;;0;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/27-28/ZOL+BIA+NIE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/27-28/NIE;;994;10.4100;0;0;0;0
-;;;;;;;;;;;Child;3COL/M/29-30/CZA+POM+ZOL;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/27-28/CZA+BIA+CZE;;998;10.4100;0;0;0;0
-;;;;;;;;;;;Child;3COL/M/27-28/ZOL+POM+NIE;;997;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/29-30/ZOL+POM+CZE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/29-30/BIA+POM+NIE;;998;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/25-26/BIA+POM+ZOL;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/27-28/CZA;;0;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/29-30/CZA+POM+ZOL;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/29-30/POM;;988;10.4100;0;0;0;0
-;;;;;;;;;;;Child;3COL/M/25-26/ZOL+BIA+NIE;;0;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/27-28/ZOL+POM+NIE;;997;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/29-30/BIA+CZAR+NIE;;0;10.4100;0;0;0;0
-;;;;;;;;;;;Child;3COL/M/27-28/ZOL+POM+CZE;;998;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/29-30/BIA;;998;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/25-26/CZA+POM+ZOL;;998;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/25-26/CZE;;0;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/25-26/ZOL+BIA+NIE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/29-30/CZE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/29-30/ZOL;;0;10.4100;0;0;0;0
-;;;;;;;;;;;Child;3COL/M/25-26/ZOL+POM+NIE;;0;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/27-28/ZOL+POM+CZE;;998;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/27-28/BIA+POM+NIE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/25-26/BIA+POM+NIE;;0;10.4100;0;0;0;0
 ;;;;;;;;;;;Child;3COL/M/25-26/POM;;0;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/27-28/POM;;995;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/25-26/ZOL+POM+NIE;;0;10.4100;0;0;0;0
+;;;;;;;;;;;Child;3COL/M/27-28/BIA+CZAR+NIE;;998;10.4100;0;0;0;0
 COMPRESSION Socks;Clothing;Socks;Viking Sport;Active;Colour;Size;;1 pair White;UK 4.5 - 7 / EU 38-40;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;2COMP/M/25-26/ZOL+ZOL;;0;17.4900;0;0;0;0
 ;;;;;;;;;;;Child;1COMP/M/25-26/BIA;;0;11.2500;0;0;0;0
@@ -3200,8 +3199,8 @@ T-Shirt 038 Never Gives Up Grey;Clothing;T-shirts;Trec Wear;Active;Size;;;L;;;Pa
 ;;;;;;;;;;;Child;102911;5054948047431;0;19.1600;0;0;0;0
 ;;;;;;;;;;;Child;102915;5054948047424;0;19.1600;0;0;0;0
 100% Beef Aminos;Supplements;Amino Acids;Universal Nutrition;New;Size;;;200 tabs;;;Parent;;;;;;;;
-;;;;;;;;;;;Child;P1894;;10;17.9900;0;0;0;0
 ;;;;;;;;;;;Child;P4166;;10;10.7833;0;0;1;1
+;;;;;;;;;;;Child;P1894;;10;17.9900;0;0;0;0
 100% Egg Aminos;Supplements;Amino Acids;Universal Nutrition;New;Size;;;250 tabs;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;P2527;;0;27.0500;0;0;0;0
 ;;;;;;;;;;;Child;P2527;;0;27.0500;0;0;0;0
@@ -3234,27 +3233,24 @@ Pure Titanium Whey;Supplements;Proteins;SAN;New;Size;Flavour;;2252g;Banana Cocon
 ;;;;;;;;;;;Child;P9873;;0;18.6100;0;0;0;0
 ;;;;;;;;;;;Child;P9287;;0;128.9000;0;0;0;0
 100% Whey by EPIQ;Supplements;Proteins;Epiq;New;Size;Flavour;;2270g;Vanilla;;Parent;;;;;;;;
-;;;;;;;;;;;Child;P20098;;0;48.9417;0;0;1;0
 ;;;;;;;;;;;Child;P20094;;0;25.8900;0;0;1;0
 ;;;;;;;;;;;Child;P20095;;0;25.8900;0;0;1;0
 ;;;;;;;;;;;Child;P20096;;0;48.9417;0;0;1;0
+;;;;;;;;;;;Child;P20098;;0;48.9417;0;0;1;0
 Gold Standard 100% Whey;Supplements;Proteins;Optimum Nutrition;New;Size;Flavour;;2273g;Banana Cream;;Parent;;;;;;;;
-;;;;;;;;;;;Child;P1221;;0;73.7300;0;0;0;0
-;;;;;;;;;;;Child;P1095;;10;73.7300;0;0;0;0
-;;;;;;;;;;;Child;P1277;;6;-254.1500;0;0;0;0
-;;;;;;;;;;;Child;P2690;;0;53.6200;0;0;0;0
 ;;;;;;;;;;;Child;P523;;0;73.7300;0;0;0;0
 ;;;;;;;;;;;Child;P21691;;10;73.7300;0;0;0;0
 ;;;;;;;;;;;Child;P1481;;100;53.6200;0;0;0;0
 ;;;;;;;;;;;Child;P1528;;5;73.7300;0;0;0;0
+;;;;;;;;;;;Child;P1484;;7;53.6200;0;0;0;0
 ;;;;;;;;;;;Child;P687;;10;53.6200;0;0;0;0
 ;;;;;;;;;;;Child;P689;;10;53.6200;0;0;0;0
-;;;;;;;;;;;Child;P6428;;0;15.6100;0;0;0;0
 ;;;;;;;;;;;Child;P350;;10;-254.1500;0;0;0;0
 ;;;;;;;;;;;Child;P2708;;10;73.7300;0;0;0;0
 ;;;;;;;;;;;Child;P2704;;10;53.6200;0;0;0;0
 ;;;;;;;;;;;Child;P2647;;10;-254.1500;0;0;0;0
 ;;;;;;;;;;;Child;P2705;;10;53.6200;0;0;0;0
+;;;;;;;;;;;Child;P1277;;6;-254.1500;0;0;0;0
 ;;;;;;;;;;;Child;P128;;0;73.7300;0;0;0;0
 ;;;;;;;;;;;Child;P786;;0;-254.1500;0;0;0;0
 ;;;;;;;;;;;Child;P597;;9;73.7300;0;0;0;0
@@ -3262,25 +3258,28 @@ Gold Standard 100% Whey;Supplements;Proteins;Optimum Nutrition;New;Size;Flavour;
 ;;;;;;;;;;;Child;P2707;;0;73.7300;0;0;0;0
 ;;;;;;;;;;;Child;P1907;;8;73.7300;0;0;0;0
 ;;;;;;;;;;;Child;P6427;;0;15.6100;0;0;0;0
-;;;;;;;;;;;Child;P1484;;7;53.6200;0;0;0;0
 ;;;;;;;;;;;Child;P1110;;10;73.7300;0;0;0;0
+;;;;;;;;;;;Child;P6428;;0;15.6100;0;0;0;0
 ;;;;;;;;;;;Child;P596;;0;73.7300;0;0;0;0
 ;;;;;;;;;;;Child;P1220;;0;73.7300;0;0;0;0
 ;;;;;;;;;;;Child;P21690;;11;53.6200;0;0;0;0
 ;;;;;;;;;;;Child;P2322;;0;73.7300;0;0;0;0
 ;;;;;;;;;;;Child;P1529;;8;53.6200;0;0;0;0
+;;;;;;;;;;;Child;P1221;;0;73.7300;0;0;0;0
+;;;;;;;;;;;Child;P1095;;10;73.7300;0;0;0;0
+;;;;;;;;;;;Child;P2690;;0;53.6200;0;0;0;0
 100% Whey Protein by NRGFuel;Supplements;Proteins;NRGFUEL;Inactive;Size;Flavour;;2270g;Chocolate;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;P23513;;0;37.6083;0;0;0;0
 ;;;;;;;;;;;Child;P23512;;0;37.6083;0;0;0;0
 ;;;;;;;;;;;Child;P23513;;0;37.6083;0;0;0;0
 ;;;;;;;;;;;Child;P23512;;0;37.6083;0;0;0;0
 100% Whey Protein;Supplements;Proteins;EAS;New;Size;Flavour;;2270g;Chocolate;;Parent;;;;;;;;
+;;;;;;;;;;;Child;P1240;;0;41.3667;0;0;0;0
+;;;;;;;;;;;Child;P3250;;0;19.7600;0;0;0;0
 ;;;;;;;;;;;Child;P3250;;0;19.7600;0;0;0;0
 ;;;;;;;;;;;Child;P49;;5;41.3667;0;0;0;0
 ;;;;;;;;;;;Child;P49;;5;41.3667;0;0;0;0
 ;;;;;;;;;;;Child;P1240;;0;41.3667;0;0;0;0
-;;;;;;;;;;;Child;P1240;;0;41.3667;0;0;0;0
-;;;;;;;;;;;Child;P3250;;0;19.7600;0;0;0;0
 100% Whey Protein by USN;Supplements;Proteins;USN;Inactive;Size;Flavour;;2280g;Banana;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;P5519;;5;34.9917;0;0;0;0
 ;;;;;;;;;;;Child;P5522;;5;18.3250;0;0;0;0
@@ -3298,7 +3297,11 @@ Gold Standard 100% Whey;Supplements;Proteins;Optimum Nutrition;New;Size;Flavour;
 ;;;;;;;;;;;Child;P5519;;5;34.9917;0;0;0;0
 ;;;;;;;;;;;Child;P5521;;0;18.3250;0;0;0;0
 ;;;;;;;;;;;Child;P5517;;10;34.9917;0;0;0;0
-2Go Bottle;Sport Accessories;Bottles, Shakers;Spider Bottle;New;Colour;;;Blue (transparent) ;;;Parent;;;;;;;;
+2Go Bottle;Sport Accessories;Bottles; Shakers;Spider Bottle;New;Colour;;;Blue (transparent) ;;;Parent;;;;;;;
+;;;;;;;;;;;Child;P9218;;10;7.8750;0;0;0;0
+;;;;;;;;;;;Child;P23666;;10;7.8750;0;0;0;0
+;;;;;;;;;;;Child;P21361;;0;7.8750;0;0;1;1
+;;;;;;;;;;;Child;P9220;;10;7.8750;0;0;0;0
 ;;;;;;;;;;;Child;P9217;;9;7.8750;0;0;0;0
 ;;;;;;;;;;;Child;P9223;;10;7.8750;0;0;0;0
 ;;;;;;;;;;;Child;P9224;;7;7.8750;0;0;0;0
@@ -3308,11 +3311,7 @@ Gold Standard 100% Whey;Supplements;Proteins;Optimum Nutrition;New;Size;Flavour;
 ;;;;;;;;;;;Child;P21360;;0;7.8750;0;0;0;0
 ;;;;;;;;;;;Child;P23665;;0;7.8750;0;0;0;0
 ;;;;;;;;;;;Child;P21358;;10;7.8750;0;0;0;0
-;;;;;;;;;;;Child;P9218;;10;7.8750;0;0;0;0
-;;;;;;;;;;;Child;P23666;;10;7.8750;0;0;0;0
-;;;;;;;;;;;Child;P21361;;0;7.8750;0;0;1;1
-;;;;;;;;;;;Child;P9220;;10;7.8750;0;0;0;0
-2Go Maxi Bottle;Sport Accessories;Bottles, Shakers;Spider Bottle;Inactive;Colour;;;Blue Black;;;Parent;;;;;;;;
+2Go Maxi Bottle;Sport Accessories;Bottles; Shakers;Spider Bottle;Inactive;Colour;;;Blue Black;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;P23668;;100;8.2917;0;0;0;0
 ;;;;;;;;;;;Child;P23667;;10;8.2917;0;0;0;0
 ;;;;;;;;;;;Child;P23667;;10;8.2917;0;0;0;0
@@ -3320,15 +3319,15 @@ Gold Standard 100% Whey;Supplements;Proteins;Optimum Nutrition;New;Size;Flavour;
 ;;;;;;;;;;;Child;P23669;;100;8.2917;0;0;0;0
 ;;;;;;;;;;;Child;P23668;;100;8.2917;0;0;0;0
 32% Protein Bar - 24 Bars;Supplements;Carbo-Protein Supplements;Weider;New;Flavour;;;Banana;;;Parent;;;;;;;;
+;;;;;;;;;;;Child;P22182;;10;25.3500;0;0;0;0
+;;;;;;;;;;;Child;P22176;;9;25.3500;0;0;0;0
+;;;;;;;;;;;Child;P22178;;10;25.3500;0;0;0;0
 ;;;;;;;;;;;Child;P22177;;10;25.3500;0;0;0;0
 ;;;;;;;;;;;Child;P22179;;10;25.3500;0;0;0;1
 ;;;;;;;;;;;Child;P22184;;10;25.3500;0;0;0;0
 ;;;;;;;;;;;Child;P22181;;10;25.3500;0;0;0;0
 ;;;;;;;;;;;Child;P22183;;10;25.3500;0;0;0;0
 ;;;;;;;;;;;Child;P22180;;10;25.3500;0;0;0;0
-;;;;;;;;;;;Child;P22182;;10;25.3500;0;0;0;0
-;;;;;;;;;;;Child;P22176;;9;25.3500;0;0;0;0
-;;;;;;;;;;;Child;P22178;;10;25.3500;0;0;0;0
 32% Whey-Wafer - 24 Bars;Supplements;Healthy Foods;Weider;Inactive;Flavour;;;Chocolate;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;P22187;;2;19.7583;0;0;0;0
 ;;;;;;;;;;;Child;P23860;;6;19.7583;0;0;0;0
@@ -3349,14 +3348,14 @@ Gold Standard 100% Whey;Supplements;Proteins;Optimum Nutrition;New;Size;Flavour;
 ;;;;;;;;;;;Child;P20560;;0;12.3417;0;0;0;0
 ;;;;;;;;;;;Child;P23614;;0;25.8900;0;0;0;0
 Kill It;Supplements;Pre- & Post-workout;5% Nutrition;New;Size;Flavour;;309g;Blue Raspberry;;Parent;;;;;;;;
+;;;;;;;;;;;Child;P20364;;0;24.9917;0;1;1;0
 ;;;;;;;;;;;Child;P20365;;0;24.9917;0;0;1;1
 ;;;;;;;;;;;Child;P20366;;10;24.9917;0;1;1;0
 ;;;;;;;;;;;Child;P20367;;100;24.9917;0;1;1;0
-;;;;;;;;;;;Child;P20364;;0;24.9917;0;1;1;0
-5% Jug  - 1 Gallon (3.78l);Sport Accessories;Bottles, Shakers;5% Nutrition;New;Colour;;;Black;;;Parent;;;;;;;;
-;;;;;;;;;;;Child;P22327;;0;12.0800;0;0;0;0
+5% Jug  - 1 Gallon (3.78l);Sport Accessories;Bottles; Shakers;5% Nutrition;New;Colour;;;Black;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;P22326;;10;12.0800;0;0;0;0
 ;;;;;;;;;;;Child;P22325;;3;12.0800;0;0;0;1
+;;;;;;;;;;;Child;P22327;;0;12.0800;0;0;0;0
 Tanktop 1DayYouMay Black-White;Clothing;Tops;5% Nutrition;Inactive;Size;;;L;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;P21338;;0;16.2083;0;0;0;0
 ;;;;;;;;;;;Child;P21339;;0;16.2083;0;0;0;0
@@ -3400,21 +3399,21 @@ Ribbed Tank Top Love It Kill It Black-Green;Clothing;Tops;5% Nutrition;Inactive;
 7 Day Pill Organizer;Sport Accessories;Other;Fit & Fresh;Inactive;;;;;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;P3362;;8;3.0667;0;0;0;0
 1.M.R Vortex™;Supplements;Pre- & Post-workout;BPI Sports;New;Size;Flavour;;150g;Blue Lemonade;;Parent;;;;;;;;
+;;;;;;;;;;;Child;P22471;;10;20.9917;0;0;0;0
+;;;;;;;;;;;Child;P22471;;10;20.9917;0;0;0;0
+;;;;;;;;;;;Child;P8953;;8;20.9917;0;0;0;0
+;;;;;;;;;;;Child;P8953;;8;20.9917;0;0;0;0
+;;;;;;;;;;;Child;P9468;;6;20.9917;0;0;1;1
+;;;;;;;;;;;Child;P9468;;6;20.9917;0;0;1;1
 ;;;;;;;;;;;Child;P20079;;0;20.9917;0;0;0;0
-;;;;;;;;;;;Child;P22471;;10;20.9917;0;0;0;0
-;;;;;;;;;;;Child;P22471;;10;20.9917;0;0;0;0
-;;;;;;;;;;;Child;P8953;;8;20.9917;0;0;0;0
-;;;;;;;;;;;Child;P8953;;8;20.9917;0;0;0;0
-;;;;;;;;;;;Child;P9468;;6;20.9917;0;0;1;1
-;;;;;;;;;;;Child;P9468;;6;20.9917;0;0;1;1
 ;;;;;;;;;;;Child;P20079;;0;20.9917;0;0;0;0
 Arthroblock;Supplements;Joint Health;Olimp Labs;New;Size;;;60 capsules;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;P9355;5054948088724;0;10.8250;0;0;1;0
 Arthroblock Forte;Supplements;Joint Health;Olimp Labs;New;Size;;;60 capsules;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;P1697;5054948088731;10;15.8250;0;0;0;0
 Nutramil;Supplements;Carbo-Protein Supplements;Olimp Labs;New;Size;Flavour;;7 x 72g;Neutral;;Parent;;;;;;;;
-;;;;;;;;;;;Child;P23448;5054948088618;2;21.6600;0;0;1;0
 ;;;;;;;;;;;Child;P23447;5054948088625;0;21.6600;0;0;0;0
+;;;;;;;;;;;Child;P23448;5054948088618;2;21.6600;0;0;1;0
 Muscle Mousse;Supplements;Proteins;Muscle Moose;Inactive;;;;;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;;;;;;;;
 Leggins Trec Girl 012;Clothing;Leggins;Trec Wear;New;Size;;;M;;;Parent;;;;;;;;
@@ -3423,24 +3422,24 @@ Leggins Trec Girl 012;Clothing;Leggins;Trec Wear;New;Size;;;M;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;104029;;2;33.3250;0;0;0;0
 ;;;;;;;;;;;Child;104028;;2;33.3250;0;0;0;0
 Leggins Trec Girl 013;Clothing;Leggins;Trec Wear;New;Size;;;L;;;Parent;;;;;;;;
-;;;;;;;;;;;Child;104031;;0;33.3250;0;0;0;0
 ;;;;;;;;;;;Child;104030;;0;33.3250;0;0;0;0
 ;;;;;;;;;;;Child;104033;;2;33.3250;0;0;0;0
 ;;;;;;;;;;;Child;104032;;1;33.3250;0;0;0;0
+;;;;;;;;;;;Child;104031;;0;33.3250;0;0;0;0
 Leggins Trec Girl 014;Clothing;Leggins;Trec Wear;New;Size;;;L;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;104034;;0;33.3250;0;0;0;0
 ;;;;;;;;;;;Child;104037;;0;33.3250;0;0;0;0
 ;;;;;;;;;;;Child;104036;;0;33.3250;0;0;0;0
 ;;;;;;;;;;;Child;104035;;1;33.3250;0;0;0;0
 Leggins Trec Girl 015;Clothing;Leggins;Trec Wear;New;Size;;;L;;;Parent;;;;;;;;
-;;;;;;;;;;;Child;104038;;1;33.3250;0;0;0;0
 ;;;;;;;;;;;Child;104041;;0;33.3250;0;0;0;0
 ;;;;;;;;;;;Child;104040;;0;33.3250;0;0;0;0
 ;;;;;;;;;;;Child;104039;;0;33.3250;0;0;0;0
+;;;;;;;;;;;Child;104038;;1;33.3250;0;0;0;0
 Leggins Trec Girl 016;Clothing;Leggins;Trec Wear;New;Size;;;M;;;Parent;;;;;;;;
-;;;;;;;;;;;Child;104042;;1;33.3250;0;0;0;0
 ;;;;;;;;;;;Child;104044;;0;33.3250;0;0;0;0
 ;;;;;;;;;;;Child;104043;;0;33.3250;0;0;0;0
+;;;;;;;;;;;Child;104042;;1;33.3250;0;0;0;0
 Fullcap 018 Green;Clothing;Headgear;Trec Wear;New;Size;;;L/XL;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;104057;;0;20.8250;0;0;0;0
 ;;;;;;;;;;;Child;104056;;2;20.8250;0;0;0;0
@@ -3496,7 +3495,7 @@ Sport Bra 04;Clothing;Underwear;Trec Wear;New;Size;;;L;;;Parent;;;;;;;;
 ;;;;;;;;;;;Child;104126;;0;24.9900;0;0;0;0
 ;;;;;;;;;;;Child;104129;;0;24.9900;0;0;0;0
 ;;;;;;;;;;;Child;104128;;0;24.9900;0;0;0;0
-Trec Mega Bottle (2.2l);Sport Accessories;Bottles, Shakers;Trec Nutrition;New;Colour;;;Red;;;Parent;;;;;;;;
+Trec Mega Bottle (2.2l);Sport Accessories;Bottles; Shakers;Trec Nutrition;New;Colour;;;Red;;;Parent;;;;;;;
 ;;;;;;;;;;;Child;103073;;0;9.9900;0;0;0;0
 ;;;;;;;;;;;Child;103074;;28;9.9900;0;0;0;0
 Flex Guard;Supplements;Joint Health;Trec Nutrition;New;Flavour;Size;;Mango-Orange;375g;;Parent;;;;;;;;
