@@ -3,6 +3,7 @@
 namespace Application\Classes\ImportExportCsv;
 //require_once(MODEL_DIR . '/Status.php');
 require_once(MODEL_DIR . '/shopProductsAdmin.php');
+require_once(MODEL_DIR . '/shopCategoriesAdmin.php');
 //require_once(MODEL_DIR . '/Category.php');
 //require_once(MODEL_DIR . '/Product.php');
 //require_once(MODEL_DIR . '/Variation.php');
@@ -24,8 +25,6 @@ class DBImport
     public function __construct($data)
     {
         $this->data = $data;
-
-
     }
 
 
@@ -46,22 +45,9 @@ $m=0;
             foreach ($data as $key => $row) {
 //                if ($key == 3) {
                 if ($key > 2) {
-                    $post = $this->prepareData($row);
+                    $product = $this->prepareData($row);
                     switch ($row['11']){
                         case 'Parent':
-                            //todo: STATUS
-                            //1. muszę zamienić status name na status_id
-                            //2. sprawdzić czy status_id danego produktu się zmienił
-                            //2. albo nie sprawdzać i wstawiać do tabeli produkt to co user podał, byle było poprawne
-                            //3. Czyli odbieram status_name zamieniam go na status_id i wstawiam do produktu
-                            //4. Muszę też gdzieś w tej klasie mieć dostęp do nowego status_id bo będzie wykorzystywany jeszcze
-                            // a czy na pewno będzie gdzieś jeszcze potrzebne??????
-                            //i nic nie robię z tabelą Status!
-                            if(!in_array($post['status'], $statusesNames)){
-                                throw new \Exception('Wrong CSV data. Status name must be among the following: '); //todo: dodać w jakiejść pętli dostępne nazwy statusów z uwzględnieniem locale
-                            };
-                            //nie ja tylko potrzebuję wstawić nowy status w tabelę Products
-
                             // Jakich danych potrzebuję do aktualizacji tabeli produkt (i których nie mam bezpośrednio)??????
                             // - category_id
                             // - producer_id
@@ -70,7 +56,7 @@ $m=0;
                             // - feature1_id
                             // - feature2_id
                             // - feature3_id
-                            // - tag1 //todo: to skąd?
+                            // - tag1 //todo: to skąd? z excela, to też powinno tam być ( jest w danych rozszerzonych /shop-products)
                             // - tag2
                             // - tag3
 
@@ -83,26 +69,46 @@ $m=0;
                             //   - a jeśli nie wprowadził to upowszechiam ID kategori bo będę go potrzebował w Product
                             //   - PODSUMOWUJĄC najpierw sprawdzam czy ID kategorii jest w tabeli Kategori, jeśli jest to zapisuję ID, jeśli nie ma to tworzę nową kategorię i zapisuję nowe ID
                             // - producer_id - załatwić Producenta (tabela product_manufacturer)
-                            // -
-                            // -
-                            // -
-                            // -
-                            // -
+                            //   - to co z kategorią
+                            // - status_id - załatwić Status (tabela product_status_translation)
+                            //   - tylko odnajduję status_id po nazwie statusu
+                            // - (type)
+                            //   - czy z wariacjami (1) czy bez (2). To polę wstawię gdy zajmę się wariacjami)
+                            // - (tag)
+                            //   - narazie pomijam
+
+                            //todo: KATEGORIA. wstawiam nową kategorię (albo nie wstawiam) i zwracam id_category
+                            $categoryId = $this->addCategory();
+
+                            //todo: PRODUCENT. wstawiam nowego producenta (albo nie wstawiam) i zwracam id_producer
+                            $producerId = $this->addProducer();
 
 
+
+                            //todo: STATUS
+                            //1. muszę zamienić status name na status_id
+                            //2. sprawdzić czy status_id danego produktu się zmienił
+                            //2. albo nie sprawdzać i wstawiać do tabeli produkt to co user podał, byle było poprawne
+                            //3. Czyli odbieram status_name zamieniam go na status_id i wstawiam do produktu
+                            //4. Muszę też gdzieś w tej klasie mieć dostęp do nowego status_id bo będzie wykorzystywany jeszcze
+                            // a czy na pewno będzie gdzieś jeszcze potrzebne??????
+                            //i nic nie robię z tabelą Status!
+                            if(!in_array($product['status'], $statusesNames)){
+                                throw new \Exception('Wrong CSV data. Status name must be among the following: '); //todo: dodać w jakiejść pętli dostępne nazwy statusów z uwzględnieniem locale
+                            };
 
 
 
 
 
 //                            //todo: do testowania
-//                            $post[\Cms::$defaultLocale]['name'] = $product_name;
-//                            $post['category_id'] = 222;
-//                            $post['producer_id'] = 222;
-//                            $post['status_id'] = 222;
-//                            $post['type'] = 222;
-                            if(!in_array($post['product_name'], $productNames)){
-                                $this->addProduct($post);
+//                            $product[\Cms::$defaultLocale]['name'] = $product_name;
+//                            $product['category_id'] = 222;
+//                            $product['producer_id'] = 222;
+//                            $product['status_id'] = 222;
+//                            $product['type'] = 222;
+                            if(!in_array($product['product_name'], $productNames)){
+                                $this->addProduct($product);
                             };
                             break;
                         case 'Child':
@@ -125,29 +131,60 @@ $m=0;
 
     private function prepareData($row)
     {
-        $post['product_name'] = $row[0];
-        $post['category'] = $row[1];
-        $post['subcategory'] = $row[2];
-        $post['manufactured_name'] = $row[3];
-        $post['status'] = $row[4];
-        $post['feature1_name'] = $row[5];
-        $post['feature2_name'] = $row[6];
-        $post['feature3_name'] = $row[7];
-        $post['feature1_value'] = $row[8];
-        $post['feature2_value'] = $row[9];
-        $post['feature3_value'] = $row[10];
-        $post['ean'] = $row[13];
-        $post['sku'] = $row[12];
-        $post['quantity'] = $row[14];
-        $post['price'] = $row[15];
-        $post['promotion'] = $row[16];
-        $post['bestseller'] = $row[17];
-        $post['recommended'] = $row[18];
-        $post['main_page'] = $row[19];
+        $product['product_name'] = $row[0];
+        $product['category'] = $row[1];
+        $product['subcategory'] = $row[2];
+        $product['manufactured_name'] = $row[3];
+        $product['status'] = $row[4];
+        $product['feature1_name'] = $row[5];
+        $product['feature2_name'] = $row[6];
+        $product['feature3_name'] = $row[7];
+        $product['feature1_value'] = $row[8];
+        $product['feature2_value'] = $row[9];
+        $product['feature3_value'] = $row[10];
+        $product['ean'] = $row[13];
+        $product['sku'] = $row[12];
+        $product['quantity'] = $row[14];
+        $product['price'] = $row[15];
+        $product['promotion'] = $row[16];
+        $product['bestseller'] = $row[17];
+        $product['recommended'] = $row[18];
+        $product['main_page'] = $row[19];
 
-        return $post;
+        return $product;
     }
 
+    private function addCategory($post)
+    {
+        //todo:1) zwróć uwagę że dodając nową kategorię w shop-categories.php?action=addForm&parent_id=1
+        //todo:... też wybierasz status
+        //todo:... Zwróć też uwagę że tworząc nową podkategorię w models/Category.php::add() on tworząc nową kategorię
+        //todo:...chce różne parametry i daje domyślne jeśli puste.
+
+        //todo:2) user może dać kategorię bez podkategori, może dać podkategorię bez kategorii(to THROW)
+
+        //todo: WNIOSKI:
+        // - wykorzystujesz models/Category.php::add()
+        // - tę metodę wykorzystujesz i do kategori i do podkategori
+        // - kategorię tworzysz podając parametr parent_id==0 !!!
+        // - podkategorię tworzysz podając id parenta
+        // - czyli najpierw musisz stworzyć parent id (lub go odebrać) i tworząc podkategorię to podać.
+        $entity = new CategoriesAdmin();
+
+        return $categoryId;
+    }
+
+    private function addProducer($post)
+    {
+
+        return $data;
+    }
+
+    private function addFeature($post)
+    {
+
+        return $data;
+    }
 
     //todo: no będzie problem
     //todo ano taki, że tworząc produkt muszę podać np category_id, producer_id
