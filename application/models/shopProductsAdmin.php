@@ -190,27 +190,27 @@ class ProductsAdmin extends Products {
 		$q.= "`date_add`=NOW(), `date_mod`=NOW() ";
 //dump($q);
 		if ($id = Cms::$db->insert($q)) {
-//			$this->convertToTranslationData($post);
+			$this->convertToTranslationData($post);
 			
-//			foreach ($post as $locale => $trans) {
-//				if (!$trans['content_short']) {
-//					$trans['content_short'] = substr(strip_tags($trans['content']), 0, 250);
-//				}
-//
-//                $name = clearName($trans['name']);
-//                $slug = makeUrl($name);
-//
-//				$item = array(
-//					'translatable_id' => $id,
-//					'name' => $name,
-//					'slug' => $slug,
-//					'content_short' => $trans['content_short'],
-//					'content' => $trans['content'],
-//					'locale' => $locale,
-//				);
-//
-//				$this->insert($this->table . '_translation', $item);
-//			}
+			foreach ($post as $locale => $trans) {
+				if (!$trans['content_short']) {
+					$trans['content_short'] = substr(strip_tags($trans['content']), 0, 250);
+				}
+
+                $name = clearName($trans['name']);
+                $slug = makeUrl($name);
+
+				$item = array(
+					'translatable_id' => $id,
+					'name' => $name,
+					'slug' => $slug,
+					'content_short' => $trans['content_short'],
+					'content' => $trans['content'],
+					'locale' => $locale,
+				);
+
+				$this->insert($this->table . '_translation', $item);
+			}
 			return $id;
 		} else {
 			return false;

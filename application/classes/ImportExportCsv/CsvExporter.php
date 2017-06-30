@@ -67,8 +67,8 @@ class CsvExporter
     private function getHumanHeaders()
     {
             $headers = ['PRODUCT NAME','CATEGORY', 'SUBCATEGORY', 'MANUFACTURER', 'STATUS', 'FEATURE1_NAME',
-                'FEATURE2_NAME', 'FEATURE3_NAME', 'FEATURE1_VALUE', 'FEATURE2_VALUE', 'FEATURE3_VALUE',
-                'PARENTAGE', 'SKU', 'EAN', 'QUANTITY', 'PRICE', 'PROMOTION', 'BESTSELLERS', 'RECOMMENDED', 'HOMEPAGE'];
+                'FEATURE2_NAME', 'FEATURE3_NAME', 'PARENTAGE', 'SKU', 'EAN', 'QUANTITY', 'PRICE', 'PROMOTION',
+                'BESTSELLERS', 'RECOMMENDED', 'HOMEPAGE', 'FEATURE1_VALUE', 'FEATURE2_VALUE', 'FEATURE3_VALUE'];
 
         return $headers;
     }

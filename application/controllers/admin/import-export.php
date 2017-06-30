@@ -32,7 +32,7 @@ require_once(CLASS_DIR . '/ImportExportCsv/DBImport.php');
 //CSV to Array
 $importer = new \Application\Classes\ImportExportCsv\CsvImporter(EXP_DIR . '/products.csv');                    //nie widzi bez całej ścieżki, mimo że jest require.
 $data = $importer->get();
-//showList($params);
+showList($params);
 
 //todo: import z CSV do DB. z array do bazy.
 //Array to DB

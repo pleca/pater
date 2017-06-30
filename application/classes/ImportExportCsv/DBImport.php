@@ -3,7 +3,11 @@
 namespace Application\Classes\ImportExportCsv;
 //require_once(MODEL_DIR . '/Status.php');
 require_once(MODEL_DIR . '/shopProductsAdmin.php');
-require_once(MODEL_DIR . '/shopCategoriesAdmin.php');
+require_once(MODEL_DIR . '/shopProducersAdmin.php');
+//require_once(MODEL_DIR . '/shopCategoriesAdmin.php');
+require_once(MODEL_DIR . '/Category.php');
+require_once(MODEL_DIR . '/ProductStatus.php');
+require_once(MODEL_DIR . '/Feature.php');
 //require_once(MODEL_DIR . '/Category.php');
 //require_once(MODEL_DIR . '/Product.php');
 //require_once(MODEL_DIR . '/Variation.php');
@@ -37,16 +41,25 @@ class DBImport
     {
         $pcsv = new \ProductsCsv();
         $productNames = $pcsv->getProductsNames();
-        $statusesNames = $pcsv->getStatusesNamesWithIds();
-$m=0;
+        $categoryEntity = new \Category();
+        $categories = $categoryEntity->getAll();
+        $producersEntity = new \ProducersAdmin();
+        $producers = $producersEntity->loadProducersSelect();
+        $productStatusEntity = new \ProductStatus();
+        $productStatuses = $productStatusEntity->getAll();
+        $featureNameEntity = new \Feature();
+        $featureNames = $featureNameEntity->getAll();
+        $productEntity = new ProductsAdmin();
+
+        $m = 0;
 
         try {
             \Cms::$db->beginTransaction();
             foreach ($data as $key => $row) {
-//                if ($key == 3) {
-                if ($key > 2) {
+                if ($key == 3) {
+//                if ($key > 2) {
                     $product = $this->prepareData($row);
-                    switch ($row['11']){
+                    switch ($row['8']) {
                         case 'Parent':
                             // Jakich danych potrzebuję do aktualizacji tabeli produkt (i których nie mam bezpośrednio)??????
                             // - category_id
@@ -77,56 +90,152 @@ $m=0;
                             // - (tag)
                             //   - narazie pomijam
 
-                            //todo: KATEGORIA. wstawiam nową kategorię (albo nie wstawiam) i zwracam id_category
-                            $categoryId = $this->addCategory();
+//                            $categoryId = $this->addCategory($product, $categories, $categoryEntity);                   //KATEGORIA. wstawiam nową kategorię (albo nie wstawiam) i zwracam id_category
+                            $categoryId = 5;
+//                            $subcategoryId = $this->addSubcategory($product, $categoryId, $categories, $categoryEntity); //PODKATEGORIA. wstawiam nową kategorię (albo nie wstawiam) i zwracam id_category
+                            $subcategoryId = 5;
+//                            $producerId = $this->addProducer($product, $producers, $producersEntity);                   //PRODUCENT. wstawiam nowego producenta (albo nie wstawiam) i zwracam id_producer
+                            $producerId = 5;
+//                            $statusId = $this->addStatus($product, $productStatuses, $productStatusEntity);                                          //STATUS. wstawiam nowego producenta (albo nie wstawiam) i zwracam id_producer
+                            $statusId = 5;
+//                            $featureNameIds = $this->addFeatureNames($product, $featureNames);                                          //STATUS. wstawiam nowego producenta (albo nie wstawiam) i zwracam id_producer
+                            $featureNameIds = 5;
 
-                            //todo: PRODUCENT. wstawiam nowego producenta (albo nie wstawiam) i zwracam id_producer
-                            $producerId = $this->addProducer();
+                            $product[\Cms::$defaultLocale]['name'] = $product['product_name'];
+                            $product['category_id'] = $subcategoryId;
+                            $product['producer_id'] = $producerId;
+                            $product['status_id'] = $statusId;
+//                            $product['feature1_id'] = $featureNameIds[0];
+//                            $product['feature2_id'] = $featureNameIds[1];
+//                            $product['feature3_id'] = $featureNameIds[2];
+                            $product['type'] = 222; //todo: zaślepka chwilowa
 
+                            $this->addProduct($product, $productEntity);
 
-
-                            //todo: STATUS
-                            //1. muszę zamienić status name na status_id
-                            //2. sprawdzić czy status_id danego produktu się zmienił
-                            //2. albo nie sprawdzać i wstawiać do tabeli produkt to co user podał, byle było poprawne
-                            //3. Czyli odbieram status_name zamieniam go na status_id i wstawiam do produktu
-                            //4. Muszę też gdzieś w tej klasie mieć dostęp do nowego status_id bo będzie wykorzystywany jeszcze
-                            // a czy na pewno będzie gdzieś jeszcze potrzebne??????
-                            //i nic nie robię z tabelą Status!
-                            if(!in_array($product['status'], $statusesNames)){
-                                throw new \Exception('Wrong CSV data. Status name must be among the following: '); //todo: dodać w jakiejść pętli dostępne nazwy statusów z uwzględnieniem locale
-                            };
-
-
-
-
-
-//                            //todo: do testowania
-//                            $product[\Cms::$defaultLocale]['name'] = $product_name;
-//                            $product['category_id'] = 222;
-//                            $product['producer_id'] = 222;
-//                            $product['status_id'] = 222;
-//                            $product['type'] = 222;
-                            if(!in_array($product['product_name'], $productNames)){
-                                $this->addProduct($product);
-                            };
                             break;
                         case 'Child':
 
                             break;
 
                         default:
-                            throw new \Exception('Wrong CSV data. Parantage name is set to: ' . $row['11']. '. Should be "Parent" or "Child".');
+                            throw new \Exception('Wrong CSV data. Parantage name is set to: ' . $row['11'] . '. Should be "Parent" or "Child".');
                             break;
                     }
                 }
             }
             \Cms::$db->commit();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             \Cms::$db->rollBack();
             echo $e->getMessage();
         }
+    }
+
+    private function addCategory($product, $categories, \Category $categoryEntity)
+    {
+        $categoryId = false;
+
+        $categoryNames = [];
+        foreach ($categories[\Cms::$defaultLocale] as $category) {
+            if ($category['parent_id'] == 0) {
+                $categoryNames[$category['name']] = $category['name'];
+            }
+        }
+
+        if (!in_array($product['category'], $categoryNames)) {
+            $item['parent_id'] = 0;
+            $item['status_id'] = 1;
+            $item['name'] = $product['category'];
+            $categoryId = $categoryEntity->add($item);
+        } else {
+            $categoryId = $categoryEntity->getBy(['name'], $product['category']);//todo no ale to nie zwraca id raczej tylko tablicę (się zobaczy w debugowaniu)
+        }
+
+        return $categoryId;
+    }
+
+    private function addSubcategory($product, $parentId, $categories, \Category $categoryEntity)
+    {
+        $subcategoryId = false;
+
+        $subcategoryNames = [];
+        foreach ($categories[\Cms::$defaultLocale] as $category) {
+            if ($category['parent_id'] !== 0) {
+                $subcategoryNames[$category['name']] = $category['name'];
+            }
+        }
+
+        if (!in_array($product['subcategory'], $subcategoryNames)) {
+            $item['parent_id'] = $parentId;
+            $item['status_id'] = 1;
+            $item['name'] = $product['subcategory'];
+            $subcategoryId = $categoryEntity->add($item);
+        } else {
+            $subcategoryId = $categoryEntity->getBy(['name'], $product['category']);//todo no ale to nie zwraca id raczej tylko tablicę (się zobaczy w debugowaniu)
+        }
+
+        return $subcategoryId;
+    }
+
+    private function addProducer($product, $producers, \ProducersAdmin $producersEntity)
+    {
+        $producerId = false;
+
+        $producerNames = [];
+        foreach ($producers as $producer) {
+            $producerNames[$producer['name']] = $producer['name'];
+        }
+
+        if (!in_array($product['manufactured_name'], $producerNames)) {
+            $item['status_id'] = 1;
+            $item['name'] = $product['manufactured_name'];
+            $producerId = $producersEntity->addAdmin($item);
+        } else {
+            $producerId = $producersEntity->getBy(['name'], $product['manufactured_name']);//todo no ale to nie zwraca id raczej tylko tablicę (się zobaczy w debugowaniu)
+        }
+
+        return $producerId;
+    }
+
+    private function addStatus($product, $statuses, \ProductStatus $statusEntity)
+    {
+        $statusId = false;
+
+        $statusesNames = [];
+        foreach ($statuses[\Cms::$defaultLocale] as $status) {
+            $statusesNames[$status['name']] = $status['name'];
+        }
+
+        if (!in_array($product['status'], $statusesNames)) {
+            throw new \Exception('Wrong CSV data. Status name must be among the following: '); //todo: dodać w jakiejść pętli dostępne nazwy statusów z uwzględnieniem locale
+        } else {
+            $statusId = $statusEntity->getBy(['name'], $product['status']);//todo no ale to nie zwraca id raczej tylko tablicę (się zobaczy w debugowaniu)
+        }
+
+        return $statusId;
+    }
+
+    private function addFeatureNames($product, $features, $featureNameEntity)
+    {
+        $featureNamesIds = false;
+
+        //todo : nie zdąrzyłem
+//        $featureNames = [];
+//        foreach ($features[\Cms::$defaultLocale] as $feature) {
+//            $featureNames[$feature['name']] = $feature['name'];
+//        }
+//
+//        if (!in_array($product['feature1_name'], $featureNames)) {
+//            $featureNameEntity->insert()
+//        }
+
+
+        return $featureNamesIds;
+    }
+
+    private function addProduct($post, ProductsAdmin $entity)
+    {
+        $nieposzło = $entity->addAdmin($post);
+        $poszło = 0;
     }
 
     private function prepareData($row)
@@ -139,66 +248,19 @@ $m=0;
         $product['feature1_name'] = $row[5];
         $product['feature2_name'] = $row[6];
         $product['feature3_name'] = $row[7];
-        $product['feature1_value'] = $row[8];
-        $product['feature2_value'] = $row[9];
-        $product['feature3_value'] = $row[10];
-        $product['ean'] = $row[13];
-        $product['sku'] = $row[12];
-        $product['quantity'] = $row[14];
-        $product['price'] = $row[15];
-        $product['promotion'] = $row[16];
-        $product['bestseller'] = $row[17];
-        $product['recommended'] = $row[18];
-        $product['main_page'] = $row[19];
+        $product['sku'] = $row[9];
+        $product['ean'] = $row[10];
+        $product['quantity'] = $row[11];
+        $product['price'] = $row[12];
+        $product['promotion'] = $row[13];
+        $product['bestseller'] = $row[14];
+        $product['recommended'] = $row[15];
+        $product['main_page'] = $row[16];
+        $product['feature1_value'] = $row[17];
+        $product['feature2_value'] = $row[18];
+        //todo tu coś nie halo, zgłasza undefinied offset, nie wma [19] kolumny
+        $product['feature3_value'] = isset($row[19]) ? $row[19] : null;
 
         return $product;
     }
-
-    private function addCategory($post)
-    {
-        //todo:1) zwróć uwagę że dodając nową kategorię w shop-categories.php?action=addForm&parent_id=1
-        //todo:... też wybierasz status
-        //todo:... Zwróć też uwagę że tworząc nową podkategorię w models/Category.php::add() on tworząc nową kategorię
-        //todo:...chce różne parametry i daje domyślne jeśli puste.
-
-        //todo:2) user może dać kategorię bez podkategori, może dać podkategorię bez kategorii(to THROW)
-
-        //todo: WNIOSKI:
-        // - wykorzystujesz models/Category.php::add()
-        // - tę metodę wykorzystujesz i do kategori i do podkategori
-        // - kategorię tworzysz podając parametr parent_id==0 !!!
-        // - podkategorię tworzysz podając id parenta
-        // - czyli najpierw musisz stworzyć parent id (lub go odebrać) i tworząc podkategorię to podać.
-        $entity = new CategoriesAdmin();
-
-        return $categoryId;
-    }
-
-    private function addProducer($post)
-    {
-
-        return $data;
-    }
-
-    private function addFeature($post)
-    {
-
-        return $data;
-    }
-
-    //todo: no będzie problem
-    //todo ano taki, że tworząc produkt muszę podać np category_id, producer_id
-    //todo: no i muszę wcześniej wiedzieć czy kategoria istnieje już
-    //todo: no a jeśli istnieje to muszę podać ID tej kategorii
-    //todo: a jeśli nie istenie to najpierw muszę ją uworzyć i podać tutaj nowe ID
-    //todo: i tak kurwa z każdą rzeczą gdy tworzę tabelę używającą ID innych tabel.
-    private function addProduct($post)
-    {
-        $entity = new ProductsAdmin();
-        $nieposzło = $entity->addAdmin($post);
-        $poszło=0;
-    }
-
-
-
 }

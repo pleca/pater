@@ -46,12 +46,9 @@ class CsvExporterHelper
         $row[5] = $product['feature1_name'];
         $row[6] = $product['feature2_name'];
         $row[7] = $product['feature3_name'];
-        $row[8] = $product['feature1_value'];
-        $row[9] = $product['feature2_value'];
-        $row[10] = $product['feature3_value'];
-        $row[11] = 'Parent';
+        $row[8] = 'Parent';
 
-        for( $i = 12; $i < 19; $i++) {
+        for( $i = 9; $i < 19; $i++) {
             $row[$i] = '';
         }
 
@@ -60,19 +57,22 @@ class CsvExporterHelper
 
     protected function prepareVariationRow($variation)
     {
-        for( $i = 0; $i < 11; $i++) {
+        for( $i = 0; $i < 8; $i++) {
             $row[$i] = '';
         }
 
-        $row[11] = 'Child';
-        $row[12] = $variation['sku'];
-        $row[13] = $variation['ean'];
-        $row[14] = $variation['quantity'];
-        $row[15] = $variation['price'];
-        $row[16] = $variation['promotion'];
-        $row[17] = $variation['bestseller'];
-        $row[18] = $variation['recommended'];
-        $row[19] = $variation['main_page'];
+        $row[8] = 'Child';
+        $row[9] = $variation['sku'];
+        $row[10] = $variation['ean'];
+        $row[11] = $variation['quantity'];
+        $row[12] = $variation['price'];
+        $row[13] = $variation['promotion'];
+        $row[14] = $variation['bestseller'];
+        $row[15] = $variation['recommended'];
+        $row[16] = $variation['main_page'];
+        $row[17] = $variation['feature1_value'];
+        $row[18] = $variation['feature2_value'];
+        $row[19] = $variation['feature3_value'];
 
         return $row;
     }
