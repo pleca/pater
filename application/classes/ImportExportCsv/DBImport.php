@@ -56,10 +56,9 @@ class DBImport
         try {
             \Cms::$db->beginTransaction();
             foreach ($data as $key => $row) {
-                if ($key == 3) {
-//                if ($key > 2) {
+                if ($key > 2) {
                     $product = $this->prepareData($row);
-                    switch ($row['8']) {
+                    switch ($row['11']) {
                         case 'Parent':
                             // Jakich danych potrzebuję do aktualizacji tabeli produkt (i których nie mam bezpośrednio)??????
                             // - category_id
@@ -90,25 +89,14 @@ class DBImport
                             // - (tag)
                             //   - narazie pomijam
 
-//                            $categoryId = $this->addCategory($product, $categories, $categoryEntity);                   //KATEGORIA. wstawiam nową kategorię (albo nie wstawiam) i zwracam id_category
-                            $categoryId = 5;
-//                            $subcategoryId = $this->addSubcategory($product, $categoryId, $categories, $categoryEntity); //PODKATEGORIA. wstawiam nową kategorię (albo nie wstawiam) i zwracam id_category
-                            $subcategoryId = 5;
-//                            $producerId = $this->addProducer($product, $producers, $producersEntity);                   //PRODUCENT. wstawiam nowego producenta (albo nie wstawiam) i zwracam id_producer
-                            $producerId = 5;
-//                            $statusId = $this->addStatus($product, $productStatuses, $productStatusEntity);                                          //STATUS. wstawiam nowego producenta (albo nie wstawiam) i zwracam id_producer
-                            $statusId = 5;
-//                            $featureNameIds = $this->addFeatureNames($product, $featureNames);                                          //STATUS. wstawiam nowego producenta (albo nie wstawiam) i zwracam id_producer
-                            $featureNameIds = 5;
-
+                            $categoryId = $this->addCategory($product, $categories, $categoryEntity);                   //KATEGORIA. wstawiam nową kategorię (albo nie wstawiam) i zwracam id_category
+                            $product['category_id'] = $this->addSubcategory($product, $categoryId, $categories, $categoryEntity); //PODKATEGORIA. wstawiam nową kategorię (albo nie wstawiam) i zwracam id_category
+                            $product['producer_id'] = $this->addProducer($product, $producers, $producersEntity);                   //PRODUCENT. wstawiam nowego producenta (albo nie wstawiam) i zwracam id_producer
+                            $product['status_id'] = $this->addStatus($product, $productStatuses, $productStatusEntity);                                          //STATUS. wstawiam nowego producenta (albo nie wstawiam) i zwracam id_producer
+                            list($product['feature1_id'],
+                                $product['feature2_id'],
+                                $product['feature3_id']) = $this->addFeatureNames($product, $featureNames, $featureNameEntity);                                          //STATUS. wstawiam nowego producenta (albo nie wstawiam) i zwracam id_producer
                             $product[\Cms::$defaultLocale]['name'] = $product['product_name'];
-                            $product['category_id'] = $subcategoryId;
-                            $product['producer_id'] = $producerId;
-                            $product['status_id'] = $statusId;
-//                            $product['feature1_id'] = $featureNameIds[0];
-//                            $product['feature2_id'] = $featureNameIds[1];
-//                            $product['feature3_id'] = $featureNameIds[2];
-                            $product['type'] = 222; //todo: zaślepka chwilowa
 
                             $this->addProduct($product, $productEntity);
 
@@ -134,20 +122,29 @@ class DBImport
     {
         $categoryId = false;
 
+        // jeśli pusty rekord "". todo: pytanie czy produkt może być bez przypisanej kategori.
+        if (empty($product['category'])) {
+            return $categoryId = null;
+        }
+
         $categoryNames = [];
+        //tworzę tablicę kategorii (bez podkategorii) z nazwami ['Supplements']=>'Supplements'
         foreach ($categories[\Cms::$defaultLocale] as $category) {
-            if ($category['parent_id'] == 0) {
+            if ($category['parent_id'] == 0) {                              // "0" czyli jeśli kategoria nie ma rodzica
                 $categoryNames[$category['name']] = $category['name'];
             }
         }
 
+        //jeśli nie ma w bazie kategori o nazwie z badanego wiersza excel to dodaj. Ustaw niezbędne do dodania kategori wartości.
         if (!in_array($product['category'], $categoryNames)) {
             $item['parent_id'] = 0;
             $item['status_id'] = 1;
             $item['name'] = $product['category'];
             $categoryId = $categoryEntity->add($item);
         } else {
-            $categoryId = $categoryEntity->getBy(['name'], $product['category']);//todo no ale to nie zwraca id raczej tylko tablicę (się zobaczy w debugowaniu)
+            //a jeśli kategoria istnieje w bazie to zwróć jej ID (bo będzie potrzebne do dodania produktu w tabeli 'product')
+            $category = $this->findCategoryIdByName($product['category'], null, 'en');//todo na sztywno 'en', bo bez sesji nie widzi \Cms::$session->get('locale')
+            $categoryId = $category['id'];
         }
 
         return $categoryId;
@@ -156,6 +153,10 @@ class DBImport
     private function addSubcategory($product, $parentId, $categories, \Category $categoryEntity)
     {
         $subcategoryId = false;
+
+        if (empty($product['subcategory'])) {
+            return $subcategoryId = null;
+        }
 
         $subcategoryNames = [];
         foreach ($categories[\Cms::$defaultLocale] as $category) {
@@ -170,7 +171,8 @@ class DBImport
             $item['name'] = $product['subcategory'];
             $subcategoryId = $categoryEntity->add($item);
         } else {
-            $subcategoryId = $categoryEntity->getBy(['name'], $product['category']);//todo no ale to nie zwraca id raczej tylko tablicę (się zobaczy w debugowaniu)
+            $category = $this->findCategoryIdByName($product['subcategory'], null, 'en');//todo na sztywno 'en', bo bez sesji nie widzi \Cms::$session->get('locale')
+            $subcategoryId = $category['id'];
         }
 
         return $subcategoryId;
@@ -179,6 +181,10 @@ class DBImport
     private function addProducer($product, $producers, \ProducersAdmin $producersEntity)
     {
         $producerId = false;
+
+        if (empty($product['manufactured_name'])) {
+            return $producerId = null;
+        }
 
         $producerNames = [];
         foreach ($producers as $producer) {
@@ -190,7 +196,8 @@ class DBImport
             $item['name'] = $product['manufactured_name'];
             $producerId = $producersEntity->addAdmin($item);
         } else {
-            $producerId = $producersEntity->getBy(['name'], $product['manufactured_name']);//todo no ale to nie zwraca id raczej tylko tablicę (się zobaczy w debugowaniu)
+            $producer = $this->findProducerIdByName($product['manufactured_name']);//todo no ale to nie zwraca id raczej tylko tablicę (się zobaczy w debugowaniu)
+            $producerId = $producer['Id'];
         }
 
         return $producerId;
@@ -208,7 +215,7 @@ class DBImport
         if (!in_array($product['status'], $statusesNames)) {
             throw new \Exception('Wrong CSV data. Status name must be among the following: '); //todo: dodać w jakiejść pętli dostępne nazwy statusów z uwzględnieniem locale
         } else {
-            $statusId = $statusEntity->getBy(['name'], $product['status']);//todo no ale to nie zwraca id raczej tylko tablicę (się zobaczy w debugowaniu)
+            $statusId = $this->findStatusIdByName($product['status']);//todo no ale to nie zwraca id raczej tylko tablicę (się zobaczy w debugowaniu)
         }
 
         return $statusId;
@@ -218,12 +225,19 @@ class DBImport
     {
         $featureNamesIds = false;
 
-        //todo : nie zdąrzyłem
-//        $featureNames = [];
-//        foreach ($features[\Cms::$defaultLocale] as $feature) {
-//            $featureNames[$feature['name']] = $feature['name'];
-//        }
-//
+        $featuresRow[] = $product['feature1_name'];
+        $featuresRow[] = $product['feature2_name'];
+        $featuresRow[] = $product['feature3_name'];
+
+        foreach ($featuresRow as $feature) {
+
+        }
+
+        $featureNames = [];
+        foreach ($features[\Cms::$defaultLocale] as $feature) {
+            $featureNames[$feature['name']] = $feature['name'];
+        }
+
 //        if (!in_array($product['feature1_name'], $featureNames)) {
 //            $featureNameEntity->insert()
 //        }
@@ -235,8 +249,73 @@ class DBImport
     private function addProduct($post, ProductsAdmin $entity)
     {
         $nieposzło = $entity->addAdmin($post);
+        $entity->expandedAdmin($post);
         $poszło = 0;
     }
+
+    private function findCategoryIdByName($name = null, $mainCategory = null, $locale = null)
+    {
+        //TODO: UWAGA TU WSTAWIAM NAZWĘ TABELI NA SZTYWNO W ZAPYTANIA, A KRZYSIEK TERAZ ZMIENIA NAZWY TABEL NA LICZBĘ POJEDYNCZĄ
+        $tableName = 'categories';
+
+        if (!$name) {
+            return false;
+        }
+
+        if (!$locale) {
+            $locale = \Cms::$session->get('locale');
+        }
+
+        $q = "SELECT c.*,t.translatable_id, t.name, t.slug, t.seo_title, t.meta_description, t.accordion_header1, t.accordion_content1, t.accordion_header2, t.accordion_content2, t.accordion_header3, t.accordion_content3, t.locale, (SELECT `slug` FROM `" . $tableName . "` WHERE `id`=c.parent_id LIMIT 1) as `parent_url` "
+            . "FROM `" . $tableName . "` c "
+            . "LEFT JOIN `" . $tableName . "_translation` t ON c.id = t.translatable_id "
+            . "WHERE t.name = '" . $name . "' AND t.locale = '" . $locale . "' ";
+
+        if ($mainCategory) {
+            $q .= "AND c.parent_id = '" . (int)$mainCategory['id'] . "' ";
+        }
+
+        $result = \Cms::$db->getRow($q);
+
+        return $result;
+    }
+
+
+    private function findProducerIdByName($name)
+    {
+        $tableName = 'product_manufacturer';
+        $q = "SELECT Id FROM `" . $tableName . "` WHERE `name`='" . $name . "' ";
+        $result = \Cms::$db->getRow($q);
+
+        return $result;
+    }
+
+    private function findStatusIdByName($name)
+    {
+        //TODO JOJ TU PRZERWAŁEM KONSTRUUJĄC ZAPYTANIE ZWRACAJĄCE
+
+
+        $tableName = 'product_status_translation';
+        $productTable = 'product';
+
+        $locale = (\Cms::$session->get('locale')) ?? 'en'; //todo: UWAGA na sztywno en jeśli brak sesji (potrzebne w trakcie testowania)
+
+
+        $q = "SELECT pst.translatable_id, pst.name, pst.locale "
+            . "FROM `" . $tableName . "` pst "
+            . "LEFT JOIN `" . $productTable . "` p ON p.status_Id = pst.translatable_Id ";
+
+        $q .= " WHERE pst.locale='" . $locale . "' GROUP BY p.id order BY p.id ";
+
+
+
+
+        $result = \Cms::$db->getRow($q);
+
+        return $result;
+    }
+
+
 
     private function prepareData($row)
     {
@@ -248,18 +327,24 @@ class DBImport
         $product['feature1_name'] = $row[5];
         $product['feature2_name'] = $row[6];
         $product['feature3_name'] = $row[7];
-        $product['sku'] = $row[9];
-        $product['ean'] = $row[10];
-        $product['quantity'] = $row[11];
-        $product['price'] = $row[12];
-        $product['promotion'] = $row[13];
-        $product['bestseller'] = $row[14];
-        $product['recommended'] = $row[15];
-        $product['main_page'] = $row[16];
-        $product['feature1_value'] = $row[17];
-        $product['feature2_value'] = $row[18];
-        //todo tu coś nie halo, zgłasza undefinied offset, nie wma [19] kolumny
-        $product['feature3_value'] = isset($row[19]) ? $row[19] : null;
+        $product['tag1'] = isset($row['8']) ? $row['8'] : '';
+        $product['tag2'] = isset($row['9']) ? $row['9'] : '';
+        $product['tag3'] = isset($row['10']) ? $row['10'] : '';
+        $product['sku'] = $row[12];
+        $product['ean'] = $row[13];
+        $product['quantity'] = $row[14];
+        $product['price'] = $row[15];
+        $product['promotion'] = $row[16];
+        $product['bestseller'] = $row[17];
+        $product['recommended'] = $row[18];
+        $product['main_page'] = $row[19];
+        $product['feature1_value'] = $row[20];
+        $product['feature2_value'] = $row[21];
+        $product['feature3_value'] = isset($row[22]) ? $row[22] : null; //todo tu coś nie halo, zgłasza undefinied offset, nie ma [19] kolumny
+        $product['id'] = $row[23];
+        //todo: zaślepka chwilowa. Coś tu trzeba wymyślić. (1/2 -wariacje/bez). Trzeba w kolejnych krokach wpisac tu wartość na podstawie wyglądu excela.
+        //todo: trzeba dac domyślnie '2' na etapie dodawania produktu, i zmienić na '1' na etapie dodawania wariacji i zaaktualizować tabelę.
+        $product['type'] = 1;
 
         return $product;
     }

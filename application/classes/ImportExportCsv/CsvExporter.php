@@ -38,10 +38,11 @@ class CsvExporter
 
         //set headers
         $pr = $this->setHeaders($pr);
+        //wrzucam dane
         $pr = $this->setRows($pr);
 
         $this->data = $pr;
-
+        //array to csv
         foreach ($this->data as $fields) {
             fputcsv($this->fp, $fields, ";");
         }
@@ -67,8 +68,8 @@ class CsvExporter
     private function getHumanHeaders()
     {
             $headers = ['PRODUCT NAME','CATEGORY', 'SUBCATEGORY', 'MANUFACTURER', 'STATUS', 'FEATURE1_NAME',
-                'FEATURE2_NAME', 'FEATURE3_NAME', 'PARENTAGE', 'SKU', 'EAN', 'QUANTITY', 'PRICE', 'PROMOTION',
-                'BESTSELLERS', 'RECOMMENDED', 'HOMEPAGE', 'FEATURE1_VALUE', 'FEATURE2_VALUE', 'FEATURE3_VALUE'];
+                'FEATURE2_NAME', 'FEATURE3_NAME', 'TAG1', 'TAG2', 'TAG3', 'PARENTAGE', 'SKU', 'EAN', 'QUANTITY', 'PRICE', 'PROMOTION',
+                'BESTSELLERS', 'RECOMMENDED', 'HOMEPAGE', 'FEATURE1_VALUE', 'FEATURE2_VALUE', 'FEATURE3_VALUE','PRODUCT_ID'];
 
         return $headers;
     }

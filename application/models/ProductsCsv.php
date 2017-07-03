@@ -127,7 +127,7 @@ class ProductsCsv
     protected function getProductsQuery()
     {
         $q = "SELECT p.id as `product_id`, pt.name as `product_name`, v.id2 as `variation_id`, ";
-        $q .= " v.sku, v.ean, v.qty as `quantity`, v.price,";
+        $q .= " v.sku, v.ean, v.qty as `quantity`, v.price, p.tag1, p.tag2, p.tag3,";
         $q .= " (SELECT `name` FROM `categories_translation` WHERE `translatable_id`=c.parent_id LIMIT 1) as `category`,";
         $q .= " ct.name as `subcategory`,";
         $q .= " pm.name as `manufactured_name`, pst.name as `status`, v.promotion, v.bestseller, v.recommended, v.main_page, ";
