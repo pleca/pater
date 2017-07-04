@@ -269,7 +269,7 @@ class BaseModel {
 		}
 		
 		foreach ($data as $key => $value) {
-			if (!in_array($key, Cms::$locales)) {
+			if (!in_array($key, Cms::$locales)) { //JOJ TU COŚ NIEŁADNEGO SIĘ DZIEJE CO MI ROZPIERDALA
 				unset($data[$key]);
 			}			
 		}		

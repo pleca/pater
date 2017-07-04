@@ -165,14 +165,15 @@ class Category extends BaseModel {
 			'parent_id' => $post['parent_id'],
 			'status_id' => $post['status_id'],
 			'show_expanded' => $post['show_expanded'],
-			'order'		=> $order
+			'order'		=> $order                       //joj debug numer kolejny liczby podkategori danej kategori
 		);
 
-		$id = $this->insert($this->table, $item);		
-		$this->convertToTranslationData($post);		
+		$id = $this->insert($this->table, $item);       //joj debug ok mówi że wstawił podkategorię o id 51 w tabeli categories (jeszcze categories_trans)
+		$this->convertToTranslationData($post);//JOJ DEBUG TA METDOLA MI ROZPIERDALA $POST, JEST PUSTĄ TABLICĄ
 
+		$lala=0;
 		if ($id) {
-			foreach ($post as $locale => $trans) {
+			foreach ($post as $locale => $trans) {//joj debug POST JEST PUSTY!!!
 				$name = clearName($trans['name']);
 				$seoTitle = addslashes($trans['seo_title']);
 				$metaDescription = addslashes($trans['meta_description']);
