@@ -14,13 +14,18 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="btn-group">
-                    {% if not item.id %}
-                       <a href="javascript:void(0);" onclick="showDiv('divAdd');">
+                       <a href="import-export.php?action=exp" >
                         <button id="sample_editable_1_new" class="btn sbold green"> exportuj z DB
                             <i class="fa fa-plus"></i>
                         </button>
                        </a>
-                    {% endif %}
+                    </div>
+                    <div class="btn-group">
+                        <a href="import-export.php?action=imp" >
+                        <button id="sample_editable_1_new" class="btn sbold green"> importuj do DB
+                            <i class="fa fa-plus"></i>
+                        </button>
+                       </a>
                     </div>
                 </div>
             </div>

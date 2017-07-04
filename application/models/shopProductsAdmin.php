@@ -251,7 +251,7 @@ class ProductsAdmin extends Products {
 	}
 	
 	public function editAdmin($post) {		
-		$post = maddslashes($post);
+  		$post = maddslashes($post);
 
 		if (empty($post[Cms::$defaultLocale]['name'])) {
 			return 'Nie wpisano nazwy produktu.';

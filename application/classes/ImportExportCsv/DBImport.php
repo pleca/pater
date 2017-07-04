@@ -56,58 +56,41 @@ class DBImport
         try {
             \Cms::$db->beginTransaction();
             foreach ($data as $key => $row) {
-                if ($key > 2) {
+//                if ($key > 2) {
+                if ($key == 3) {
                     $product = $this->prepareData($row);
                     switch ($row['11']) {
                         case 'Parent':
-                            // Jakich danych potrzebuję do aktualizacji tabeli produkt (i których nie mam bezpośrednio)??????
-                            // - category_id
-                            // - producer_id
-                            // - status_id
-                            // - type
-                            // - feature1_id
-                            // - feature2_id
-                            // - feature3_id
-                            // - tag1 //todo: to skąd? z excela, to też powinno tam być ( jest w danych rozszerzonych /shop-products)
-                            // - tag2
-                            // - tag3
+                            //TODO BŁĘDY:
+                            //todo 1: zmieniając kategorię bez podkategori nie zmienia kategorii
+                            //todo 2: zmieniając podkategorię bez kategori DZIAŁA (zmienia category_id) w products
+                            //todo    ALE nie dodaje nowej nazwy do tabeli categories_translation
+                            //todo 3:
+                            //todo 4:
 
-                            //Czyli potrzebuję przed wstawieniem do tabeli Product mieć:
-                            // - category_id - załatwić Kategorię (tabela: categories_translation)
-                            //   - odczytać z excel Category i Subcategory
-                            //   - zamienić nazwy na ID
-                            //   - jeśli user wprowadził nową kategorię to zaktualizować tabelę Kategoria
-                            //   - i upowszechnić nowy ID bo będę go potrzebował w Product
-                            //   - a jeśli nie wprowadził to upowszechiam ID kategori bo będę go potrzebował w Product
-                            //   - PODSUMOWUJĄC najpierw sprawdzam czy ID kategorii jest w tabeli Kategori, jeśli jest to zapisuję ID, jeśli nie ma to tworzę nową kategorię i zapisuję nowe ID
-                            // - producer_id - załatwić Producenta (tabela product_manufacturer)
-                            //   - to co z kategorią
-                            // - status_id - załatwić Status (tabela product_status_translation)
-                            //   - tylko odnajduję status_id po nazwie statusu
-                            // - (type)
-                            //   - czy z wariacjami (1) czy bez (2). To polę wstawię gdy zajmę się wariacjami)
-                            // - (tag)
-                            //   - narazie pomijam
+                            $categoryId = $this->addCategory($product, $categories, $categoryEntity);
+                            $product['category_id'] = $this->addSubcategory($product, $categoryId, $categories, $categoryEntity);
+                            $product['producer_id'] = $this->addProducer($product, $producers, $producersEntity);
+                            $product['status_id'] = $this->addStatus($product, $productStatuses, $productStatusEntity);
+                            $product['feature1_id'] = $this->addFeature($product['feature1_name'], $featureNames, $featureNameEntity);
+                            $product['feature2_id'] = $this->addFeature($product['feature2_name'], $featureNames, $featureNameEntity);
+                            $product['feature3_id'] = $this->addFeature($product['feature3_name'], $featureNames, $featureNameEntity);
 
-                            $categoryId = $this->addCategory($product, $categories, $categoryEntity);                   //KATEGORIA. wstawiam nową kategorię (albo nie wstawiam) i zwracam id_category
-                            $product['category_id'] = $this->addSubcategory($product, $categoryId, $categories, $categoryEntity); //PODKATEGORIA. wstawiam nową kategorię (albo nie wstawiam) i zwracam id_category
-                            $product['producer_id'] = $this->addProducer($product, $producers, $producersEntity);                   //PRODUCENT. wstawiam nowego producenta (albo nie wstawiam) i zwracam id_producer
-                            $product['status_id'] = $this->addStatus($product, $productStatuses, $productStatusEntity);                                          //STATUS. wstawiam nowego producenta (albo nie wstawiam) i zwracam id_producer
-                            list($product['feature1_id'],
-                                $product['feature2_id'],
-                                $product['feature3_id']) = $this->addFeatureNames($product, $featureNames, $featureNameEntity);                                          //STATUS. wstawiam nowego producenta (albo nie wstawiam) i zwracam id_producer
-                            $product[\Cms::$defaultLocale]['name'] = $product['product_name'];
 
-                            $this->addProduct($product, $productEntity);
+                            if(is_null($product['id'])){
+                                $this->addProduct($product, $productEntity);
+                            }else{
+                                $this->updateProduct($product, $productEntity);
+                            }
 
                             break;
-                        case 'Child':
-
-                            break;
-
-                        default:
-                            throw new \Exception('Wrong CSV data. Parantage name is set to: ' . $row['11'] . '. Should be "Parent" or "Child".');
-                            break;
+//                        case 'Child':
+//
+//                            break;
+//
+//                        default:
+//                            throw new \Exception('Wrong CSV data. Parantage name is set to: ' . $row['11'] . '. Should be "Parent" or "Child".');
+//                            break;
                     }
                 }
             }
@@ -215,42 +198,34 @@ class DBImport
         if (!in_array($product['status'], $statusesNames)) {
             throw new \Exception('Wrong CSV data. Status name must be among the following: '); //todo: dodać w jakiejść pętli dostępne nazwy statusów z uwzględnieniem locale
         } else {
-            $statusId = $this->findStatusIdByName($product['status']);//todo no ale to nie zwraca id raczej tylko tablicę (się zobaczy w debugowaniu)
+            $status = $this->findStatusIdByName($product['status']);
+            $statusId = $status['translatable_id'];
         }
 
         return $statusId;
     }
 
-    private function addFeatureNames($product, $features, $featureNameEntity)
+    private function addFeature($feat, $features, \Feature $featureNameEntity)
     {
-        $featureNamesIds = false;
-
-        $featuresRow[] = $product['feature1_name'];
-        $featuresRow[] = $product['feature2_name'];
-        $featuresRow[] = $product['feature3_name'];
-
-        foreach ($featuresRow as $feature) {
-
-        }
-
+        //tworzę tablicę nazw features ['Supplements']=>'Supplements'
         $featureNames = [];
         foreach ($features[\Cms::$defaultLocale] as $feature) {
             $featureNames[$feature['name']] = $feature['name'];
         }
 
-//        if (!in_array($product['feature1_name'], $featureNames)) {
-//            $featureNameEntity->insert()
-//        }
+        if(empty($feat)){
+            return 0;
+        }
 
+        //TODO JEŚLI DODAŁEM NOWĄ NAZWĘ FEATURE chwilę wcześniej, np dla feature1, to jeśli feature2 ma tę samą nazwę (no ale nie może mieć przecież i tak!) to znowu będzie chciał ją wprowadzić bo nie widzi jej w bazie jeszcze.
+        if (!in_array($feat, $featureNames)) {
+            $item[\Cms::$defaultLocale['name']] = $feat;
+            $featureId = $featureNameEntity->add($item);
+        } else {
+            $featureId = $this->findFeatureIdByName($feat);
+        }
 
-        return $featureNamesIds;
-    }
-
-    private function addProduct($post, ProductsAdmin $entity)
-    {
-        $nieposzło = $entity->addAdmin($post);
-        $entity->expandedAdmin($post);
-        $poszło = 0;
+        return $featureId;
     }
 
     private function findCategoryIdByName($name = null, $mainCategory = null, $locale = null)
@@ -292,30 +267,45 @@ class DBImport
 
     private function findStatusIdByName($name)
     {
-        //TODO JOJ TU PRZERWAŁEM KONSTRUUJĄC ZAPYTANIE ZWRACAJĄCE
-
-
         $tableName = 'product_status_translation';
         $productTable = 'product';
+        $locale = empty(\Cms::$session->get('locale')) ? 'en' : (\Cms::$session->get('locale')); //todo: UWAGA na sztywno en jeśli brak sesji (potrzebne w trakcie testowania)
 
-        $locale = (\Cms::$session->get('locale')) ?? 'en'; //todo: UWAGA na sztywno en jeśli brak sesji (potrzebne w trakcie testowania)
-
-
-        $q = "SELECT pst.translatable_id, pst.name, pst.locale "
+        $q = "SELECT pst.translatable_id "
             . "FROM `" . $tableName . "` pst "
             . "LEFT JOIN `" . $productTable . "` p ON p.status_Id = pst.translatable_Id ";
-
-        $q .= " WHERE pst.locale='" . $locale . "' GROUP BY p.id order BY p.id ";
-
-
-
+        $q .= " WHERE pst.locale='" . $locale . "' AND pst.name='" . $name . "' LIMIT 1";
 
         $result = \Cms::$db->getRow($q);
 
         return $result;
     }
 
+    private function findFeatureIdByName($name)
+    {
+        $tableName = 'features_translation';
 
+        $q = "SELECT ft.translatable_id "
+            . "FROM `" . $tableName . "` ft "
+            . "WHERE ft.name = '".$name."'";
+        $result = \Cms::$db->getRow($q);
+
+        return $result['translatable_id'];
+    }
+
+    private function addProduct($post, ProductsAdmin $entity)
+    {
+        $nieposzło = $entity->addAdmin($post);
+        $entity->expandedAdmin($post);
+        $poszło = 0;
+    }
+
+    private function updateProduct($post, ProductsAdmin $entity)
+    {
+        $nieposzło = $entity->editAdmin($post);
+        $noico = $entity->expandedAdmin($post); //zwraca false jeśli nie było nic do zapdejtowania
+        $poszło = 0;
+    }
 
     private function prepareData($row)
     {
@@ -345,6 +335,10 @@ class DBImport
         //todo: zaślepka chwilowa. Coś tu trzeba wymyślić. (1/2 -wariacje/bez). Trzeba w kolejnych krokach wpisac tu wartość na podstawie wyglądu excela.
         //todo: trzeba dac domyślnie '2' na etapie dodawania produktu, i zmienić na '1' na etapie dodawania wariacji i zaaktualizować tabelę.
         $product['type'] = 1;
+        $product[\Cms::$defaultLocale]['name'] = $product['product_name'];
+        $product[\Cms::$defaultLocale]['content'] = ''; //todo: dodac kolumnę, Omijam to bo chcę zrobić skutecznie update product a wymaga tych zmiennych.
+        $product[\Cms::$defaultLocale]['seo_title'] = ''; //todo: dodac kolumnę, Omijam to bo chcę zrobić skutecznie update product a wymaga tych zmiennych.
+        $product[\Cms::$defaultLocale]['content_short'] = ''; //todo: dodac kolumnę, Omijam to bo chcę zrobić skutecznie update product a wymaga tych zmiennych.
 
         return $product;
     }
