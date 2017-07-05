@@ -19,9 +19,12 @@ use Product;
 use ProductsAdmin;
 use Application\Classes\ImportExportCsv\Exception\WrongStatusException;
 
+//joj SKOŃCZYŁEM NA TYM ŻE CHCIAŁEM ZAPISAĆ ID PRODUKTU WE WŁAŚCIWOŚCI KLASY BY WARIACJA Z NIEJ KORZYSTAŁA PRZY ZAPISIE WARIACJI ALE
+//NIE ZAPISUJE ID PRODUKTU PRZY WIERSZU 4. DEBUGER POKAZUJE ZE ROW[23] JEST PUSTY ''       $product['id'] = $column[23];
 class DBImport
 {
     private $data;
+    private $currentProductId;
 
     public function __construct($data)
     {
@@ -48,12 +51,12 @@ class DBImport
         $productEntity = new ProductsAdmin();
 
         $m = 0;
-
+//        $this->currentProductId =8;
         try {
             \Cms::$db->beginTransaction();
             foreach ($data as $key => $row) {
-//                if ($key > 2) {
-                if ($key == 3) {
+                if ($key > 2) {
+//                if ($key == 3) {
                     $product = $this->prepareData($row);
                     switch ($row['11']) {
                         case 'Parent':
@@ -96,17 +99,15 @@ class DBImport
                                 $this->updateProduct($product, $productEntity);
                             }
 
+                            $this->currentProductId = $product['id'];
+                            $this->currentProductId = 8;
+
                             break;
                         case 'Child':
-                            // skąd mam wiedzieć jeśli wariacja została niezmieniona a zmieniono produkt? załóżmy że produkt ma teraz inne id, jak go przypisac do wariacji
-                            //  - no ale to jest fikcyjne. Co to znaczy zmienić id produktu, jeśli modyfikuję produkt to id się nie zmienia, a jeśli dodaje nowy wiersz z
-                            //    nowym produktem ...to ma nowe wariacje. Czy można mieć stare wariacje i nowy produkt? Co to jest nowy produkt?
-                            //  - dobra chuj, traktuję że produkt id się nie zmienił,a ja zmieniam tylko pola wariacji...lub dodaję nową wariację.
 
-
-
+                            $n= $this->currentProductId;
+$m=0;
                             $this->updateVariation();
-
 
                             break;
 
@@ -127,8 +128,6 @@ class DBImport
     {
 
     }
-
-
 
     private function addCategory($product, $categories, \Category $categoryEntity)
     {
@@ -336,31 +335,31 @@ class DBImport
         $poszło = 0;
     }
 
-    private function prepareData($row)
+    private function prepareData($column)
     {
-        $product['product_name'] = $row[0];
-        $product['category'] = $row[1];
-        $product['subcategory'] = $row[2];
-        $product['manufactured_name'] = $row[3];
-        $product['status'] = $row[4];
-        $product['feature1_name'] = $row[5];
-        $product['feature2_name'] = $row[6];
-        $product['feature3_name'] = $row[7];
-        $product['tag1'] = isset($row['8']) ? $row['8'] : '';
-        $product['tag2'] = isset($row['9']) ? $row['9'] : '';
-        $product['tag3'] = isset($row['10']) ? $row['10'] : '';
-        $product['sku'] = $row[12];
-        $product['ean'] = $row[13];
-        $product['quantity'] = $row[14];
-        $product['price'] = $row[15];
-        $product['promotion'] = $row[16];
-        $product['bestseller'] = $row[17];
-        $product['recommended'] = $row[18];
-        $product['main_page'] = $row[19];
-        $product['feature1_value'] = $row[20];
-        $product['feature2_value'] = $row[21];
-        $product['feature3_value'] = isset($row[22]) ? $row[22] : null; //todo tu coś nie halo, zgłasza undefinied offset, nie ma [19] kolumny
-        $product['id'] = $row[23];
+        $product['product_name'] = $column[0];
+        $product['category'] = $column[1];
+        $product['subcategory'] = $column[2];
+        $product['manufactured_name'] = $column[3];
+        $product['status'] = $column[4];
+        $product['feature1_name'] = $column[5];
+        $product['feature2_name'] = $column[6];
+        $product['feature3_name'] = $column[7];
+        $product['tag1'] = isset($column['8']) ? $column['8'] : '';
+        $product['tag2'] = isset($column['9']) ? $column['9'] : '';
+        $product['tag3'] = isset($column['10']) ? $column['10'] : '';
+        $product['sku'] = $column[12];
+        $product['ean'] = $column[13];
+        $product['quantity'] = $column[14];
+        $product['price'] = $column[15];
+        $product['promotion'] = $column[16];
+        $product['bestseller'] = $column[17];
+        $product['recommended'] = $column[18];
+        $product['main_page'] = $column[19];
+        $product['feature1_value'] = $column[20];
+        $product['feature2_value'] = $column[21];
+        $product['feature3_value'] = isset($column[22]) ? $column[22] : null; //todo tu coś nie halo, zgłasza undefinied offset, nie ma [19] kolumny
+        $product['id'] = $column[23];
         //todo: zaślepka chwilowa. Coś tu trzeba wymyślić. (1/2 -wariacje/bez). Trzeba w kolejnych krokach wpisac tu wartość na podstawie wyglądu excela.
         //todo: trzeba dac domyślnie '2' na etapie dodawania produktu, i zmienić na '1' na etapie dodawania wariacji i zaaktualizować tabelę.
         $product['type'] = 1;
