@@ -1,5 +1,7 @@
 <?php
 
+use Application\Classes\ImportExportCsv\Exception\WrongStatusException;
+
 /* 2015-10-14 | 4me.CMS 15.3 */
 
 if (!defined('NO_ACCESS'))
@@ -15,21 +17,24 @@ require_once(CLASS_DIR . '/ImportExportCsv/CsvImporter.php');
 require_once(CLASS_DIR . '/ImportExportCsv/CsvExporter.php');
 require_once(CLASS_DIR . '/ImportExportCsv/CsvExporterHelper.php');
 require_once(CLASS_DIR . '/ImportExportCsv/DBImport.php');
-
+require_once(CLASS_DIR . '/ImportExportCsv/Exception/WrongStatusException.php');
 
 $action = $_GET['action'] ?? "default";
-switch ($action){
-    case 'imp':
-        import();
-        break;
-    case  'exp':
-        export();
-        break;
-    default:
-        showList();
-
-
-}
+//try {
+    switch ($action) {
+        case 'imp':
+            import();
+            break;
+        case  'exp':
+            export();
+            break;
+        default:
+            showList();
+    }
+//}catch(WrongStatusException $e){//todo: nie łapie bo wcześniej jest catch \Exception w application/classes/ImportExportCsv/DBImport.php
+//    $m=0;
+//    showList($e->getMessage());
+//}
 
 function export()
 {

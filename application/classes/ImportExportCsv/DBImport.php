@@ -8,6 +8,7 @@ require_once(MODEL_DIR . '/shopProducersAdmin.php');
 require_once(MODEL_DIR . '/Category.php');
 require_once(MODEL_DIR . '/ProductStatus.php');
 require_once(MODEL_DIR . '/Feature.php');
+require_once(CLASS_DIR . '/ImportExportCsv/Exception/WrongStatusException.php');
 //require_once(MODEL_DIR . '/Category.php');
 //require_once(MODEL_DIR . '/Product.php');
 //require_once(MODEL_DIR . '/Variation.php');
@@ -16,21 +17,16 @@ require_once(MODEL_DIR . '/Feature.php');
 
 use Product;
 use ProductsAdmin;
-
+use Application\Classes\ImportExportCsv\Exception\WrongStatusException;
 
 class DBImport
 {
-
     private $data;
 
-    /**
-     * DBImport constructor.
-     */
     public function __construct($data)
     {
         $this->data = $data;
     }
-
 
     public function run()
     {
@@ -61,12 +57,30 @@ class DBImport
                     $product = $this->prepareData($row);
                     switch ($row['11']) {
                         case 'Parent':
-                            //TODO BŁĘDY:
-                            //todo 1: zmieniając kategorię bez podkategori nie zmienia kategorii
-                            //todo 2: zmieniając podkategorię bez kategori DZIAŁA (zmienia category_id) w products
-                            //todo    ALE nie dodaje nowej nazwy do tabeli categories_translation
-                            //todo 3:
-                            //todo 4:
+                            //KATEGORIA:
+                            //todo 1: NIE ZMIENIA KETEGORI JEŚLI DODAM ZUPEŁNIE NOWĄ
+                            //todo 2: NIE ZMIENIA KETEGORI JEŚLI DODAM INNĄ
+                            // nie działa bo nie może działać, nie mogę dla tej samej podkategori zmienić kategorię rodzica bo w wielu produktach
+                            // użyana jest ta sama podkategoria i każda podkategoria wskazuje na tę samą kategorię rodzic.
+                            // czyli muszę ... dodać nowy rekord dla podkategori (która już istnieje) z nowym parent_id.
+                            //PODKATEGORIA
+                            // (DZIAŁA GDY ZMIENIĘ PODKATEGORIĘ NA JUŻ ISTENIEJĄCĄ (INNĄ NIŻ BYŁA))
+                            // (DZIAŁA GDY ZMIENIĘ PODKATEGORIĘ NA ZUPEŁNIE NOWĄ
+                            // -ALE ON NIE MOŻE ZMIENIĆ SOBIE KATEGORI DLA PODKATEGORII DLA JEDNEGO PRODUKTU. TU JEST PROBLEM
+                            //     TRZEBA ZABRONIĆ ZMIANY KATEGORII BO W DWÓCH PRODUKTACH Z JEDNAKOWYMI PODKATEGORIAMI MOZE SOBIE ZMIENIĆ NA RÓZNE KATEGORIE
+                            //     ALBO WYWALIĆ BŁĄD.
+                            //PRODUCENT:
+                            // (DZIAŁA GDY ZMIENIĘ NA ISTENIEJĄCEGO PRODUCENTA.)
+                            // (DZIAŁA JEŚLI ZMIENIĘ NA ZUPEŁNIE NOWY)
+                            //STATUS:
+                            // (DZIAŁA GDY ZMIENIĘ NA ISTENIEJĄCY STATUS)
+                            // (DZIAŁA JEŚLI ZMIENIĘ NA ZUPEŁNIE NOWY, NIE DODAJE BO NIEMA DODOWAĆ)
+                            //todo 3: JEŚLI ZMIENIĘ NA ZUPEŁNIE NOWY POWINIEN ZŁAPAĆ SPECYFICZNY WYJĄTEK, ALE NIE ŁAPIE BO TUTAJ JEST CATCH DLA OGÓLNEGO EXCEPTION.
+                            //TAG:
+                            // (DZIAŁA)
+                            //FEATURE:
+                            // (DZIAŁA GDY ZMIENIĘ NA ISTENIEJĄCY FEATURE w pierwszej kolumnie)
+                            // (DZIAŁA JEŚLI ZMIENIĘ NA ZUPEŁNIE NOWY)
 
                             $categoryId = $this->addCategory($product, $categories, $categoryEntity);
                             $product['category_id'] = $this->addSubcategory($product, $categoryId, $categories, $categoryEntity);
@@ -76,7 +90,6 @@ class DBImport
                             $product['feature2_id'] = $this->addFeature($product['feature2_name'], $featureNames, $featureNameEntity);
                             $product['feature3_id'] = $this->addFeature($product['feature3_name'], $featureNames, $featureNameEntity);
 
-
                             if(is_null($product['id'])){
                                 $this->addProduct($product, $productEntity);
                             }else{
@@ -84,13 +97,22 @@ class DBImport
                             }
 
                             break;
-//                        case 'Child':
-//
-//                            break;
-//
-//                        default:
-//                            throw new \Exception('Wrong CSV data. Parantage name is set to: ' . $row['11'] . '. Should be "Parent" or "Child".');
-//                            break;
+                        case 'Child':
+                            // skąd mam wiedzieć jeśli wariacja została niezmieniona a zmieniono produkt? załóżmy że produkt ma teraz inne id, jak go przypisac do wariacji
+                            //  - no ale to jest fikcyjne. Co to znaczy zmienić id produktu, jeśli modyfikuję produkt to id się nie zmienia, a jeśli dodaje nowy wiersz z
+                            //    nowym produktem ...to ma nowe wariacje. Czy można mieć stare wariacje i nowy produkt? Co to jest nowy produkt?
+                            //  - dobra chuj, traktuję że produkt id się nie zmienił,a ja zmieniam tylko pola wariacji...lub dodaję nową wariację.
+
+
+
+                            $this->updateVariation();
+
+
+                            break;
+
+                        default:
+                            throw new \Exception('Wrong CSV data. Parantage name is set to: ' . $row['11'] . '. Should be "Parent" or "Child".');
+                            break;
                     }
                 }
             }
@@ -100,6 +122,13 @@ class DBImport
             echo $e->getMessage();
         }
     }
+
+    private function updateVariation()
+    {
+
+    }
+
+
 
     private function addCategory($product, $categories, \Category $categoryEntity)
     {
@@ -122,7 +151,7 @@ class DBImport
         if (!in_array($product['category'], $categoryNames)) {
             $item['parent_id'] = 0;
             $item['status_id'] = 1;
-            $item['name'] = $product['category'];
+            $item[\Cms::$defaultLocale]['name'] = $product['category'];
             $categoryId = $categoryEntity->add($item);
         } else {
             //a jeśli kategoria istnieje w bazie to zwróć jej ID (bo będzie potrzebne do dodania produktu w tabeli 'product')
@@ -151,7 +180,7 @@ class DBImport
         if (!in_array($product['subcategory'], $subcategoryNames)) {
             $item['parent_id'] = $parentId;
             $item['status_id'] = 1;
-            $item['name'] = $product['subcategory'];
+            $item[\Cms::$defaultLocale]['name'] = $product['subcategory'];
             $subcategoryId = $categoryEntity->add($item);
         } else {
             $category = $this->findCategoryIdByName($product['subcategory'], null, 'en');//todo na sztywno 'en', bo bez sesji nie widzi \Cms::$session->get('locale')
@@ -196,7 +225,7 @@ class DBImport
         }
 
         if (!in_array($product['status'], $statusesNames)) {
-            throw new \Exception('Wrong CSV data. Status name must be among the following: '); //todo: dodać w jakiejść pętli dostępne nazwy statusów z uwzględnieniem locale
+            throw new WrongStatusException('Wrong CSV data. Status name must be among the following: '); //todo: dodać w jakiejść pętli dostępne nazwy statusów z uwzględnieniem locale
         } else {
             $status = $this->findStatusIdByName($product['status']);
             $statusId = $status['translatable_id'];
@@ -219,7 +248,7 @@ class DBImport
 
         //TODO JEŚLI DODAŁEM NOWĄ NAZWĘ FEATURE chwilę wcześniej, np dla feature1, to jeśli feature2 ma tę samą nazwę (no ale nie może mieć przecież i tak!) to znowu będzie chciał ją wprowadzić bo nie widzi jej w bazie jeszcze.
         if (!in_array($feat, $featureNames)) {
-            $item[\Cms::$defaultLocale['name']] = $feat;
+            $item[\Cms::$defaultLocale]['name'] = $feat;
             $featureId = $featureNameEntity->add($item);
         } else {
             $featureId = $this->findFeatureIdByName($feat);

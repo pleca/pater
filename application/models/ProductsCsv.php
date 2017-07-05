@@ -111,7 +111,8 @@ class ProductsCsv
         $q .= " (SELECT `name` FROM `features_translation` WHERE `translatable_id`=p.feature3_id AND locale='" . $this->locale . "' LIMIT 1) as `feature3_name`,";
         $q .= " (SELECT `name` FROM `feature_values_translation` WHERE `translatable_id`=v.feature1_value_id AND locale='" . $this->locale . "' LIMIT 1) as `feature1_value`,";
         $q .= " (SELECT `name` FROM `feature_values_translation` WHERE `translatable_id`=v.feature2_value_id AND locale='" . $this->locale . "' LIMIT 1) as `feature2_value`,";
-        $q .= " (SELECT `name` FROM `feature_values_translation` WHERE `translatable_id`=v.feature3_value_id AND locale='" . $this->locale . "' LIMIT 1) as `feature3_value`";
+        $q .= " (SELECT `name` FROM `feature_values_translation` WHERE `translatable_id`=v.feature3_value_id AND locale='" . $this->locale . "' LIMIT 1) as `feature3_value`,";
+        $q .= " (SELECT `value` FROM `taxes` WHERE `id`=v.tax_id LIMIT 1) as `tax_value`";
         $q .= " FROM `product` p";
         $q .= " LEFT JOIN `categories` c ON p.category_id=c.id";
         $q .= " LEFT JOIN `product_translation` pt ON p.id=pt.translatable_id";
@@ -136,7 +137,8 @@ class ProductsCsv
         $q .= " (SELECT `name` FROM `features_translation` WHERE `translatable_id`=p.feature3_id AND locale='" . $this->locale . "' LIMIT 1) as `feature3_name`,";
         $q .= " (SELECT `name` FROM `feature_values_translation` WHERE `translatable_id`=v.feature1_value_id AND locale='" . $this->locale . "' LIMIT 1) as `feature1_value`,";
         $q .= " (SELECT `name` FROM `feature_values_translation` WHERE `translatable_id`=v.feature2_value_id AND locale='" . $this->locale . "' LIMIT 1) as `feature2_value`,";
-        $q .= " (SELECT `name` FROM `feature_values_translation` WHERE `translatable_id`=v.feature3_value_id AND locale='" . $this->locale . "' LIMIT 1) as `feature3_value`";
+        $q .= " (SELECT `name` FROM `feature_values_translation` WHERE `translatable_id`=v.feature3_value_id AND locale='" . $this->locale . "' LIMIT 1) as `feature3_value`,";
+        $q .= " (SELECT `value` FROM `taxes` WHERE `id`=v.tax_id LIMIT 1) as `tax_value`";
         $q .= " FROM `product` p";
         $q .= " LEFT JOIN `categories` c ON p.category_id=c.id";
         $q .= " LEFT JOIN `product_translation` pt ON p.id=pt.translatable_id";
