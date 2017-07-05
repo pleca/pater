@@ -19,8 +19,6 @@ use Product;
 use ProductsAdmin;
 use Application\Classes\ImportExportCsv\Exception\WrongStatusException;
 
-//joj SKOŃCZYŁEM NA TYM ŻE CHCIAŁEM ZAPISAĆ ID PRODUKTU WE WŁAŚCIWOŚCI KLASY BY WARIACJA Z NIEJ KORZYSTAŁA PRZY ZAPISIE WARIACJI ALE
-//NIE ZAPISUJE ID PRODUKTU PRZY WIERSZU 4. DEBUGER POKAZUJE ZE ROW[23] JEST PUSTY ''       $product['id'] = $column[23];
 class DBImport
 {
     private $data;
@@ -51,7 +49,6 @@ class DBImport
         $productEntity = new ProductsAdmin();
 
         $m = 0;
-//        $this->currentProductId =8;
         try {
             \Cms::$db->beginTransaction();
             foreach ($data as $key => $row) {
@@ -100,14 +97,11 @@ class DBImport
                             }
 
                             $this->currentProductId = $product['id'];
-                            $this->currentProductId = 8;
 
                             break;
                         case 'Child':
 
-                            $n= $this->currentProductId;
-$m=0;
-                            $this->updateVariation();
+                            $this->updateVariation($product);
 
                             break;
 
@@ -352,14 +346,15 @@ $m=0;
         $product['ean'] = $column[13];
         $product['quantity'] = $column[14];
         $product['price'] = $column[15];
-        $product['promotion'] = $column[16];
-        $product['bestseller'] = $column[17];
-        $product['recommended'] = $column[18];
-        $product['main_page'] = $column[19];
-        $product['feature1_value'] = $column[20];
-        $product['feature2_value'] = $column[21];
-        $product['feature3_value'] = isset($column[22]) ? $column[22] : null; //todo tu coś nie halo, zgłasza undefinied offset, nie ma [19] kolumny
-        $product['id'] = $column[23];
+        $product['tax'] = $column[16];
+        $product['promotion'] = $column[17];
+        $product['bestseller'] = $column[18];
+        $product['recommended'] = $column[19];
+        $product['main_page'] = $column[20];
+        $product['feature1_value'] = $column[21];
+        $product['feature2_value'] = $column[22];
+        $product['feature3_value'] = isset($column[23]) ? $column[23] : null; //todo tu coś nie halo, zgłasza undefinied offset, nie ma [19] kolumny
+        $product['id'] = $column[24];
         //todo: zaślepka chwilowa. Coś tu trzeba wymyślić. (1/2 -wariacje/bez). Trzeba w kolejnych krokach wpisac tu wartość na podstawie wyglądu excela.
         //todo: trzeba dac domyślnie '2' na etapie dodawania produktu, i zmienić na '1' na etapie dodawania wariacji i zaaktualizować tabelę.
         $product['type'] = 1;
