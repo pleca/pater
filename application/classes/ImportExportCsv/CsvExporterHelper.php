@@ -51,11 +51,11 @@ class CsvExporterHelper
         $row[10] = $product['tag3'];
         $row[11] = 'Parent';
 
-        for( $i = 12; $i < 23; $i++) {
+        for( $i = 12; $i < 24; $i++) {
             $row[$i] = '';
         }
 
-        $row[23] = $product['product_id'];
+        $row[24] = $product['product_id'];
 
         return $row;
     }
@@ -71,13 +71,14 @@ class CsvExporterHelper
         $row[13] = $variation['ean'];
         $row[14] = $variation['quantity'];
         $row[15] = $variation['price'];
-        $row[16] = $variation['promotion'];
-        $row[17] = $variation['bestseller'];
-        $row[18] = $variation['recommended'];
-        $row[19] = $variation['main_page'];
-        $row[20] = $variation['feature1_value'];
-        $row[21] = $variation['feature2_value'];
-        $row[22] = $variation['feature3_value'];
+        $row[16] = $variation['tax_value'];
+        $row[17] = $variation['promotion'];
+        $row[18] = $variation['bestseller'];
+        $row[19] = $variation['recommended'];
+        $row[20] = $variation['main_page'];
+        $row[21] = $variation['feature1_value'];
+        $row[22] = $variation['feature2_value'];
+        $row[23] = $variation['feature3_value'];
 
         return $row;
     }

@@ -305,10 +305,10 @@ class ProductsAdmin extends Products {
 		$q.= "`tag1`='" . $post['tag1'] . "', `tag2`='" . $post['tag2'] . "', `tag3`='" . $post['tag3'] . "', `date_mod`=NOW() ";
 		$q.= "WHERE `id`='" . $post['id'] . "' ";		
 		
-		if (Cms::$db->update($q)) {			
+		if (Cms::$db->update($q)) {		//DEBUG UPDATE product SET `feature1_id`='2', `feature2_id`='0', `feature3_id`='0', `tag1`='Test8', `tag2`='TEST9', `tag3`='TEST11', `date_mod`=NOW() WHERE `id`='1'
 			return true;
 		} else {
-			return false;
+			return false;//debug return false
 		}
 	}
 	
